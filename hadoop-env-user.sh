@@ -5,10 +5,10 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export HADOOP_ENV_USER=1
-export HADOOP_ENV_USER_VERSION="0.314"
+export HADOOP_ENV_USER_VERSION="0.315"
 
 
-# Assuming this is already set
+# This should already be set
 #export JAVA_HOME=${JAVA_HOME}
 
 export HADOOP_USER="tca"
@@ -16,16 +16,14 @@ export HADOOP_ROOT="/opt/hadoop"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
 
-
-# assume HADOOP_CONF_DIR is set elsewhere
+# HADOOP_CONF_DIR should be set by user
 #export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
 
+# Set component homes
 export HADOOP_COMMON_HOME="$HADOOP_HOME"
 export HADOOP_HDFS_HOME="$HADOOP_COMMON_HOME"
 export HADOOP_MAPRED_HOME="$HADOOP_COMMON_HOME"
 export YARN_HOME="$HADOOP_COMMON_HOME"
-
-# ecosystem components
 export HBASE_HOME="$HADOOP_ROOT/hbase"
 export HBASE_CONF_DIR="$HBASE_HOME/conf"
 export HIVE_HOME="$HADOOP_ROOT/hive"
@@ -41,13 +39,7 @@ $HIVE_HOME/bin:\
 $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
 
-# hadoop ecosystem classpath
-#export HADOOP_CLASSPATH="\
-#$HBASE_CONF_DIR:\
-#$HBASE_HOME/lib/*:\
-#$HIVE_HOME/lib/*:\
-#$KAFKA_HOME/libs/*:\
-#$SPARK_HOME/lib/*"
+# Classpath set by $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
 
 # -----------------------------------------------
