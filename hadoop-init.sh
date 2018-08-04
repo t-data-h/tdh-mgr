@@ -6,7 +6,7 @@
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.511"
+VERSION="0.512"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 
@@ -48,9 +48,9 @@ usage()
 #  locally resolves to an interface other than the loopback
 hostip_is_valid()
 {
-    local hostid=`hostname`
-    local hostip=`hostname -i`
-    local fqdn=`hostname -f`
+    local hostid=$(hostname -s)
+    local hostip=$(hostname -i)
+    local fqdn=$(hostname -f)
     local iface=
     local ip=
     local rt=1
@@ -70,8 +70,8 @@ hostip_is_valid()
     for line in `ip addr list | grep "inet "`
     do
         IFS=$' '
-        iface=`echo $line | awk -F' ' '{ print $NF }'`
-        ip=`echo $line | awk '{ print $2}' | awk -F'/' '{ print $1 }'`
+        iface=$(echo $line | awk -F' ' '{ print $NF }')
+        ip=$(echo $line | awk '{ print $2}' | awk -F'/' '{ print $1 }')
 
         if [ "$ip" == "$hostip" ]; then
             rt=0
@@ -104,12 +104,12 @@ check_process_pid()
 
 check_process()
 {
-    local pidf=`ls /tmp/*-${HADOOP_USER}$1 2> /dev/null`
-    local rt=$?
+    local pidf=$(ls /tmp/*-${HADOOP_USER}$1 2> /dev/null)
+    local rt=1
     local pid=0
  
     if [ -n "$pidf" ] && [ -r $pidf ]; then
-        pid=`cat $pidf`
+        pid=$(cat ${pidf})
         check_process_pid $pid
         rt=$?
     fi
@@ -184,18 +184,14 @@ case "$ACTION" in
         check_process $RM_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
-            p=`cat $RM_PIDFILE`
-            echo " YARN Resource Manager is already running  [$p]"
-            echo "  Using pidfile $RM_PIDFILE"
+            echo " YARN Resource Manager is already running  [$PID]"
             exit $rt
         fi
 
         check_process $NN_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
-            p=`cat $NN_PIDFILE`
-            echo " HDFS Namenode is already running  [$p]"
-            echo "   Using pidfile $NN_PIDFILE"
+            echo " HDFS Namenode is already running  [$PID]"
             exit $rt
         fi
 
