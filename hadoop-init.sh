@@ -102,7 +102,7 @@ check_process_pid()
 }
 
 
-check_process()
+check_process_pidfile()
 {
     local pidf=$(ls /tmp/*-${HADOOP_USER}$1 2> /dev/null)
     local rt=1
@@ -128,7 +128,9 @@ show_status()
         echo " Error! Unable to find a network interface. Please verify networking is configured properly."
     fi
 
-    check_process $NN_PIDFILE
+    echo " ------ Hadoop ------- "
+
+    check_process_pidfile $NN_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
         echo " HDFS Namenode         [$PID]"
@@ -136,7 +138,7 @@ show_status()
         echo " HDFS Namenode is not running"
     fi
 
-    check_process $SN_PIDFILE
+    check_process_pidfile $SN_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
         echo " HDFS SecondaryNN      [$PID]"
@@ -144,7 +146,7 @@ show_status()
         echo " HDFS SecondaryNamenode is not running"
     fi
 
-    check_process $DN_PIDFILE
+    check_process_pidfile $DN_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
         echo " HDFS Datanode         [$PID]"
@@ -152,7 +154,7 @@ show_status()
         echo " HDFS Datanode is not running"
     fi
 
-    check_process $RM_PIDFILE
+    check_process_pidfile $RM_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
         echo " YARN ResourceManager  [$PID]"
@@ -160,7 +162,7 @@ show_status()
         echo " YARN ResourceManager is not running"
     fi
 
-    check_process $NM_PIDFILE
+    check_process_pidfile $NM_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
         echo " YARN NodeManager      [$PID]"
@@ -172,23 +174,23 @@ show_status()
 }
 
 
-
 # =================
 #  MAIN
 # =================
 
 rt=0
 
+
 case "$ACTION" in
     'start')
-        check_process $RM_PIDFILE
+        check_process_pidfile $RM_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
             echo " YARN Resource Manager is already running  [$PID]"
             exit $rt
         fi
 
-        check_process $NN_PIDFILE
+        check_process_pidfile $NN_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
             echo " HDFS Namenode is already running  [$PID]"
@@ -207,7 +209,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_process $RM_PIDFILE 
+        check_process_pidfile $RM_PIDFILE 
         rt=$?
         if [ $rt -ne 0 ]; then
             ( sudo -u $HADOOP_USER $YARN_HOME/sbin/stop-yarn.sh )
@@ -215,13 +217,13 @@ case "$ACTION" in
             echo " YARN ResourceManager not running or not found."
         fi
 
-        check_process $NM_PIDFILE 
+        check_process_pidfile $NM_PIDFILE 
         rt=$?
         if [ $rt -ne 0 ]; then
             ( sudo -u $HADOOP_USER $YARN_HOME/sbin/stop-yarn.sh )
         fi
 
-        check_process $NN_PIDFILE
+        check_process_pidfile $NN_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
             ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh )
@@ -237,6 +239,7 @@ case "$ACTION" in
         usage
         ;;
 esac
+
 
 exit $rt 
 

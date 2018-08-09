@@ -6,7 +6,7 @@
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.511"
+VERSION="0.512"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 
@@ -32,7 +32,7 @@ fi
 HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
 RS_PIDFILE="/tmp/hbase-${HADOOP_USER}-1-regionserver.pid"
 ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
-HB_THRIFT=".hbase.thrift.ThriftServer"
+HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
 HB_THRIFTLOG="hbase-thriftserver.log"
 PID=
 
@@ -50,6 +50,7 @@ usage()
     echo "  Version: $VERSION"
 }
  
+
 get_process_pid()
 {
     local key="$1"
@@ -82,14 +83,14 @@ check_process_pid()
 }
 
 
-check_process()
+check_process_pidfile()
 {
     local pidf="$1"
     local ret=0
     local pid=0
 
     if [ -r $pidf ]; then
-        pid=`cat $pidf`
+        pid=$(cat $pidf)
         check_process_pid $pid
         ret=$?
     fi
@@ -97,11 +98,12 @@ check_process()
     return $ret
 }
 
+
 show_status()
 {
     local rt=0
 
-    check_process $ZK_PIDFILE
+    check_process_pidfile $ZK_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
         echo " Zookeeper             [$PID]"
@@ -109,7 +111,7 @@ show_status()
         echo " Zookeeper is not running"
     fi
 
-    check_process $HB_PIDFILE
+    check_process_pidfile $HB_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
         echo " HBase Master          [$PID]"
@@ -117,7 +119,7 @@ show_status()
         echo " HBase Master is not running"
     fi
 
-    check_process $RS_PIDFILE
+    check_process_pidfile $RS_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
         echo " HBase RegionServer    [$PID]"
@@ -125,7 +127,7 @@ show_status()
         echo " RegionServer is not running"
     fi
 
-    get_process_pid $HB_THRIFT
+    get_process_pid $HB_THRIFT_PSKEY
     if [ $PID -ne 0 ]; then
         echo " HBase ThriftServer    [$PID]"
     else
@@ -135,31 +137,36 @@ show_status()
     return $ret
 }
 
-r=0
+
+# =================
+#  MAIN
+# =================
+
+rt=0
+
+echo " ------ HBase -------- "
 
 case "$ACTION" in
     'start')
-        check_process $HB_PIDFILE
-        r=$?
-        if [ $r -ne 0 ]; then
-            p=`cat $HB_PIDFILE`
-            echo " HBase Master is already running  [$p]"
+        check_process_pidfile $HB_PIDFILE
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " HBase Master is already running  [$PID]"
         fi
 
-        check_process $RS_PIDFILE
-        r=$?
-        if [ $r -ne 0 ]; then
-            p=`cat $RS_PIDFILE`
-            echo " RegionServer is already running  [$p]"
+        check_process_pidfile $RS_PIDFILE
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " RegionServer is already running  [$PID]"
         fi
 
-        if [ $r -eq 0 ]; then
+        if [ $rt -eq 0 ]; then
             ( sudo -u $HADOOP_USER $HBASE_HOME/bin/start-hbase.sh )
         fi
 
-        get_process_pid $HB_THRIFT
+        get_process_pid $HB_THRIFT_PSKEY
         if [ $PID -ne 0 ]; then
-            echo " ThriftServer is already running [$PID]"
+            echo " ThriftServer is already running  [$PID]"
         else
             echo "Starting HBase ThriftServer..."
             ( sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start > $HB_THRIFTLOG & )
@@ -169,7 +176,7 @@ case "$ACTION" in
     'stop')
         ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh )
 
-        get_process_pid $HB_THRIFT
+        get_process_pid $HB_THRIFT_PSKEY
         if [ $PID -ne 0 ]; then
             echo "Stopping HBase ThriftServer [$PID]..."
             ( sudo -u $HADOOP_USER kill $PID )
@@ -179,12 +186,12 @@ case "$ACTION" in
         ;;
 
     'status'|'info')
-        r= show_status
+        rt= show_status
         ;;
     *)
         usage
         ;;
 esac
 
-exit $r
+exit $rt
 

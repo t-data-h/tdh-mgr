@@ -4,12 +4,13 @@
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.511"
+VERSION="0.512"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
 SPARK_PID="org.apache.spark.deploy.history.HistoryServer"
 PID=
+
 
 # source the hadoop-env-user script
 if [ -z "$HADOOP_ENV_USER" ]; then
@@ -50,10 +51,12 @@ check_process_pid()
     return 0
 }
 
+
 get_pid()
 {
-    PID=`ps ax | grep java | grep $SPARK_PID | grep -v grep | awk '{ print $1 }'`
+    PID=$(ps ax | grep java | grep $SPARK_PID | grep -v grep | awk '{ print $1 }')
 }
+
 
 check_process()
 {
@@ -69,12 +72,14 @@ check_process()
     return $ret
 }
 
+
 show_status()
 {
     local ret=0
 
     check_process 
     ret=$?
+
     if [ $ret -ne 0 ]; then
         echo " Spark2 HistoryServer  [$PID]"
     else
@@ -84,7 +89,15 @@ show_status()
     return $ret
 }
 
+
+# =================
+#  MAIN
+# =================
+
+
 r=0
+
+echo " ------ Spark2 ------- "
 
 case "$ACTION" in
     'start')

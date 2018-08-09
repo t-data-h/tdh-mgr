@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 #
 PNAME=${0##*\/}
-VERSION="0.502"
+VERSION="0.512"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 ACTION="$1"
@@ -58,8 +58,9 @@ check_process_pid()
 
 get_pid()
 {
-    PID=`ps ax | grep java | grep $KAFKA_PID | grep -v grep | awk '{ print $1 }'`
+    PID=$(ps ax | grep java | grep $KAFKA_PID | grep -v grep | awk '{ print $1 }')
 }
+
 
 check_process()
 {
@@ -75,6 +76,7 @@ check_process()
     return $rt
 }
 
+
 show_status()
 {
     local rt=0
@@ -84,21 +86,28 @@ show_status()
     if [ $rt -ne 0 ]; then
         echo " Kafka Broker          [$PID]"
     else
-        echo " Kafka Server is not running"
+        echo " Kafka Broker is not running"
     fi
 
     return $rt
 }
 
 
+# =================
+#  MAIN
+# =================
+
+
 rt=0
+
+echo " ------ Kafka -------- "
 
 case "$ACTION" in
     'start')
         check_process
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo " Kafka Server is already running"
+            echo " Kafka Broker is already running"
             exit $rt
         fi
 
@@ -106,19 +115,19 @@ case "$ACTION" in
             KAFKA_CFG="$CONFIG"
         fi
 
-        echo "Starting Kafka..."
+        echo "Starting Kafka Broker"
         ( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG )
         ;;
 
     'stop')
-        check_process $KAFKA_PID 
+        check_process 
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo "Stopping Kafka [$PID]"
+            echo "Stopping Kafka Broker [$PID]"
             ( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-stop.sh )
             rt=0
         else
-            echo "Kafka Server not found."
+            echo "Kafka Broker not found."
         fi
         ;;
 
@@ -131,4 +140,6 @@ case "$ACTION" in
         ;;
 esac
 
+
 exit $rt
+

@@ -6,11 +6,11 @@
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.511"
+VERSION="0.512"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-
 HADOOP_ENV="hadoop-env-user.sh"
+
 
 # source the hadoop-env-user script
 if [ -z "$HADOOP_ENV_USER" ]; then
@@ -31,7 +31,7 @@ HIVE_LOGDIR="/var/log/hadoop/hive"
 METASTORE_LOG="$HIVE_LOGDIR/hive-metastore.log"
 HIVESERVER2_LOG="$HIVE_LOGDIR/hiveserver2.log"
 METADB="mysqld"
-HPID=0
+PID=0
 
 
 if [ -z "$HADOOP_USER" ]; then
@@ -55,11 +55,11 @@ get_process_pid()
     local key="$1"
     local pids=
 
-    HPID=0
+    PID=0
     pids=$(ps awwwx | grep "$key" | grep -v "grep" | awk '{ print $1 }')
 
     for p in $pids; do
-        HPID=$p
+        PID=$p
         break
     done
 
@@ -70,44 +70,49 @@ get_process_pid()
 show_status()
 {
     get_process_pid $HIVEMETASTORE
-    if [ $HPID -ne 0 ]; then
-        echo " Hive Metastore        [$HPID]"
+    if [ $PID -ne 0 ]; then
+        echo " Hive Metastore        [$PID]"
     else
         echo " Hive Metastore is not running"
     fi
 
     get_process_pid $HIVESERVER2
-    if [ $HPID -ne 0 ]; then
-        echo " HiveServer2           [$HPID]"
+    if [ $PID -ne 0 ]; then
+        echo " HiveServer2           [$PID]"
     else
         echo " HiveServer2 is not running"
     fi
 
-    return $HPID 
+    return $PID 
 }
 
 
-pid=0
+# =================
+#  MAIN
+# =================
+
+
 rt=0
 
+echo " ------ Hive ---------"
 
 case "$ACTION" in
 
     'start')
         get_process_pid $HIVEMETASTORE
-        if [ $HPID -ne 0 ]; then
-            echo " MetaStore is already running  [$HPID]"
-            exit $HPID
+        if [ $PID -ne 0 ]; then
+            echo " MetaStore is already running  [$PID]"
+            exit $PID
         fi
 
         get_process_pid $HIVESERVER2
-        if [ $HPID -ne 0 ]; then
-            echo " HiveServer2 is already running [$HPID]"
-            exit $HPID
+        if [ $PID -ne 0 ]; then
+            echo " HiveServer2 is already running [$PID]"
+            exit $PID
         fi
 
         get_process_pid $METADB
-        if [ $HPID -eq 0 ]; then
+        if [ $PID -eq 0 ]; then
             echo "Mysqld is not running! aborting..."
             exit 1
         fi
@@ -121,17 +126,17 @@ case "$ACTION" in
 
     'stop')
         get_process_pid $HIVEMETASTORE 
-        if [ $HPID -ne 0 ]; then
-            echo "Stopping Hive MetaStore [$HPID]..."
-            ( sudo -u $HADOOP_USER kill $HPID )
+        if [ $PID -ne 0 ]; then
+            echo "Stopping Hive MetaStore [$PID]..."
+            ( sudo -u $HADOOP_USER kill $PID )
         else
             echo "Hive Metastore process not found..."
         fi
 
         get_process_pid $HIVESERVER2
-        if [ $HPID -ne 0 ]; then
-            echo "Stopping HiveServer2 [$HPID]..."
-            ( sudo -u $HADOOP_USER kill $HPID )
+        if [ $PID -ne 0 ]; then
+            echo "Stopping HiveServer2 [$PID]..."
+            ( sudo -u $HADOOP_USER kill $PID )
         else
             echo "HiveServer2 process not found..."
         fi
@@ -146,5 +151,5 @@ case "$ACTION" in
         ;;
 esac
 
-
 exit $rt
+
