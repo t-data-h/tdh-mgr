@@ -105,7 +105,7 @@ check_process_pid()
 check_process_pidfile()
 {
     local pidf=$(ls /tmp/*-${HADOOP_USER}$1 2> /dev/null)
-    local rt=1
+    local rt=$?
     local pid=0
  
     if [ -n "$pidf" ] && [ -r $pidf ]; then
