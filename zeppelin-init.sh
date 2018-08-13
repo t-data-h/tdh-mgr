@@ -82,6 +82,7 @@ show_status()
 pid=0
 rt=0
 
+echo " ----- Zeppelin ------ "
 
 case "$ACTION" in
     'start')
