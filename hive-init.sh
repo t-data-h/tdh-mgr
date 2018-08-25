@@ -6,11 +6,9 @@
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.512"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
-
 
 # source the hadoop-env-user script
 if [ -z "$HADOOP_ENV_USER" ]; then
@@ -22,6 +20,10 @@ if [ -z "$HADOOP_ENV_USER" ]; then
         HADOOP_ENV="./$HADOOP_ENV"
     fi
     source $HADOOP_ENV
+fi
+
+if [ -z "$HADOOP_USER" ]; then
+    HADOOP_USER="$USER"
 fi
 
 
@@ -43,10 +45,10 @@ if [ -n "$HADOOP_LOGDIR" ]; then
 fi
 
 
-usage() 
+usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $VERSION"
+    echo "  Version: $HADOOP_ENV_USER_VERSION"
 }
 
 
@@ -83,7 +85,7 @@ show_status()
         echo " HiveServer2 is not running"
     fi
 
-    return $PID 
+    return $PID
 }
 
 
@@ -125,7 +127,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        get_process_pid $HIVEMETASTORE 
+        get_process_pid $HIVEMETASTORE
         if [ $PID -ne 0 ]; then
             echo "Stopping Hive MetaStore [$PID]..."
             ( sudo -u $HADOOP_USER kill $PID )
@@ -152,4 +154,3 @@ case "$ACTION" in
 esac
 
 exit $rt
-

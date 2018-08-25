@@ -1,7 +1,7 @@
 #!/bin/bash
-#  Custom init script for starting Hue 
+#  Custom init script for starting Hue
 #   (in a pseudo-distributed environment)
-# 
+#
 #  Timothy C. Arland <tcarland@gmail.com>
 #
 ACTION="$1"
@@ -41,10 +41,10 @@ fi
 
 
 
-usage() 
+usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $VERSION"
+    echo "  Version: $HADOOP_ENV_USER_VERSION"
 }
 
 
@@ -56,9 +56,9 @@ get_process_pid()
     HPID=0
     pids=$(ps awwwx | grep "$key" | grep -v "grep" | awk '{ print $1 }')
 
-    # this is ugly, but the key with a space (even quoted) in it caused 
+    # this is ugly, but the key with a space (even quoted) in it caused
     # some reliability issues with the above grep
-    for p in $pids; do   
+    for p in $pids; do
         HPID=$p
         break
     done
@@ -99,7 +99,7 @@ case "$ACTION" in
     'stop')
 
         get_process_pid "$HUE_KEY"
-        
+
         if [ $HPID -ne 0 ]; then
             echo "Stopping Hue [$HPID]..."
             ( sudo -u $HADOOP_USER kill $HPID )
@@ -120,9 +120,3 @@ case "$ACTION" in
 esac
 
 exit $rt
-
-
-
-
-
-

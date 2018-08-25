@@ -1,14 +1,12 @@
 #!/bin/bash
 #
-#  Init script for HBase Services 
+#  Init script for HBase Services
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.512"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-
 
 HADOOP_ENV="hadoop-env-user.sh"
 
@@ -44,12 +42,12 @@ else
 fi
 
 
-usage() 
+usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $VERSION"
+    echo "  Version: $HADOOP_ENV_USER_VERSION"
 }
- 
+
 
 get_process_pid()
 {
@@ -131,7 +129,7 @@ show_status()
     if [ $PID -ne 0 ]; then
         echo " HBase ThriftServer    [$PID]"
     else
-        echo " ThriftServer is not running" 
+        echo " ThriftServer is not running"
     fi
 
     return $ret
@@ -194,4 +192,3 @@ case "$ACTION" in
 esac
 
 exit $rt
-

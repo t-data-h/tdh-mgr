@@ -1,12 +1,11 @@
 #!/bin/bash
-#  Custom init script for starting Apache Zeppelin 
+#  Custom init script for starting Apache Zeppelin
 #   (in a pseudo-distributed environment)
-# 
+#
 #  Timothy C. Arland <tcarland@gmail.com>
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.511"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 
@@ -41,10 +40,10 @@ fi
 
 
 
-usage() 
+usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $VERSION"
+    echo "  Version: $HADOOP_ENV_USER_VERSION"
 }
 
 
@@ -52,19 +51,20 @@ get_process_pid()
 {
     local key="$1"
     local pids=
-    
+
     ZPID=0
     pids=$(ps awwwx | grep "$key" | grep -v "grep" | awk '{ print $1 }')
 
-    # this is ugly, but the key with a space (even quoted) in it caused 
+    # this is ugly, but the key with a space (even quoted) in it caused
     # some reliability issues with the above grep
-    for p in $pids; do   
+    for p in $pids; do
         ZPID=$p
         break
     done
 
     return 0
 }
+
 
 show_status()
 {
@@ -78,6 +78,9 @@ show_status()
     return $ZPID
 }
 
+
+## MAIN
+#
 
 pid=0
 rt=0
@@ -100,7 +103,7 @@ case "$ACTION" in
     'stop')
 
         get_process_pid "$ZKEY"
-        
+
         if [ $ZPID -ne 0 ]; then
             echo "Stopping Zeppelin [$ZPID]..."
             ( sudo -u $HADOOP_USER $ZEPPELIN_HOME/bin/zeppelin-daemon.sh stop )
@@ -120,9 +123,3 @@ case "$ACTION" in
 esac
 
 exit $rt
-
-
-
-
-
-

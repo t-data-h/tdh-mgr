@@ -1,12 +1,11 @@
 #!/bin/bash
 #
 #  Init script for Spark Standalone
-#  
+#
 #  Timothy C. Arland <tcarland@gmail.com>
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.511"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
@@ -35,10 +34,10 @@ fi
 
 
 
-usage() 
+usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $VERSION"
+    echo "  Version: $HADOOP_ENV_USER_VERSION"
 }
 
 
@@ -76,7 +75,7 @@ show_status()
 {
     local ret=0
 
-    check_process 
+    check_process
     ret=$?
     if [ $ret -ne 0 ]; then
         echo " Spark Standalone      [$PID]"
@@ -105,7 +104,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_process $SPARK_PID 
+        check_process $SPARK_PID
         r=$?
         if [ $r -ne 0 ]; then
             echo "Stopping Spark Standalone..."

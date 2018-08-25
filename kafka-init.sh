@@ -1,11 +1,11 @@
 #!/bin/bash
 #
 #  Init script for Kafka Broker(s)
-#  
+#
 #  Timothy C. Arland <tcarland@gmail.com>
 #
 PNAME=${0##*\/}
-VERSION="0.512"
+VERSION="0.513"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 ACTION="$1"
@@ -39,9 +39,10 @@ KAFKA_CFG="config/server.properties"
 PID=
 
 
-usage() 
+usage()
 {
     echo "$PNAME {start|stop|status}"
+    echo "  Version: $HADOOP_ENV_USER_VERSION"
 }
 
 
@@ -81,7 +82,7 @@ show_status()
 {
     local rt=0
 
-    check_process 
+    check_process
     rt=$?
     if [ $rt -ne 0 ]; then
         echo " Kafka Broker          [$PID]"
@@ -120,7 +121,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_process 
+        check_process
         rt=$?
         if [ $rt -ne 0 ]; then
             echo "Stopping Kafka Broker [$PID]"
@@ -142,4 +143,3 @@ esac
 
 
 exit $rt
-

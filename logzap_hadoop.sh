@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 PNAME=${0##*\/}
-VERSION="0.022"
+VERSION="0.513"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
@@ -36,7 +36,7 @@ usage()
 }
 
 
-# recursive rm of all files and directories save for 
+# recursive rm of all files and directories save for
 # the top level directories in HADOOP_LOGDIR
 erase_all()
 {
@@ -47,10 +47,10 @@ erase_all()
 
     cd $path
     cwd=`pwd`
-    
+
     echo "erase_all $cwd"
 
-    for x in * 
+    for x in *
     do
         if [ -d $x ]; then
             if [ -z "$rec" ]; then
@@ -93,9 +93,8 @@ while [ $# -gt 0 ]; do
 done
 
 
-echo "HADOOP_LOGDIR=\"$HADOOP_LOGDIR\"" 
+echo "HADOOP_LOGDIR=\"$HADOOP_LOGDIR\""
 erase_all "$HADOOP_LOGDIR"
 rt=$?
 
 exit $rt
-

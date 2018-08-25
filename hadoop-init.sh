@@ -6,7 +6,6 @@
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.512"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 
@@ -37,14 +36,14 @@ NM_PIDFILE="-nodemanager.pid"
 PID=
 
 
-usage() 
+usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $VERSION"
+    echo "  Version: $HADOOP_ENV_USER_VERSION"
 }
 
 
-#  Validates that our configured hostname as provided by `hostname -f` 
+#  Validates that our configured hostname as provided by `hostname -f`
 #  locally resolves to an interface other than the loopback
 hostip_is_valid()
 {
@@ -58,7 +57,7 @@ hostip_is_valid()
     echo ""
     echo "$fqdn"
     echo -n  "[$hostid] : $hostip"
-    
+
     if [ "$hostip" == "127.0.0.1" ]; then
         echo "   <lo> "
         echo "  WARNING! Hostname is set to localhost, aborting.."
@@ -107,13 +106,13 @@ check_process_pidfile()
     local pidf=$(ls /tmp/*-${HADOOP_USER}$1 2> /dev/null)
     local rt=$?
     local pid=0
- 
+
     if [ -n "$pidf" ] && [ -r $pidf ]; then
         pid=$(cat ${pidf})
         check_process_pid $pid
         rt=$?
     fi
-    
+
     return $rt
 }
 
@@ -121,7 +120,7 @@ check_process_pidfile()
 show_status()
 {
     local rt=0
-    
+
     hostip_is_valid
     rt=$?
     if [ $rt -ne 0 ]; then
@@ -135,15 +134,15 @@ show_status()
     if [ $rt -ne 0 ]; then
         echo " HDFS Namenode         [$PID]"
     else
-        echo " HDFS Namenode is not running"
+        echo " HDFS Primary Namenode is not running"
     fi
 
     check_process_pidfile $SN_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
-        echo " HDFS SecondaryNN      [$PID]"
+        echo " HDFS Secondary NN     [$PID]"
     else
-        echo " HDFS SecondaryNamenode is not running"
+        echo " HDFS Secondary Namenode is not running"
     fi
 
     check_process_pidfile $DN_PIDFILE
@@ -209,7 +208,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_process_pidfile $RM_PIDFILE 
+        check_process_pidfile $RM_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
             ( sudo -u $HADOOP_USER $YARN_HOME/sbin/stop-yarn.sh )
@@ -217,7 +216,7 @@ case "$ACTION" in
             echo " YARN ResourceManager not running or not found."
         fi
 
-        check_process_pidfile $NM_PIDFILE 
+        check_process_pidfile $NM_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
             ( sudo -u $HADOOP_USER $YARN_HOME/sbin/stop-yarn.sh )
@@ -241,5 +240,4 @@ case "$ACTION" in
 esac
 
 
-exit $rt 
-
+exit $rt

@@ -4,7 +4,6 @@
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.512"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
@@ -33,10 +32,10 @@ if [ -z "$HADOOP_USER" ]; then
 fi
 
 
-usage() 
+usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $VERSION"
+    echo "  Version: $HADOOP_ENV_USER_VERSION"
 }
 
 
@@ -77,7 +76,7 @@ show_status()
 {
     local ret=0
 
-    check_process 
+    check_process
     ret=$?
 
     if [ $ret -ne 0 ]; then
@@ -133,4 +132,3 @@ case "$ACTION" in
 esac
 
 exit $r
-

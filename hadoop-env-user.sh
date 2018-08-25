@@ -1,15 +1,19 @@
 #!/bin/bash
 #  hadoop-env-user.sh
-#  Sets up PATH for various ecosystem components
+#  Sets up the environment for TDH components.
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export HADOOP_ENV_USER=1
-export HADOOP_ENV_USER_VERSION="0.315"
+export HADOOP_ENV_USER_VERSION="0.513"
 
 
 # This should already be set
 #export JAVA_HOME=${JAVA_HOME}
+if [ -z "$JAVA_HOME" ]; then
+    echo "Error JAVA_HOME is not set"
+    exit 1
+fi
 
 export HADOOP_USER="tca"
 export HADOOP_ROOT="/opt/hadoop"
@@ -58,5 +62,3 @@ if [ "$HADOOP_PATH" ]; then
         export PATH="$HADOOP_PATH"
     fi
 fi
-
-
