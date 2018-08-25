@@ -124,7 +124,8 @@ show_status()
     hostip_is_valid
     rt=$?
     if [ $rt -ne 0 ]; then
-        echo " Error! Unable to find a network interface. Please verify networking is configured properly."
+        echo " Error! Unable to find a network interface. "
+        echo "    Please verify networking is configured properly."
     fi
 
     echo " ------ Hadoop ------- "
@@ -140,7 +141,7 @@ show_status()
     check_process_pidfile $SN_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
-        echo " HDFS Secondary NN     [$PID]"
+        echo " HDFS Sec.NameNode     [$PID]"
     else
         echo " HDFS Secondary Namenode is not running"
     fi
