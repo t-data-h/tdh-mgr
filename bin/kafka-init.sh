@@ -5,7 +5,6 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 #
 PNAME=${0##*\/}
-VERSION="0.513"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 ACTION="$1"

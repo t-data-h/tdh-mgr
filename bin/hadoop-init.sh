@@ -8,7 +8,6 @@ ACTION="$1"
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-
 HADOOP_ENV="hadoop-env-user.sh"
 
 # source the hadoop-env-user script

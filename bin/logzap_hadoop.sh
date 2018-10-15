@@ -1,7 +1,6 @@
 #!/bin/bash
 #
 PNAME=${0##*\/}
-VERSION="0.513"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"

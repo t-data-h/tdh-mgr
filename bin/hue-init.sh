@@ -6,7 +6,6 @@
 #
 ACTION="$1"
 PNAME=${0##*\/}
-VERSION="0.511"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 
