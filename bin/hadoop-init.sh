@@ -65,11 +65,14 @@ hostip_is_valid()
 
     IFS=$'\n'
 
+#   for line in `ifconfig | grep inet`
+#   do
+#       ip=$( echo $line | awk '{ print $2 }' )
     for line in `ip addr list | grep "inet "`
     do
-        IFS=$' '
+        IFS=' '
         iface=$(echo $line | awk -F' ' '{ print $NF }')
-        ip=$(echo $line | awk '{ print $2}' | awk -F'/' '{ print $1 }')
+        ip=$(echo $line | awk '{ print $2 }' | awk -F'/' '{ print $1 }')
 
         if [ "$ip" == "$hostip" ]; then
             rt=0
@@ -125,6 +128,7 @@ show_status()
     if [ $rt -ne 0 ]; then
         echo " Error! Unable to find a network interface. "
         echo "    Please verify networking is configured properly."
+        return $rt
     fi
 
     echo " ------ Hadoop ------- "
