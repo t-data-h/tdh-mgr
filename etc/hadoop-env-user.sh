@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export HADOOP_ENV_USER=1
-export HADOOP_ENV_USER_VERSION="0.513"
+export HADOOP_ENV_USER_VERSION="0.514"
 
 
 # This should already be set
@@ -45,6 +45,13 @@ $SPARK_HOME/bin"
 
 # Classpath set by $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
+# Kafka
+if [ -f "/etc/kafka/jaas.conf" ]; then
+    export KAFKA_OPTS="-Djava.security.auth.login=/etc/kafka/jaas.conf"
+fi
+if [ -f "/etc/kafka/conf/kafka-client.conf" ]; then
+    export ZKS=$( cat /etc/kafka/conf/kafka-client.conf | awk -F '=' '{ print $2 }' )
+fi
 
 # -----------------------------------------------
 #  NOTE:  Do not add or change below this line!
