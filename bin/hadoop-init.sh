@@ -4,7 +4,6 @@
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 #
-ACTION="$1"
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
@@ -65,9 +64,7 @@ hostip_is_valid()
 
     IFS=$'\n'
 
-#   for line in `ifconfig | grep inet`
-#   do
-#       ip=$( echo $line | awk '{ print $2 }' )
+    #for line in `ifconfig | grep inet`; do ip=$( echo $line | awk '{ print $2 }' )
     for line in `ip addr list | grep "inet "`
     do
         IFS=' '
@@ -182,7 +179,7 @@ show_status()
 # =================
 
 rt=0
-
+ACTION="$1"
 
 case "$ACTION" in
     'start')
@@ -206,7 +203,8 @@ case "$ACTION" in
             echo " Error! Unable to find a network interface. Please verify networking is configured properly."
             exit $rt
         fi
-
+    
+        echo " ------ Hadoop ------- "
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh )
         ( sudo -u $HADOOP_USER $YARN_HOME/sbin/start-yarn.sh )
         ;;
