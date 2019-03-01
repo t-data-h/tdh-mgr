@@ -123,7 +123,7 @@ show_status()
     hostip_is_valid
     rt=$?
     if [ $rt -ne 0 ]; then
-        echo " Error! Unable to find a network interface. "
+        echo "    Unable to find a network interface. "
         echo "    Please verify networking is configured properly."
         return $rt
     fi
