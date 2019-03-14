@@ -5,14 +5,22 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export HADOOP_ENV_USER=1
-export HADOOP_ENV_USER_VERSION="0.514"
+export HADOOP_ENV_USER_VERSION="0.516"
 
 
-# This should already be set
+# Assume that JAVA_HOME is already set or managed by the system.
 #export JAVA_HOME=${JAVA_HOME}
 if [ -z "$JAVA_HOME" ]; then
     echo "Error JAVA_HOME is not set"
     exit 1
+fi
+
+# HADOOP_CONF_DIR should always be set by user prior to sourcing the Environment
+# to support switching environments.
+if [ -z "$HADOOP_CONF_DIR" ]; then
+    echo "Warning! HADOOP_CONF_DIR is not set!"
+    export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
+    echo "=> Setting default HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
 fi
 
 export HADOOP_USER="tca"
@@ -20,10 +28,7 @@ export HADOOP_ROOT="/opt/hadoop"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
 
-# HADOOP_CONF_DIR should be set by user
-#export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
-
-# Set component homes
+# Set components home
 export HADOOP_COMMON_HOME="$HADOOP_HOME"
 export HADOOP_HDFS_HOME="$HADOOP_COMMON_HOME"
 export HADOOP_MAPRED_HOME="$HADOOP_COMMON_HOME"
@@ -43,29 +48,21 @@ $HIVE_HOME/bin:\
 $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
 
-# Classpath set by $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
 # Kafka
 if [ -f "/etc/kafka/jaas.conf" ]; then
     export KAFKA_OPTS="-Djava.security.auth.login=/etc/kafka/jaas.conf"
 fi
+
 if [ -f "/etc/kafka/conf/kafka-client.conf" ]; then
     export ZKS=$( cat /etc/kafka/conf/kafka-client.conf | awk -F '=' '{ print $2 }' )
 fi
 
 # -----------------------------------------------
-#  NOTE:  Do not add or change below this line!
+#  NOTE:  Do not edit below this line.
 #
-if [ "$LD_LIBRARY_PATH" ]; then
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HADOOP_HOME/lib/native"
-else
-    export LD_LIBRARY_PATH="$HADOOP_HOME/lib/native"
-fi
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${HADOOP_HOME}/lib/native
 
-if [ "$HADOOP_PATH" ]; then
-    if [ "$PATH" ]; then
-        export PATH="$PATH:$HADOOP_PATH"
-    else
-        export PATH="$HADOOP_PATH"
-    fi
+if [ -n "$HADOOP_PATH" ]; then
+    export PATH=${PATH:+${PATH}:}$HADOOP_PATH
 fi

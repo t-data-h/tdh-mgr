@@ -9,6 +9,13 @@ AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
 
+NN_PIDFILE="-namenode.pid"
+SN_PIDFILE="-secondarynamenode.pid"
+DN_PIDFILE="-datanode.pid"
+RM_PIDFILE="-resourcemanager.pid"
+NM_PIDFILE="-nodemanager.pid"
+PID=
+
 # source the hadoop-env-user script
 if [ -z "$HADOOP_ENV_USER" ]; then
     if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
@@ -18,20 +25,15 @@ if [ -z "$HADOOP_ENV_USER" ]; then
     elif [ -r "./$HADOOP_ENV" ]; then
         HADOOP_ENV="./$HADOOP_ENV"
     fi
-    source $HADOOP_ENV
+
+    . $HADOOP_ENV
 fi
+
 
 if [ -z "$HADOOP_USER" ]; then
     HADOOP_USER="$USER"
 fi
 
-
-NN_PIDFILE="-namenode.pid"
-SN_PIDFILE="-secondarynamenode.pid"
-DN_PIDFILE="-datanode.pid"
-RM_PIDFILE="-resourcemanager.pid"
-NM_PIDFILE="-nodemanager.pid"
-PID=
 
 
 usage()
@@ -203,7 +205,7 @@ case "$ACTION" in
             echo " Error! Unable to find a network interface. Please verify networking is configured properly."
             exit $rt
         fi
-    
+
         echo " ------ Hadoop ------- "
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh )
         ( sudo -u $HADOOP_USER $YARN_HOME/sbin/start-yarn.sh )
