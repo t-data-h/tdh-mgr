@@ -2,8 +2,9 @@ TDH-HADOOP
 ===========
 
   TDH is a custom hadoop distribution with an initial configuration as a
-pseudo-distributed node, based entirely on apache versions. This project 
-provides a group of scripts for running the environment.
+pseudo-distributed cluster with 1 worker node. The distribution is based
+entirely on direct apache versions. This project provides a set of scripts
+for managing the environment.
 
 
 ### Building the Hadoop Distribution
@@ -211,6 +212,8 @@ fi
 
 **hadoop-env-user.sh:**
 
+An example of this file is provided as *./etc/hadoop-env-user.sh*, and
+would look something similar to the following:
 ```
 # User oriented environment variables (for use with bash)
 
@@ -238,30 +241,6 @@ $HBASE_HOME/bin:\
 $HIVE_HOME/bin:\
 $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
-
-# shouldn't need to add anything below this line
-# this part is intended to avoiding stomping on these vars
-if [ "$LD_LIBRARY_PATH" ]; then
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HADOOP_HOME/lib/native"
-else
-    export LD_LIBRARY_PATH="$HADOOP_HOME/lib/native"
-fi
-
-if [ "$HADOOP_CLASSPATH" ]; then
-    if [ "$CLASSPATH" ]; then
-        export CLASSPATH="$CLASSPATH:$HADOOP_CLASSPATH"
-    else
-        export CLASSPATH="$HADOOP_CLASSPATH"
-    fi
-fi
-
-if [ "$HADOOP_PATH" ]; then
-    if [ "$PATH" ]; then
-        export PATH="$PATH:$HADOOP_PATH"
-    else
-        export PATH="$HADOOP_PATH"
-    fi
-fi
 ```
 
 
