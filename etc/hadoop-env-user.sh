@@ -23,8 +23,8 @@ if [ -z "$HADOOP_CONF_DIR" ]; then
     echo "=> Setting default HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
 fi
 
-export HADOOP_USER="tca"
-export HADOOP_ROOT="/opt/hadoop"
+export HADOOP_USER="${USER}"
+export HADOOP_ROOT="/opt/TDH"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
 

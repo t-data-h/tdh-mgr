@@ -47,7 +47,7 @@ erase_all()
     cd $path
     cwd=`pwd`
 
-    echo "erase_all $cwd"
+    echo "ERASE: $cwd"
 
     for x in *
     do
@@ -92,7 +92,7 @@ while [ $# -gt 0 ]; do
 done
 
 
-echo "HADOOP_LOGDIR=\"$HADOOP_LOGDIR\""
+echo "HADOOP_LOGDIR=$HADOOP_LOGDIR"
 erase_all "$HADOOP_LOGDIR"
 rt=$?
 
