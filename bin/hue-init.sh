@@ -14,19 +14,19 @@ HADOOP_ENV="hadoop-env-user.sh"
 # source the hadoop-env-user script
 if [ -z "$HADOOP_ENV_USER" ]; then
     if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-        HADOOP_ENV="$HOME/hadoop/etc/$HADOOP_ENV"
+        . $HOME/hadoop/etc/$HADOOP_ENV
     elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        HADOOP_ENV="/etc/hadoop/$HADOOP_ENV"
-    elif [ -r "./$HADOOP_ENV" ]; then
-        HADOOP_ENV="./$HADOOP_ENV"
+        . /etc/hadoop/$HADOOP_ENV
+    elif [ -r "./etc/$HADOOP_ENV" ]; then
+        . ./etc/$HADOOP_ENV
     fi
     source $HADOOP_ENV
 fi
 
 
-HUE_HOME="/opt/hadoop/hue"
+HUE_HOME="$HADOOP_ROOT/hue"
 HUE_KEY="hue runserver"
-HUE_LOGDIR="/var/log/hadoop"
+HUE_LOGDIR="$HADOOP_LOGDIR"
 HPID=0
 
 

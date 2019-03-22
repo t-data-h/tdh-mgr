@@ -14,21 +14,17 @@ PID=
 # source the hadoop-env-user script
 if [ -z "$HADOOP_ENV_USER" ]; then
     if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-        HADOOP_ENV="$HOME/hadoop/etc/$HADOOP_ENV"
+        . $HOME/hadoop/etc/$HADOOP_ENV
     elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        HADOOP_ENV="/etc/hadoop/$HADOOP_ENV"
-    elif [ -r "./$HADOOP_ENV" ]; then
-        HADOOP_ENV="./$HADOOP_ENV"
+        . /etc/hadoop/$HADOOP_ENV
+    elif [ -r "./etc/$HADOOP_ENV" ]; then
+        . ./etc/$HADOOP_ENV
     fi
-    source $HADOOP_ENV
 fi
 
 
 if [ -z "$SPARK_USER" ]; then
-    SPARK_USER="$USER"
-fi
-if [ -z "$HADOOP_USER" ]; then
-    HADOOP_USER="$SPARK_USER"
+    SPARK_USER="$HADOOP_USER"
 fi
 
 

@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 #
 PNAME=${0##*\/}
-VERSION="0.513"
+VERSION="0.514"
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # default init script list
@@ -19,13 +19,12 @@ HADOOP_ENV="hadoop-env-user.sh"
 # source the hadoop-env-user script
 if [ -z "$HADOOP_ENV_USER" ]; then
     if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-        HADOOP_ENV="$HOME/hadoop/etc/$HADOOP_ENV"
+        . $HOME/hadoop/etc/$HADOOP_ENV
     elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        HADOOP_ENV="/etc/hadoop/$HADOOP_ENV"
-    elif [ -r "./$HADOOP_ENV" ]; then
-        HADOOP_ENV="./$HADOOP_ENV"
+        . /etc/hadoop/$HADOOP_ENV
+    elif [ -r "./etc/$HADOOP_ENV" ]; then
+        . ./etc/$HADOOP_ENV
     fi
-    source $HADOOP_ENV
 fi
 
 

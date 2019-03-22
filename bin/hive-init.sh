@@ -13,19 +13,13 @@ HADOOP_ENV="hadoop-env-user.sh"
 # source the hadoop-env-user script
 if [ -z "$HADOOP_ENV_USER" ]; then
     if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-        HADOOP_ENV="$HOME/hadoop/etc/$HADOOP_ENV"
+        . $HOME/hadoop/etc/$HADOOP_ENV
     elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        HADOOP_ENV="/etc/hadoop/$HADOOP_ENV"
-    elif [ -r "./$HADOOP_ENV" ]; then
-        HADOOP_ENV="./$HADOOP_ENV"
+        . /etc/hadoop/$HADOOP_ENV
+    elif [ -r "./etc/$HADOOP_ENV" ]; then
+        . ./etc/$HADOOP_ENV
     fi
-    source $HADOOP_ENV
 fi
-
-if [ -z "$HADOOP_USER" ]; then
-    HADOOP_USER="$USER"
-fi
-
 
 HIVEMETASTORE="MetaStore"
 HIVESERVER2="HiveServer2"
@@ -35,10 +29,6 @@ HIVESERVER2_LOG="$HIVE_LOGDIR/hiveserver2.log"
 METADB="mysqld"
 PID=0
 
-
-if [ -z "$HADOOP_USER" ]; then
-    HADOOP_USER="$USER"
-fi
 
 if [ -n "$HADOOP_LOGDIR" ]; then
     HIVE_LOGDIR="$HADOOP_LOGDIR/hive"
