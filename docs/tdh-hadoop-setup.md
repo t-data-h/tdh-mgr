@@ -20,6 +20,10 @@ versions:
 - Spark  1.6.x - 2.3.x
 - Kafka  0.10.x
 
+System Prerequisites: https://gist.github.com/tcarland/3d10c22885ec655a0c2435676c1ae7b1
+Mysqld Configuration: https://gist.github.com/tcarland/64e300606d83782e4150ce2db053b733
+
+
 #### Prerequisites
 - **Oracle JDK 1.8**
 

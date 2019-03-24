@@ -21,5 +21,3 @@ versions:
 - Kafka  0.10.x
 
 Refer to the setup document in docs/tdh-hadoop-setup.md
-
-
