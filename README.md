@@ -20,4 +20,6 @@ versions:
 - Spark  1.6.x - 2.3.x
 - Kafka  0.10.x
 
-Refer to the setup document in docs/tdh-hadoop-setup.md
+Refer to the setup document in *docs/tdh-hadoop-setup.md* for building 
+up a TDH distribution from scratch.
+
