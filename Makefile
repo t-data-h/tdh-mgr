@@ -7,7 +7,5 @@ BINPATH="${HADOOP_ROOT}/bin"
 ETCPATH="${HADOOP_ROOT}/etc"
 
 install:
-	( sudo cp etc/hadoop-env-user.sh ${ETCPATH} )
-	( sudo cp bin/*.sh ${BINPATH} )
-	
-
+	( cp etc/hadoop-env-user.sh ${ETCPATH} )
+	( cp bin/*.sh ${BINPATH} )
