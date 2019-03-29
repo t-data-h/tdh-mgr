@@ -114,7 +114,7 @@ case "$ACTION" in
         fi
 
         echo "Starting Kafka Broker"
-        ( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG )
+        ( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG 2>&1 > /dev/null )
         ;;
 
     'stop')
@@ -122,7 +122,7 @@ case "$ACTION" in
         rt=$?
         if [ $rt -ne 0 ]; then
             echo "Stopping Kafka Broker [$PID]"
-            ( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-stop.sh )
+            ( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null )
             rt=0
         else
             echo "Kafka Broker not found."

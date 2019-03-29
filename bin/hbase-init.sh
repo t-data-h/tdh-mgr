@@ -67,7 +67,7 @@ check_process_pid()
 
     PID=0
 
-    if ps ax | grep $pid | grep -v grep 1> /dev/null 2> /dev/null ; then
+    if ps ax | grep $pid | grep -v grep 2>&1 > /dev/null ; then
         PID=$pid
         return 1
     fi
@@ -154,7 +154,7 @@ case "$ACTION" in
         fi
 
         if [ $rt -eq 0 ]; then
-            ( sudo -u $HADOOP_USER $HBASE_HOME/bin/start-hbase.sh )
+            ( sudo -u $HADOOP_USER $HBASE_HOME/bin/start-hbase.sh 2>&1 > /dev/null )
         fi
 
         get_process_pid $HB_THRIFT_PSKEY
@@ -162,12 +162,12 @@ case "$ACTION" in
             echo " ThriftServer is already running  [$PID]"
         else
             echo "Starting HBase ThriftServer..."
-            ( sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start > $HB_THRIFTLOG & )
+            ( sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start 2>&1 > $HB_THRIFTLOG & )
         fi
         ;;
 
     'stop')
-        ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh )
+        ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null )
 
         get_process_pid $HB_THRIFT_PSKEY
         if [ $PID -ne 0 ]; then

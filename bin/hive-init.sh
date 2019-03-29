@@ -110,10 +110,10 @@ case "$ACTION" in
         fi
 
         echo "Starting MetaStore..."
-        ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore > $METASTORE_LOG & )
+        ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $METASTORE_LOG & )
 
         echo "Starting HiveServer2..."
-        ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service hiveserver2 > $HIVESERVER2_LOG & )
+        ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVESERVER2_LOG & )
         ;;
 
     'stop')

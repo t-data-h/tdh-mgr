@@ -199,15 +199,15 @@ case "$ACTION" in
         fi
 
         echo " ------ Hadoop ------- "
-        ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh )
-        ( sudo -u $HADOOP_USER $YARN_HOME/sbin/start-yarn.sh )
+        ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh 2>&1 > /dev/null )
+        ( sudo -u $HADOOP_USER $YARN_HOME/sbin/start-yarn.sh 2>&1 > /dev/null )
         ;;
 
     'stop')
         check_process_pidfile $RM_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
-            ( sudo -u $HADOOP_USER $YARN_HOME/sbin/stop-yarn.sh )
+            ( sudo -u $HADOOP_USER $YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
         else
             echo " YARN ResourceManager not running or not found."
         fi
@@ -215,13 +215,13 @@ case "$ACTION" in
         check_process_pidfile $NM_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
-            ( sudo -u $HADOOP_USER $YARN_HOME/sbin/stop-yarn.sh )
+            ( sudo -u $HADOOP_USER $YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
         fi
 
         check_process_pidfile $NN_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
-            ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh )
+            ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh 2>&1 > /dev/null )
         fi
         rt=0
         ;;
