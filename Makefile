@@ -1,6 +1,6 @@
 
 ifndef HADOOP_ROOT
-HADOOP_ROOT=/opt/hadoop
+HADOOP_ROOT=/opt/TDH
 endif
 
 BINPATH="${HADOOP_ROOT}/bin"

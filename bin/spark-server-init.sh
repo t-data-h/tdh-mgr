@@ -4,29 +4,29 @@
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 #
-ACTION="$1"
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
 SPARK_PID="org.apache.spark.deploy.master.Master"
-PID=
 
 # source the hadoop-env-user script
-if [ -z "$HADOOP_ENV_USER" ]; then
-    if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-         .$HOME/hadoop/etc/$HADOOP_ENV
-    if [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        . /etc/hadoop/$HADOOP_ENV
-    elif [ -r "./etc/$HADOOP_ENV" ]; then
-        . ./etc/$HADOOP_ENV
-    fi
+if [ -r "./etc/$HADOOP_ENV" ]; then
+    . ./etc/$HADOOP_ENV
+elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    . /etc/hadoop/$HADOOP_ENV
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+    . $HOME/hadoop/etc/$HADOOP_ENV
+fi
+
+if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    exit 1
 fi
 
 if [ -z "$SPARK_USER" ]; then
     SPARK_USER="$HADOOP_USER"
 fi
-
 
 
 usage()
@@ -36,62 +36,34 @@ usage()
 }
 
 
-check_process_pid()
-{
-    local pid=$1
-
-    if ps ax | grep $pid | grep -v grep 1> /dev/null 2> /dev/null ; then
-        return 1
-    fi
-
-    return 0
-}
-
-get_pid()
-{
-    PID=`ps ax | grep java | grep $SPARK_PID | grep -v grep | awk '{ print $1 }'`
-}
-
-check_process()
-{
-    local ret=0
-
-    get_pid
-
-    if [ -n "$PID" ]; then
-        check_process_pid $PID
-        ret=$?
-    fi
-
-    return $ret
-}
-
 show_status()
 {
-    local ret=0
+    local rt=0
 
-    check_process
-    ret=$?
-    if [ $ret -ne 0 ]; then
+    check_process $SPARK_ID
+
+    rt=$?
+    if [ $rt -ne 0 ]; then
         echo " Spark Standalone      [$PID]"
     else
         echo " Spark Standalone Server is not running"
     fi
 
-    return $ret
+    return $rt
 }
 
 
-
-r=0
+ACTION="$1"
+rt=0
 
 case "$ACTION" in
     'start')
-        check_process
-        r=$?
-        if [ $r -ne 0 ]; then
+        check_process $SPARK_ID
+
+        rt=$?
+        if [ $rt -ne 0 ]; then
             echo "Error: Spark Master is already running [$PID]"
-            exit $r
+            exit $rt
         fi
 
         echo "Starting Spark Standalone..."
@@ -99,14 +71,16 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_process $SPARK_PID
-        r=$?
-        if [ $r -ne 0 ]; then
+        check_process $SPARK_ID
+
+        rt=$?
+        if [ $rt -ne 0 ]; then
             echo "Stopping Spark Standalone..."
             ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/stop-all.sh )
+            rt=0
         else
             echo " Spark Master not running.."
-            exit $r
+            exit $rt
         fi
         ;;
 
@@ -118,4 +92,4 @@ case "$ACTION" in
         ;;
 esac
 
-exit $r
+exit $rt

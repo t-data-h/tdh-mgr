@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export HADOOP_ENV_USER=1
-export HADOOP_ENV_USER_VERSION="0.517"
+export HADOOP_ENV_USER_VERSION="0.518"
 
 
 # Assume that JAVA_HOME is already set or managed by the system.
@@ -66,3 +66,78 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${HADOOP_HOME}/lib
 if [ -n "$HADOOP_PATH" ]; then
     export PATH=${PATH:+${PATH}:}$HADOOP_PATH
 fi
+
+PID=
+
+
+check_process_pid()
+{
+    local pid=$1
+
+    if ps ax | grep $pid | grep -v grep 2>&1> /dev/null ; then
+        PID=$pid
+        return 1
+    fi
+
+    return 0
+}
+
+
+check_process()
+{
+    local key="$1"
+    local rt=0
+
+    PID=$(ps ax | grep $key | grep -v grep | awk '{ print $1 }')
+
+    if [ -n "$PID" ]; then
+        check_process_pid $PID
+        rt=$?
+    fi
+
+    return $rt
+}
+
+
+#  Validates that our configured hostname as provided by `hostname -f`
+#  locally resolves to an interface other than the loopback
+hostip_is_valid()
+{
+    local hostid=$(hostname -s)
+    local hostip=$(hostname -i)
+    local fqdn=$(hostname -f)
+    local iface=
+    local ip=
+    local rt=1
+
+    echo "$fqdn"
+    echo -n  "[$hostid] : $hostip"
+
+    if [ "$hostip" == "127.0.0.1" ]; then
+        echo "   <lo> "
+        echo "  WARNING! Hostname is set to localhost, aborting.."
+        return $rt
+    fi
+
+    IFS=$'\n'
+
+    #for line in `ifconfig | grep inet`; do ip=$( echo $line | awk '{ print $2 }' )
+    for line in `ip addr list | grep "inet "`
+    do
+        IFS=' '
+        iface=$(echo $line | awk -F' ' '{ print $NF }')
+        ip=$(echo $line | awk '{ print $2 }' | awk -F'/' '{ print $1 }')
+
+        if [ "$ip" == "$hostip" ]; then
+            rt=0
+            break
+        fi
+    done
+
+    if [ $rt -eq 0 ]; then
+        echo " : <$iface>"
+    fi
+    echo ""
+
+    return $rt
+}

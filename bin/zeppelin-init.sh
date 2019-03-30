@@ -4,33 +4,34 @@
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 #
-ACTION="$1"
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
-
-# source the hadoop-env-user script
-if [ -z "$HADOOP_ENV_USER" ]; then
-    if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-        . $HOME/hadoop/etc/$HADOOP_ENV
-    elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        . /etc/hadoop/$HADOOP_ENV
-    elif [ -r "./etc/$HADOOP_ENV" ]; then
-        . ./etc/$HADOOP_ENV
-    fi
-fi
-
 
 ZEPPELIN_HOME="$HADOOP_ROOT/zeppelin"
 ZKEY="ZeppelinServer"
 ZLOGDIR="$HADOOP_LOGDIR"
 ZPID=0
 
+
+# source the hadoop-env-user script
+if [ -r "./etc/$HADOOP_ENV" ]; then
+    . ./etc/$HADOOP_ENV
+elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    . /etc/hadoop/$HADOOP_ENV
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+    . $HOME/hadoop/etc/$HADOOP_ENV
+fi
+
+if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    exit 1
+fi
+
 if [ -n "$HADOOP_LOGDIR" ]; then
     ZLOGDIR="$HADOOP_LOGDIR"
 fi
-
 
 
 usage()
@@ -40,69 +41,59 @@ usage()
 }
 
 
-get_process_pid()
-{
-    local key="$1"
-    local pids=
-
-    ZPID=0
-    pids=$(ps awwwx | grep "$key" | grep -v "grep" | awk '{ print $1 }')
-
-    # this is ugly, but the key with a space (even quoted) in it caused
-    # some reliability issues with the above grep
-    for p in $pids; do
-        ZPID=$p
-        break
-    done
-
-    return 0
-}
-
-
 show_status()
 {
-    get_process_pid "$ZKEY"
-    if [ $ZPID -ne 0 ]; then
-        echo " Zeppelin              [$ZPID]"
+    check_process "$ZKEY"
+
+    rt=$?
+    if [ $rt -ne 0 ]; then
+        echo " Zeppelin              [$PID]"
+        rt=0
     else
         echo " Zeppelin is not running"
+        rt=1
     fi
 
-    return $ZPID
+    return $rt
 }
 
 
 ## MAIN
 #
 
-pid=0
+ACTION="$1"
 rt=0
 
 echo " ----- Zeppelin ------ "
 
 case "$ACTION" in
     'start')
-        get_process_pid "$ZKEY"
+        check_process "$ZKEY"
 
-        if [ $ZPID -ne 0 ]; then
-            echo " Zeppelin is already running [$ZPID]"
-            exit $ZPID
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " Zeppelin is already running [$rt]"
+            exit $rt
         fi
 
         echo "Starting Zeppelin..."
         ( cd $ZEPPELIN_HOME; sudo -u $HADOOP_USER $ZEPPELIN_HOME/bin/zeppelin-daemon.sh start )
+        rt=0
         ;;
 
     'stop')
 
-        get_process_pid "$ZKEY"
+        check_process "$ZKEY"
 
-        if [ $ZPID -ne 0 ]; then
+        rt=$?
+        if [ $rt -ne 0 ]; then
             echo "Stopping Zeppelin [$ZPID]..."
             ( sudo -u $HADOOP_USER $ZEPPELIN_HOME/bin/zeppelin-daemon.sh stop )
+            rt=0
             #sleep 1
         else
             echo "Zeppelin not found..."
+            rt=1
         fi
         ;;
 

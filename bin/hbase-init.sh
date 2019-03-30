@@ -4,31 +4,31 @@
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 #
-ACTION="$1"
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
-
-# source the hadoop-env-user script
-if [ -z "$HADOOP_ENV_USER" ]; then
-    if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-        . $HOME/hadoop/etc/$HADOOP_ENV
-    elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        . /etc/hadoop/$HADOOP_ENV
-    elif [ -r "./etc/$HADOOP_ENV" ]; then
-        . ./etc/$HADOOP_ENV
-    fi
-fi
-
 
 HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
 RS_PIDFILE="/tmp/hbase-${HADOOP_USER}-1-regionserver.pid"
 ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
 HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
 HB_THRIFTLOG="hbase-thriftserver.log"
-PID=
+#PID=
 
+# source the hadoop-env-user script
+if [ -r "./etc/$HADOOP_ENV" ]; then
+    . ./etc/$HADOOP_ENV
+elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    . /etc/hadoop/$HADOOP_ENV
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+    . $HOME/hadoop/etc/$HADOOP_ENV
+fi
+
+if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    exit 1
+fi
 
 if [ -n "$HADOOP_LOGDIR" ]; then
     HB_THRIFTLOG="$HADOOP_LOGDIR/hbase/$HB_THRIFTLOG"
@@ -44,12 +44,12 @@ usage()
 }
 
 
-get_process_pid()
+get_process_pids()
 {
     local key="$1"
     local pids=
-
     PID=0
+
     pids=$(ps awwwx | grep "$key" | grep -v "grep" | awk '{ print $1 }')
 
     for p in $pids; do
@@ -61,34 +61,19 @@ get_process_pid()
 }
 
 
-check_process_pid()
-{
-    local pid=$1
-
-    PID=0
-
-    if ps ax | grep $pid | grep -v grep 2>&1 > /dev/null ; then
-        PID=$pid
-        return 1
-    fi
-
-    return 0
-}
-
-
 check_process_pidfile()
 {
     local pidf="$1"
-    local ret=0
     local pid=0
+    local rt=0
 
     if [ -r $pidf ]; then
         pid=$(cat $pidf)
         check_process_pid $pid
-        ret=$?
+        rt=$?
     fi
 
-    return $ret
+    return $rt
 }
 
 
@@ -120,8 +105,9 @@ show_status()
         echo " RegionServer is not running"
     fi
 
-    get_process_pid $HB_THRIFT_PSKEY
-    if [ $PID -ne 0 ]; then
+    #get_process_pid $HB_THRIFT_PSKEY
+    check_process "$HB_THRIFT_PSKEY"
+    if [ $rt -ne 0 ]; then
         echo " HBase ThriftServer    [$PID]"
     else
         echo " ThriftServer is not running"
@@ -135,6 +121,7 @@ show_status()
 #  MAIN
 # =================
 
+ACTION="$1"
 rt=0
 
 echo " ------ HBase -------- "
@@ -154,11 +141,13 @@ case "$ACTION" in
         fi
 
         if [ $rt -eq 0 ]; then
+            echo "Starting HBase..."
             ( sudo -u $HADOOP_USER $HBASE_HOME/bin/start-hbase.sh 2>&1 > /dev/null )
         fi
 
-        get_process_pid $HB_THRIFT_PSKEY
-        if [ $PID -ne 0 ]; then
+        check_process $HB_THRIFT_PSKEY
+        rt=$?
+        if [ $rt -ne 0 ]; then
             echo " ThriftServer is already running  [$PID]"
         else
             echo "Starting HBase ThriftServer..."
@@ -167,10 +156,15 @@ case "$ACTION" in
         ;;
 
     'stop')
+        check_process_pidfile $HB_PIDFILE
+
+        echo "Stopping HBase..."
         ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null )
 
-        get_process_pid $HB_THRIFT_PSKEY
-        if [ $PID -ne 0 ]; then
+        check_process $HB_THRIFT_PSKEY
+        rt=$?
+
+        if [ $rt -ne 0 ]; then
             echo "Stopping HBase ThriftServer [$PID]..."
             ( sudo -u $HADOOP_USER kill $PID )
         else

@@ -2,29 +2,28 @@
 #
 ##  Timothy C. Arland <tcarland@gmail.com>
 #
-ACTION="$1"
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
-SPARK_PID="org.apache.spark.deploy.history.HistoryServer"
-PID=
-
+SPARK_ID="org.apache.spark.deploy.history.HistoryServer"
 
 # source the hadoop-env-user script
-if [ -z "$HADOOP_ENV_USER" ]; then
-    if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-        . $HOME/hadoop/etc/$HADOOP_ENV
-    elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        . /etc/hadoop/$HADOOP_ENV
-    elif [ -r "./etc/$HADOOP_ENV" ]; then
-        . ./etc/$HADOOP_ENV
-    fi
+if [ -r "./etc/$HADOOP_ENV" ]; then
+    . ./etc/$HADOOP_ENV
+elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    . /etc/hadoop/$HADOOP_ENV
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+    . $HOME/hadoop/etc/$HADOOP_ENV
 fi
-
 
 if [ -z "$SPARK_USER" ]; then
     SPARK_USER="$HADOOP_USER"
+fi
+
+if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    exit 1
 fi
 
 
@@ -35,44 +34,11 @@ usage()
 }
 
 
-check_process_pid()
-{
-    local pid=$1
-
-    if ps ax | grep $pid | grep -v grep 1> /dev/null 2> /dev/null ; then
-        return 1
-    fi
-
-    return 0
-}
-
-
-get_pid()
-{
-    PID=$(ps ax | grep java | grep $SPARK_PID | grep -v grep | awk '{ print $1 }')
-}
-
-
-check_process()
-{
-    local ret=0
-
-    get_pid
-
-    if [ -n "$PID" ]; then
-        check_process_pid $PID
-        ret=$?
-    fi
-
-    return $ret
-}
-
-
 show_status()
 {
     local ret=0
 
-    check_process
+    check_process "$SPARK_ID"
     ret=$?
 
     if [ $ret -ne 0 ]; then
@@ -89,18 +55,18 @@ show_status()
 #  MAIN
 # =================
 
-
-r=0
+ACTION="$1"
+rt=0
 
 echo " ------ Spark2 ------- "
 
 case "$ACTION" in
     'start')
-        check_process
-        r=$?
-        if [ $r -ne 0 ]; then
+        check_process "$SPARK_ID"
+        rt=$?
+        if [ $rt -ne 0 ]; then
             echo "Error: Spark2 HistoryServer is already running [$PID]"
-            exit $r
+            exit $rt
         fi
 
         echo "Starting Spark2 HistoryServer"
@@ -108,12 +74,12 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_process
-        r=$?
-        if [ $r -ne 0 ]; then
+        check_process "$SPARK_ID"
+        rt=$?
+        if [ $rt -ne 0 ]; then
             echo "Stopping Spark2 HistoryServer [$PID]"
             ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/stop-history-server.sh 2>&1 > /dev/null )
-            r=0
+            rt=0
         else
             echo "Spark2 HistoryServer not found.."
         fi
@@ -127,4 +93,4 @@ case "$ACTION" in
         ;;
 esac
 
-exit $r
+exit $rt

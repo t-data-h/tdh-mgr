@@ -14,17 +14,19 @@ SN_PIDFILE="-secondarynamenode.pid"
 DN_PIDFILE="-datanode.pid"
 RM_PIDFILE="-resourcemanager.pid"
 NM_PIDFILE="-nodemanager.pid"
-PID=
 
 # source the hadoop-env-user script
-if [ -z "$HADOOP_ENV_USER" ]; then
-    if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-        . $HOME/hadoop/etc/$HADOOP_ENV
-    elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        . /etc/hadoop/$HADOOP_ENV
-    elif [ -r "./etc/$HADOOP_ENV" ]; then
-        . ./etc/$HADOOP_ENV
-    fi
+if [ -r "./etc/$HADOOP_ENV" ]; then
+    . ./etc/$HADOOP_ENV
+elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    . /etc/hadoop/$HADOOP_ENV
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+    . $HOME/hadoop/etc/$HADOOP_ENV
+fi
+
+if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    exit 1
 fi
 
 
@@ -35,74 +37,14 @@ usage()
 }
 
 
-#  Validates that our configured hostname as provided by `hostname -f`
-#  locally resolves to an interface other than the loopback
-hostip_is_valid()
-{
-    local hostid=$(hostname -s)
-    local hostip=$(hostname -i)
-    local fqdn=$(hostname -f)
-    local iface=
-    local ip=
-    local rt=1
-
-    echo ""
-    echo "$fqdn"
-    echo -n  "[$hostid] : $hostip"
-
-    if [ "$hostip" == "127.0.0.1" ]; then
-        echo "   <lo> "
-        echo "  WARNING! Hostname is set to localhost, aborting.."
-        return $rt
-    fi
-
-    IFS=$'\n'
-
-    #for line in `ifconfig | grep inet`; do ip=$( echo $line | awk '{ print $2 }' )
-    for line in `ip addr list | grep "inet "`
-    do
-        IFS=' '
-        iface=$(echo $line | awk -F' ' '{ print $NF }')
-        ip=$(echo $line | awk '{ print $2 }' | awk -F'/' '{ print $1 }')
-
-        if [ "$ip" == "$hostip" ]; then
-            rt=0
-            break
-        fi
-    done
-
-    if [ $rt -eq 0 ]; then
-        echo " : <$iface>"
-    fi
-    echo ""
-
-    return $rt
-}
-
-
-check_process_pid()
-{
-    local pid=$1
-    PID=0
-
-    if ps ax | grep $pid | grep -v grep 1> /dev/null 2> /dev/null ; then
-        PID=$pid
-        return 1
-    fi
-
-    return 0
-}
-
-
 check_process_pidfile()
 {
     local pidf=$(ls /tmp/*-${HADOOP_USER}$1 2> /dev/null)
     local rt=$?
-    local pid=0
 
     if [ -n "$pidf" ] && [ -r $pidf ]; then
-        pid=$(cat ${pidf})
-        check_process_pid $pid
+        PID=$(cat ${pidf})
+        check_process_pid $PID
         rt=$?
     fi
 
@@ -121,8 +63,6 @@ show_status()
         echo "    Please verify networking is configured properly."
         return $rt
     fi
-
-    echo " ------ Hadoop ------- "
 
     check_process_pidfile $NN_PIDFILE
     rt=$?
@@ -172,8 +112,10 @@ show_status()
 #  MAIN
 # =================
 
-rt=0
 ACTION="$1"
+rt=0
+
+echo " ------ Hadoop ------- "
 
 case "$ACTION" in
     'start')
@@ -190,7 +132,7 @@ case "$ACTION" in
             echo " HDFS Namenode is already running  [$PID]"
             exit $rt
         fi
-
+#
         hostip_is_valid
         rt=$?
         if [ $rt -ne 0 ]; then
@@ -198,8 +140,9 @@ case "$ACTION" in
             exit $rt
         fi
 
-        echo " ------ Hadoop ------- "
+        echo "Starting HDFS..."
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh 2>&1 > /dev/null )
+        echo "Starting YARN..."
         ( sudo -u $HADOOP_USER $YARN_HOME/sbin/start-yarn.sh 2>&1 > /dev/null )
         ;;
 
@@ -207,6 +150,7 @@ case "$ACTION" in
         check_process_pidfile $RM_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
+            echo "Stopping YARN [$PID]..."
             ( sudo -u $HADOOP_USER $YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
         else
             echo " YARN ResourceManager not running or not found."
@@ -221,6 +165,7 @@ case "$ACTION" in
         check_process_pidfile $NN_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
+            echo "Stopping HDFS [$PID]..."
             ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh 2>&1 > /dev/null )
         fi
         rt=0

@@ -7,33 +7,34 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-ACTION="$1"
-CONFIG="$2"
-
 HADOOP_ENV="hadoop-env-user.sh"
 
+KAFKA_ID="kafka.Kafka"
+KAFKA_CFG="config/server.properties"
+
 # source the hadoop-env-user script
-if [ -z "$HADOOP_ENV_USER" ]; then
-    if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-        . $HOME/hadoop/etc/$HADOOP_ENV
-    elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        . /etc/hadoop/$HADOOP_ENV
-    elif [ -r "./etc/$HADOOP_ENV" ]; then
-        . ./etc/$HADOOP_ENV
-    fi
+if [ -r "./etc/$HADOOP_ENV" ]; then
+    . ./etc/$HADOOP_ENV
+elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    . /etc/hadoop/$HADOOP_ENV
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+    . $HOME/hadoop/etc/$HADOOP_ENV
+fi
+
+if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    exit 1
 fi
 
 if [ -z "$HADOOP_USER" ]; then
     HADOOP_USER="$USER"
 fi
+
 if [ -z "$KAFKA_HOME" ]; then
     echo "Error! KAFKA_HOME is not set. Check your hadoop env."
     exit 1
 fi
 
-KAFKA_PID="kafka.Kafka"
-KAFKA_CFG="config/server.properties"
-PID=
 
 
 usage()
@@ -43,44 +44,13 @@ usage()
 }
 
 
-check_process_pid()
-{
-    local pid=$1
-
-    if ps ax | grep $pid | grep -v grep 1> /dev/null 2> /dev/null ; then
-        return 1
-    fi
-
-    return 0
-}
-
-get_pid()
-{
-    PID=$(ps ax | grep java | grep $KAFKA_PID | grep -v grep | awk '{ print $1 }')
-}
-
-
-check_process()
-{
-    local rt=0
-
-    get_pid
-
-    if [ -n "$PID" ]; then
-        check_process_pid $PID
-        rt=$?
-    fi
-
-    return $rt
-}
-
-
 show_status()
 {
     local rt=0
 
-    check_process
+    check_process "$KAFKA_ID"
     rt=$?
+
     if [ $rt -ne 0 ]; then
         echo " Kafka Broker          [$PID]"
     else
@@ -96,13 +66,15 @@ show_status()
 # =================
 
 
+ACTION="$1"
+CONFIG="$2"
 rt=0
 
 echo " ------ Kafka -------- "
 
 case "$ACTION" in
     'start')
-        check_process
+        check_process $KAFKA_ID
         rt=$?
         if [ $rt -ne 0 ]; then
             echo " Kafka Broker is already running"
@@ -113,12 +85,12 @@ case "$ACTION" in
             KAFKA_CFG="$CONFIG"
         fi
 
-        echo "Starting Kafka Broker"
+        echo "Starting Kafka Broker..."
         ( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG 2>&1 > /dev/null )
         ;;
 
     'stop')
-        check_process
+        check_process $KAFKA_ID
         rt=$?
         if [ $rt -ne 0 ]; then
             echo "Stopping Kafka Broker [$PID]"
@@ -137,6 +109,5 @@ case "$ACTION" in
         usage
         ;;
 esac
-
 
 exit $rt

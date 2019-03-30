@@ -4,31 +4,29 @@
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 #
-ACTION="$1"
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-
 HADOOP_ENV="hadoop-env-user.sh"
-
-# source the hadoop-env-user script
-if [ -z "$HADOOP_ENV_USER" ]; then
-    if [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-        . $HOME/hadoop/etc/$HADOOP_ENV
-    elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
-        . /etc/hadoop/$HADOOP_ENV
-    elif [ -r "./etc/$HADOOP_ENV" ]; then
-        . ./etc/$HADOOP_ENV
-    fi
-    source $HADOOP_ENV
-fi
-
 
 HUE_HOME="$HADOOP_ROOT/hue"
 HUE_KEY="hue runserver"
 HUE_LOGDIR="$HADOOP_LOGDIR"
-HPID=0
 
+
+# source the hadoop-env-user script
+if [ -r "./etc/$HADOOP_ENV" ]; then
+    . ./etc/$HADOOP_ENV
+elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    . /etc/hadoop/$HADOOP_ENV
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+    . $HOME/hadoop/etc/$HADOOP_ENV
+fi
+
+if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    exit 1
+fi
 
 if [ -z "$HADOOP_USER" ]; then
     HADOOP_USER="$USER"
@@ -47,24 +45,6 @@ usage()
 }
 
 
-get_process_pid()
-{
-    local key="$1"
-    local pids=
-
-    HPID=0
-    pids=$(ps awwwx | grep "$key" | grep -v "grep" | awk '{ print $1 }')
-
-    # this is ugly, but the key with a space (even quoted) in it caused
-    # some reliability issues with the above grep
-    for p in $pids; do
-        HPID=$p
-        break
-    done
-
-    return 0
-}
-
 show_status()
 {
     get_process_pid "$HUE_KEY"
@@ -78,17 +58,18 @@ show_status()
 }
 
 
-pid=0
+ACTION="$1"
 rt=0
 
 
 case "$ACTION" in
     'start')
-        get_process_pid "$HUE_KEY"
+        check_process "$HUE_KEY"
 
-        if [ $HPID -ne 0 ]; then
-            echo " Hue is already running [$HPID]"
-            exit $HPID
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " Hue is already running [$PID]"
+            exit $rt
         fi
 
         echo "Starting Hue..."
@@ -96,12 +77,12 @@ case "$ACTION" in
         ;;
 
     'stop')
+        check_process "$HUE_KEY"
 
-        get_process_pid "$HUE_KEY"
-
-        if [ $HPID -ne 0 ]; then
-            echo "Stopping Hue [$HPID]..."
-            ( sudo -u $HADOOP_USER kill $HPID )
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo "Stopping Hue [$PID]..."
+            ( sudo -u $HADOOP_USER kill $PID )
             sleep 1
             ( sudo -u $HADOOP_USER killall hue > /dev/null )
         else
