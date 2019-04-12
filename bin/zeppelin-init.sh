@@ -11,7 +11,6 @@ HADOOP_ENV="hadoop-env-user.sh"
 
 ZEPPELIN_HOME="$HADOOP_ROOT/zeppelin"
 ZKEY="ZeppelinServer"
-ZLOGDIR="$HADOOP_LOGDIR"
 ZPID=0
 
 
@@ -29,9 +28,6 @@ if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
     exit 1
 fi
 
-if [ -n "$HADOOP_LOGDIR" ]; then
-    ZLOGDIR="$HADOOP_LOGDIR"
-fi
 
 
 usage()
