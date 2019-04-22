@@ -11,9 +11,9 @@ HADOOP_ENV="hadoop-env-user.sh"
 
 HIVEMETASTORE="MetaStore"
 HIVESERVER2="HiveServer2"
-HIVE_LOGDIR="/var/log/hadoop/hive"
-METASTORE_LOG="$HIVE_LOGDIR/hive-metastore.log"
-HIVESERVER2_LOG="$HIVE_LOGDIR/hiveserver2.log"
+HIVE_LOGDIR="${HADOOP_LOGDIR}/hive"
+METASTORE_LOG="${HIVE_LOGDIR}/hive-metastore.log"
+HIVESERVER2_LOG="${HIVE_LOGDIR}/hiveserver2.log"
 METADB="mysqld"
 
 # source the hadoop-env-user script
@@ -28,10 +28,6 @@ fi
 if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
-fi
-
-if [ -n "$HADOOP_LOGDIR" ]; then
-    HIVE_LOGDIR="$HADOOP_LOGDIR/hive"
 fi
 
 

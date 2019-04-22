@@ -29,8 +29,7 @@ if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
     exit 1
 else
     echo ""
-    echo "$PNAME v${HADOOP_ENV_USER_VERSION}"
-    echo ""
+    echo "  $PNAME v${HADOOP_ENV_USER_VERSION}"
 fi
 
 if [ -n "$HADOOP_ECOSYSTEM_INITS" ]; then
@@ -60,7 +59,8 @@ usage()
 version()
 {
     echo ""
-    echo "TDH Environment v${HADOOP_ENV_USER_VERSION}"
+    echo "hadoop-env-user:"
+    echo "  TDH Environment v${HADOOP_ENV_USER_VERSION}"
     echo ""
 }
 
