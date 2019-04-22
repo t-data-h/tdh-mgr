@@ -13,7 +13,7 @@ HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
 RS_PIDFILE="/tmp/hbase-${HADOOP_USER}-1-regionserver.pid"
 ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
 HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
-HB_THRIFTLOG="hbase-thriftserver.log"
+HB_THRIFTLOG="${HADOOP_LOGDIR}/hbase/hbase-thriftserver.log"
 #PID=
 
 # source the hadoop-env-user script
@@ -30,11 +30,6 @@ if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
     exit 1
 fi
 
-if [ -n "$HADOOP_LOGDIR" ]; then
-    HB_THRIFTLOG="$HADOOP_LOGDIR/hbase/$HB_THRIFTLOG"
-else
-    HB_THRIFTLOG="/tmp/$HB_THRIFTLOG"
-fi
 
 
 usage()

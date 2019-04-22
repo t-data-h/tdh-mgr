@@ -1,3 +1,5 @@
+# Makefile for tdh-hadoop installation
+#
 
 ifndef HADOOP_ROOT
 HADOOP_ROOT=/opt/TDH
