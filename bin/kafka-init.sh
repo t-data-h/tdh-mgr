@@ -26,10 +26,6 @@ if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
     exit 1
 fi
 
-if [ -z "$HADOOP_USER" ]; then
-    HADOOP_USER="$USER"
-fi
-
 if [ -z "$KAFKA_HOME" ]; then
     echo "Error! KAFKA_HOME is not set. Check your hadoop env."
     exit 1
