@@ -28,15 +28,6 @@ if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
     exit 1
 fi
 
-if [ -z "$HADOOP_USER" ]; then
-    HADOOP_USER="$USER"
-fi
-
-if [ -n "$HADOOP_LOGDIR" ]; then
-    HUE_LOGDIR="$HADOOP_LOGDIR"
-fi
-
-
 
 usage()
 {
