@@ -14,7 +14,6 @@ RS_PIDFILE="/tmp/hbase-${HADOOP_USER}-1-regionserver.pid"
 ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
 HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
 HB_THRIFTLOG="${HADOOP_LOGDIR}/hbase/hbase-thriftserver.log"
-#PID=
 
 # source the hadoop-env-user script
 if [ -r "./etc/$HADOOP_ENV" ]; then
