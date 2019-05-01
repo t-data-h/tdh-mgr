@@ -29,7 +29,8 @@ if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
     exit 1
 else
     echo ""
-    echo "  $PNAME v${HADOOP_ENV_USER_VERSION}"
+    echo "$PNAME v${HADOOP_ENV_USER_VERSION}"
+    echo ""
 fi
 
 if [ -n "$HADOOP_ECOSYSTEM_INITS" ]; then
