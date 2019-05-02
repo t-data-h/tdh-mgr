@@ -60,7 +60,6 @@ usage()
 version()
 {
     echo ""
-    echo "hadoop-env-user:"
     echo "  TDH Environment v${HADOOP_ENV_USER_VERSION}"
     echo ""
 }
