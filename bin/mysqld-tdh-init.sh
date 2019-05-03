@@ -8,7 +8,7 @@ PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
-TDHMYSQL="mysqld"
+TDHMYSQL="mysqld --"
 
 
 # source the hadoop-env-user script
@@ -40,14 +40,14 @@ if [ -z "$TDHDOCKER_MYSQL" ]; then
     exit 0;  # exit silently as no container name is provided or set
 fi
 
-echo " ----- TDH MySQL ----- "
+echo " ------- MySQL ------- "
 
 case "$ACTION" in
     'start')
         check_process "$TDHMYSQL"
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo "TDH Mysql Daemon already running [$PID]"
+            echo "Mysql Daemon already running [$PID]"
             exit $rt
         fi
 
@@ -58,11 +58,11 @@ case "$ACTION" in
         check_process "$TDHMYSQL"
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo "Stopping TDH-Mysql [$PID]..."
+            echo "Stopping Mysql Docker $TDHDOCKER_MYSQL [$PID]..."
 
-            ( docker stop $TDHDOCKER_MYSQL )
+            ( docker stop $TDHDOCKER_MYSQL > /dev/null )
         else
-            echo " TDH Mysql not running or not found."
+            echo " Mysqld not running or not found."
         fi
         ;;
 
@@ -70,9 +70,9 @@ case "$ACTION" in
         check_process "$TDHMYSQL"
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo " TDH MySQL             [$PID]"
+            echo "  MySQL                [$PID]"
         else
-            echo " TDH MySQL is not running"
+            echo " MySQL Daemon is not running"
         fi
         ;;
     *)
