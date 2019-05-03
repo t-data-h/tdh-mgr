@@ -77,11 +77,10 @@ case "$ACTION" in
         if [ $rt -ne 0 ]; then
             echo "Stopping Spark Standalone..."
             ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/stop-all.sh )
-            rt=0
         else
             echo " Spark Master not running.."
-            exit $rt
         fi
+        rt=0
         ;;
 
     'status'|'info')

@@ -58,12 +58,13 @@ case "$ACTION" in
         check_process "$TDHMYSQL"
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo "Stopping Mysql Docker $TDHDOCKER_MYSQL [$PID]..."
+            echo "Stopping Mysql Container $TDHDOCKER_MYSQL [$PID]..."
 
             ( docker stop $TDHDOCKER_MYSQL > /dev/null )
         else
             echo " Mysqld not running or not found."
         fi
+        rt=0
         ;;
 
     'status')

@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export HADOOP_ENV_USER=1
-export HADOOP_ENV_USER_VERSION="0.525"
+export HADOOP_ENV_USER_VERSION="0.526"
 
 
 # Assume that JAVA_HOME is already set or managed by the system.
@@ -45,6 +45,7 @@ export SPARK_HOME="$HADOOP_ROOT/spark"
 # bin path
 export HADOOP_PATH="\
 $HADOOP_ROOT/bin:\
+$HADOOP_ROOT/sbin:\
 $HADOOP_HOME/bin:\
 $HBASE_HOME/bin:\
 $HIVE_HOME/bin:\

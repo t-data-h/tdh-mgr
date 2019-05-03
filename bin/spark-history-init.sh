@@ -79,10 +79,10 @@ case "$ACTION" in
         if [ $rt -ne 0 ]; then
             echo "Stopping Spark2 HistoryServer [$PID]"
             ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/stop-history-server.sh 2>&1 > /dev/null )
-            rt=0
         else
             echo "Spark2 HistoryServer not found.."
         fi
+        rt=0
         ;;
 
     'status'|'info')
