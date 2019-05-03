@@ -70,7 +70,7 @@ case "$ACTION" in
         check_process "$TDHMYSQL"
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo "  MySQL                [$PID]"
+            echo " MySQL Daemon          [$PID]"
         else
             echo " MySQL Daemon is not running"
         fi

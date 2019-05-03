@@ -8,7 +8,7 @@ PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # default init script list
-inits="hadoop-init.sh hbase-init.sh mysqld-tdh-init.sh hive-init.sh kafka-init.sh \
+inits="hadoop-init.sh mysqld-tdh-init.sh hbase-init.sh hive-init.sh kafka-init.sh \
 spark-history-init.sh hue-init.sh"
 force=0
 
