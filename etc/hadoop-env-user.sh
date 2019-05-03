@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export HADOOP_ENV_USER=1
-export HADOOP_ENV_USER_VERSION="0.522"
+export HADOOP_ENV_USER_VERSION="0.523"
 
 
 # Assume that JAVA_HOME is already set or managed by the system.
