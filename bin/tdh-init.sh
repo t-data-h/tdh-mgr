@@ -8,7 +8,7 @@ PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # default init script list
-inits="hadoop-init.sh mysqld-tdh-init.sh hbase-init.sh hive-init.sh kafka-init.sh \
+INITS="hadoop-init.sh mysqld-tdh-init.sh hbase-init.sh hive-init.sh kafka-init.sh \
 spark-history-init.sh hue-init.sh"
 force=0
 
@@ -34,7 +34,7 @@ else
 fi
 
 if [ -n "$HADOOP_ECOSYSTEM_INITS" ]; then
-    inits="$HADOOP_ECOSYSTEM_INITS"
+    INITS="$HADOOP_ECOSYSTEM_INITS"
 fi
 # -----------
 
@@ -50,8 +50,8 @@ usage()
     echo "  HADOOP_ECOSYSTEM_INITS=\"${HADOOP_ECOSYSTEM_INITS}\""
     if [ -z "$HADOOP_ECOSYSTEM_INITS" ]; then
         echo ""
-        echo "  Using defaults:"
-        echo "  '$inits'"
+        echo "  Using default list:"
+        echo "  '$INITS'"
     fi
     echo ""
 }
@@ -71,7 +71,7 @@ run_action()
     local rt=0
     local cmd=
 
-    for cmd in $inits; do
+    for cmd in $INITS; do
         ( $cmd $action )
         rt=$?
 
@@ -103,7 +103,7 @@ stop_all()
     local rt=0
 
     # reverse our list for stop
-    for cmd in $inits; do
+    for cmd in $INITS; do
         if [ "$tmp" ]; then
             tmp="$cmd $tmp"
         else
@@ -111,7 +111,7 @@ stop_all()
         fi
     done
 
-    inits="$tmp"
+    INITS="$tmp"
 
     run_action "stop"
     rt=$?
