@@ -9,7 +9,6 @@ AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HADOOP_ENV="hadoop-env-user.sh"
 TDHMYSQL="mysqld"
-TDHDOCKER_MYSQL="tdh-mysql1"
 
 
 # source the hadoop-env-user script
@@ -37,6 +36,9 @@ usage()
 ACTION="$1"
 rt=0
 
+if [ -z "$TDHDOCKER_MYSQL" ]; then
+    exit 0;  # exit silently as no container name is provided or set
+fi
 
 echo " ----- TDH MySQL ----- "
 
