@@ -8,13 +8,13 @@ PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # default init script list
-inits="hadoop-init.sh hbase-init.sh hive-init.sh kafka-init.sh \
+inits="hadoop-init.sh hbase-init.sh mysqld-tdh-init.sh hive-init.sh kafka-init.sh \
 spark-history-init.sh hue-init.sh"
 force=0
 
 HADOOP_ENV="hadoop-env-user.sh"
 
-
+# ----------- preable
 # source the hadoop-env-user script
 if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
@@ -36,7 +36,7 @@ fi
 if [ -n "$HADOOP_ECOSYSTEM_INITS" ]; then
     inits="$HADOOP_ECOSYSTEM_INITS"
 fi
-
+# -----------
 
 
 usage()

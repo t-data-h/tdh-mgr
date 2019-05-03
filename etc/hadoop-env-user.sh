@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export HADOOP_ENV_USER=1
-export HADOOP_ENV_USER_VERSION="0.523"
+export HADOOP_ENV_USER_VERSION="0.525"
 
 
 # Assume that JAVA_HOME is already set or managed by the system.
@@ -28,7 +28,7 @@ export HADOOP_ROOT="/opt/TDH"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
 
-# enable mysqld docker container by name 
+# enable mysqld docker container by name
 export TDHDOCKER_MYSQL="tdh-mysql1"
 
 # Set components home
@@ -91,10 +91,14 @@ check_process()
     local key="$1"
     local rt=0
 
-    PID=$(ps ax | grep $key | grep -v grep | awk '{ print $1 }')
+    if [ -z "$key" ]; then
+        return $rt
+    fi
 
-    if [ -n "$PID" ]; then
-        check_process_pid $PID
+    pid=$(ps ax | grep "$key" | grep -v grep | awk '{ print $1 }')
+
+    if [ -n "$pid" ]; then
+        check_process_pid $pid
         rt=$?
     fi
 

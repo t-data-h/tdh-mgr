@@ -64,6 +64,7 @@ show_status()
         return $rt
     fi
 
+    echo " ------ Hadoop ------- "
     check_process_pidfile $NN_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
@@ -115,7 +116,6 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " ------ Hadoop ------- "
 
 case "$ACTION" in
     'start')
@@ -140,6 +140,7 @@ case "$ACTION" in
             exit $rt
         fi
 
+        echo " ------ Hadoop ------- "
         echo "Starting HDFS..."
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh 2>&1 > /dev/null )
         echo "Starting YARN..."
@@ -147,6 +148,7 @@ case "$ACTION" in
         ;;
 
     'stop')
+        echo " ------ Hadoop ------- "
         check_process_pidfile $RM_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
