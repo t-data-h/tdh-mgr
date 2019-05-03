@@ -5,7 +5,7 @@
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v0.1.6"
+VERSION="v0.2.6"
 
 
 
@@ -19,8 +19,8 @@ usage()
     echo "                     $(hostname -i)/24"
     echo "  -V|--version   : Display version and exit"
     echo ""
-    echo "      Note the /24 netmask is assumed above but should"
-    echo "      always be provided when setting an alternate ip address"
+    echo "   Note the /24 netmask is the default used above, but the netmask"
+    echo "   should always be provided with the -I option"
     echo ""
 }
 
@@ -130,7 +130,7 @@ if [ "$ACTION" == "start" ]; then
         echo ""
 	    echo "  Binding $BINDIP to interface $IFACE"
 
-        ( ip addr add $BINDIP dev $IFACE )
+        ( sudo ip addr add $BINDIP dev $IFACE )
         rt=$?
 
         hostip_is_valid

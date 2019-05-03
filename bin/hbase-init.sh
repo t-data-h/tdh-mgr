@@ -164,6 +164,7 @@ case "$ACTION" in
         else
             echo "HBase Thrift Server not found..."
         fi
+        rt=0
         ;;
 
     'status'|'info')

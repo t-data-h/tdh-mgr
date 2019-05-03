@@ -119,6 +119,7 @@ case "$ACTION" in
         else
             echo "HiveServer2 process not found..."
         fi
+        rt=0
         ;;
 
     'status'|'info')
