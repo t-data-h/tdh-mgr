@@ -10,6 +10,7 @@ SBINPATH="${HADOOP_ROOT}/sbin"
 ETCPATH="${HADOOP_ROOT}/etc"
 
 install:
+	( mkdir -p ${BINPATH}; mkdir -p ${SBINPATH} )
 	( cp etc/* ${ETCPATH} )
 	( cp bin/*.sh ${BINPATH} )
 	( cp sbin/*.sh ${SBINPATH} )
