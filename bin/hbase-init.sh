@@ -7,19 +7,21 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-HADOOP_ENV="hadoop-env-user.sh"
-
 HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
 RS_PIDFILE="/tmp/hbase-${HADOOP_USER}-1-regionserver.pid"
 ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
 HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
 HB_THRIFTLOG="${HADOOP_LOGDIR}/hbase/hbase-thriftserver.log"
 
-# source the hadoop-env-user script
+# ----------- preamble
+HADOOP_ENV="hadoop-env-user.sh"
+
 if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
+elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
+    . /opt/TDH/etc/$HADOOP_ENV
 elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
     . $HOME/hadoop/etc/$HADOOP_ENV
 fi
@@ -28,6 +30,7 @@ if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+# -----------
 
 
 
