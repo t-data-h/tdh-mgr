@@ -7,17 +7,19 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-HADOOP_ENV="hadoop-env-user.sh"
-
 KAFKA_ID="kafka.Kafka"
 KAFKA_CFG="config/server.properties"
 
-# source the hadoop-env-user script
+# ----------- preamble
+HADOOP_ENV="hadoop-env-user.sh"
+
 if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
-elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then        # /opt/TDH   is default
+    . /opt/TDH/etc/$HADOOP_ENV
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then    # $HOME is last
     . $HOME/hadoop/etc/$HADOOP_ENV
 fi
 
@@ -25,6 +27,7 @@ if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+# -----------
 
 if [ -z "$KAFKA_HOME" ]; then
     echo "Error! KAFKA_HOME is not set. Check your hadoop env."

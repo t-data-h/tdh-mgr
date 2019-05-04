@@ -12,16 +12,22 @@ INITS="hadoop-init.sh mysqld-tdh-init.sh hbase-init.sh hive-init.sh kafka-init.s
 spark-history-init.sh hue-init.sh"
 force=0
 
+# ----------- preamble
 HADOOP_ENV="hadoop-env-user.sh"
+HADOOP_ENV_PATH=
 
-# ----------- preable
-# source the hadoop-env-user script
-if [ -r "./etc/$HADOOP_ENV" ]; then
+if [ -r "./etc/$HADOOP_ENV" ]; then                 # local directory 1st
     . ./etc/$HADOOP_ENV
-elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    HADOOP_ENV_PATH="./etc"
+elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then         # /etc/hadoop/  primary
     . /etc/hadoop/$HADOOP_ENV
-elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+    HADOOP_ENV_PATH="/etc/hadoop"
+elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then                # /opt/TDH   is default
+    . $HADOOP_ENV_PATH/$HADOOP_ENV
+    HADOOP_ENV_PATH="/opt/TDH/etc"
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then    # $HOME is last
     . $HOME/hadoop/etc/$HADOOP_ENV
+    HADOOP_ENV_PATH="$HOME/hadoop/etc"
 fi
 
 if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
@@ -29,7 +35,7 @@ if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
     exit 1
 else
     echo ""
-    echo "$PNAME v${HADOOP_ENV_USER_VERSION}"
+    echo "$PNAME v${HADOOP_ENV_USER_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})"
     echo ""
 fi
 
@@ -45,7 +51,7 @@ usage()
     echo "Usage: $PNAME [-fh]  {start|stop|status}"
     echo "     -h|--help    : Show usage and exit"
     echo "     -f|--force   : Run all start/stop scripts ignoring any errors"
-    echo "     -V|--version : Show TDH Environment version and exit"
+    echo "     -V|--version : Show TDH version and exit"
     echo ""
     echo "  HADOOP_ECOSYSTEM_INITS=\"${HADOOP_ECOSYSTEM_INITS}\""
     if [ -z "$HADOOP_ECOSYSTEM_INITS" ]; then

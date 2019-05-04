@@ -7,19 +7,26 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-HADOOP_ENV="hadoop-env-user.sh"
 TDHMYSQL="mysqld --"
 
+## ----------- preamble
+HADOOP_ENV="hadoop-env-user.sh"
 
-# source the hadoop-env-user script
 if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
-elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then        # /opt/TDH   is default
+    . /opt/TDH/etc/$HADOOP_ENV
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then    # $HOME is last
     . $HOME/hadoop/etc/$HADOOP_ENV
 fi
 
+if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    exit 1
+fi
+# -----------
 
 
 usage()
@@ -48,10 +55,10 @@ case "$ACTION" in
         rt=$?
         if [ $rt -ne 0 ]; then
             echo "Mysql Daemon already running [$PID]"
-            exit $rt
+        else
+            ( docker start $TDHDOCKER_MYSQL > /dev/null )
         fi
-
-        ( docker start $TDHDOCKER_MYSQL )
+        rt=0
         ;;
 
     'stop')
