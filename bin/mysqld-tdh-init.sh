@@ -67,7 +67,6 @@ case "$ACTION" in
         rt=$?
         if [ $rt -ne 0 ]; then
             echo "Stopping Mysql Container $TDHDOCKER_MYSQL [$PID]..."
-
             ( docker stop $TDHDOCKER_MYSQL > /dev/null )
         else
             echo " Mysqld not running or not found."
