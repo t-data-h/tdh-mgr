@@ -1,4 +1,4 @@
-TDH-HADOOP
+TDH Hadoop 
 ===========
 
   TDH is a custom hadoop distribution with an initial configuration as a
@@ -15,11 +15,10 @@ instructions are based on building a distribution using the following
 versions:
 
 - Hadoop 2.7.x
-- HBase  1.1.x - 1.2
+- HBase  1.1.x - 1.3
 - Hive   1.2.x
-- Spark  1.6.x - 2.3.x
+- Spark  1.6.x - 2.4.x
 - Kafka  0.10.x
 
-Refer to the setup document in *docs/tdh-hadoop-setup.md* for building 
+Refer to the setup document in *docs/tdh-hadoop-setup.md* for building
 up a TDH distribution from scratch.
-

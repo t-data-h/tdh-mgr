@@ -14,7 +14,7 @@ HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
 HB_THRIFTLOG="${HADOOP_LOGDIR}/hbase/hbase-thriftserver.log"
 
 # ----------- preamble
-HADOOP_ENV="hadoop-env-user.sh"
+HADOOP_ENV="tdh-env-user.sh"
 
 if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
@@ -26,7 +26,7 @@ elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
     . $HOME/hadoop/etc/$HADOOP_ENV
 fi
 
-if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
@@ -37,7 +37,7 @@ fi
 usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $HADOOP_ENV_USER_VERSION"
+    echo "  Version: $TDH_VERSION"
 }
 
 
