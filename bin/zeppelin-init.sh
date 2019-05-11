@@ -7,7 +7,7 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-HADOOP_ENV="hadoop-env-user.sh"
+HADOOP_ENV="tdh-env-user.sh"
 
 ZEPPELIN_HOME="$HADOOP_ROOT/zeppelin"
 ZKEY="ZeppelinServer"
@@ -23,7 +23,7 @@ elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
     . $HOME/hadoop/etc/$HADOOP_ENV
 fi
 
-if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
@@ -33,7 +33,7 @@ fi
 usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $HADOOP_ENV_USER_VERSION"
+    echo "  Version: $TDH_VERSION"
 }
 
 

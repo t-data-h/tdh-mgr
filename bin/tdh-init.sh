@@ -13,7 +13,7 @@ spark-history-init.sh hue-init.sh"
 force=0
 
 # ----------- preamble
-HADOOP_ENV="hadoop-env-user.sh"
+HADOOP_ENV="tdh-env-user.sh"
 HADOOP_ENV_PATH=
 
 if [ -r "./etc/$HADOOP_ENV" ]; then                 # local directory 1st
@@ -30,12 +30,12 @@ elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then    # $HOME is last
     HADOOP_ENV_PATH="$HOME/hadoop/etc"
 fi
 
-if [ -z "$HADOOP_ENV_USER_VERSION" ]; then
+if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 else
     echo ""
-    echo "$PNAME v${HADOOP_ENV_USER_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})"
+    echo "$PNAME v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})"
     echo ""
 fi
 
@@ -66,7 +66,7 @@ usage()
 version()
 {
     echo ""
-    echo "  TDH Environment v${HADOOP_ENV_USER_VERSION}"
+    echo "  TDH Environment v${TDH_VERSION}"
     echo ""
 }
 

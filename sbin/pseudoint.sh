@@ -5,8 +5,19 @@
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v0.2.6"
 
+# ----------- preamble
+HADOOP_ENV="tdh-env-user.sh"
+
+if [ -r "./etc/$HADOOP_ENV" ]; then
+    . ./etc/$HADOOP_ENV
+elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    . /etc/hadoop/$HADOOP_ENV
+elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
+    . /opt/TDH/etc/$HADOOP_ENV
+elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
+    . $HOME/hadoop/etc/$HADOOP_ENV
+fi
 
 
 usage()
@@ -27,9 +38,13 @@ usage()
 
 version()
 {
-    echo ""
-    echo "$PNAME Version: $VERSION by $AUTHOR"
-    echo ""
+    if [ -z "$TDH_VERSION" ]; then
+        echo "TDH_ENV_USER not found"
+    else
+        echo ""
+        echo "$PNAME Version: $TDH_VERSION by $AUTHOR"
+        echo ""
+    fi
 }
 
 
