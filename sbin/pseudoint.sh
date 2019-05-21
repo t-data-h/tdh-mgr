@@ -39,7 +39,7 @@ usage()
 version()
 {
     if [ -z "$TDH_VERSION" ]; then
-        echo "TDH_ENV_USER not found"
+        echo "TDH_ENV_USER not found!"
     else
         echo ""
         echo "$PNAME Version: $TDH_VERSION by $AUTHOR"
@@ -144,6 +144,7 @@ if [ "$ACTION" == "start" ]; then
     if [ $rt -ne 0 ]; then
         echo ""
 	    echo "  Binding $BINDIP to interface $IFACE"
+        echo ""
 
         ( sudo ip addr add $BINDIP dev $IFACE )
         rt=$?
