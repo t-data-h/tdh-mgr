@@ -59,15 +59,17 @@ show_status()
 {
     local rt=0
 
+    echo " ------ Hadoop ------- "
+
     hostip_is_valid
     rt=$?
     if [ $rt -ne 0 ]; then
         echo "    Unable to find a network interface. "
         echo "    Please verify networking is configured properly."
+        echo ""
         return $rt
     fi
 
-    echo " ------ Hadoop ------- "
     check_process_pidfile $NN_PIDFILE
     rt=$?
     if [ $rt -ne 0 ]; then
