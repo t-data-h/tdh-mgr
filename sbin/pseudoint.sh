@@ -19,6 +19,8 @@ elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
     . $HOME/hadoop/etc/$HADOOP_ENV
 fi
 
+# -----------
+
 
 usage()
 {

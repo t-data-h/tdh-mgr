@@ -8,9 +8,12 @@ endif
 BINPATH="${HADOOP_ROOT}/bin"
 SBINPATH="${HADOOP_ROOT}/sbin"
 ETCPATH="${HADOOP_ROOT}/etc"
+DOCPATH="${HADOOP_ROOT}/docs"
 
 install:
 	( mkdir -p ${BINPATH}; mkdir -p ${SBINPATH} )
-	( cp etc/* ${ETCPATH} )
-	( cp bin/*.sh ${BINPATH} )
-	( cp sbin/*.sh ${SBINPATH} )
+	( mkdir -p ${ETCPATH}; mkdir -p ${DOCPATH} )
+	( cp etc/* ${ETCPATH}/ )
+	( cp docs/* ${DOCPATH}/ )
+	( cp bin/*.sh ${BINPATH}/ )
+	( cp sbin/*.sh ${SBINPATH}/ )

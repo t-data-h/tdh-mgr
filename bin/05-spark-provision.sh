@@ -47,7 +47,7 @@ else
     if [ -n "$YARN_LINK" ]; then
         ( rm $YARN_LINK )
     fi
-    ( ln -s $SPARK_JAR $HADOOP_HOME/share/hadoop/yarn/lib 
+    ( ln -s $SPARK_JAR $HADOOP_HOME/share/hadoop/yarn/lib )
 fi
 
 echo "$PNAME Finished."
