@@ -9,7 +9,7 @@ if [ -z "$hadooproot" ]; then
 fi
 
 if [ -e "$etchadoop" ]; then
-    if [ -l "$etchadoop" ]; then
+    if [ -L "$etchadoop" ]; then
         ( sudo rm $etchadoop )
     else
         echo "Error ''$etchadoop' exists and is not a link"
@@ -23,8 +23,8 @@ if [ "$hadooproot" == "/opt/hadoop" ]; then
     echo "HADOOP_ROOT set to $hadooproot"
 else
     if [ -e "/opt/hadoop" ]; then
-        if [ -l "/opt/hadoop" ]; then
-            ( sudo rm /opt/hadoop; ln -s $hadooproot /opt/hadoop )
+        if [ -L "/opt/hadoop" ]; then
+            ( sudo rm /opt/hadoop; sudo ln -s $hadooproot /opt/hadoop )
             echo "HADOOP_ROOT of ''$hadooproot' linked to /opt/hadoop"
         else
             echo "/opt/hadoop exists and is not a link"
