@@ -27,6 +27,7 @@ export HADOOP_USER="${USER}"
 export HADOOP_ROOT="/opt/TDH"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
+export HADOOP_PID_DIR="/tmp"
 
 # enable mysqld docker container by name
 export TDHDOCKER_MYSQL="tdh-mysql1"
