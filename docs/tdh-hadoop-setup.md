@@ -74,6 +74,7 @@ hostname configuration.
     $ ssh-keygen
     $ ssh-copy-id hadoop@myhost
 # or
+    $ mkdir -p .ssh; chmod 700 .ssh
     $ cat .ssh/id_rsa.pub >> .ssh/authorized_keys
     $ chmod 600 !$
 ```
@@ -251,12 +252,11 @@ $SPARK_HOME/bin"
 #### Format the Namenode/Datanode
 
   Once the environment is setup, the **/opt/tdh/hadoop/bin/hadoop** binary should
-be in the path. The following will format the name and datanodes as specified in
-the **hdfs-site.xml**.
+be in the path. The following will format the namenode as specified in **hdfs-site.xml**.
 ```
 # mkdir -p /opt/hadoop/hdfs/namenode
 # mkdir -p /opt/hadoop/hdfs/datanode
-# sudo -u hadoop hadoop namenode -format
+# sudo -u $USER hadoop namenode -format
 ```
 
 #### Start HDFS and Yarn
