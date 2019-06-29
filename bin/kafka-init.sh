@@ -27,13 +27,16 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
-# -----------
 
 if [ -z "$KAFKA_HOME" ]; then
     echo "Error! KAFKA_HOME is not set. Check your hadoop env."
     exit 1
 fi
 
+KAFKA_VER=$(readlink -f $KAFKA_HOME)
+KAFKA_VER=${KAFKA_VER##*\/}
+
+# -----------
 
 
 usage()
@@ -69,7 +72,7 @@ ACTION="$1"
 CONFIG="$2"
 rt=0
 
-echo " ------ Kafka -------- "
+echo " ----- $KAFKA_VER ------ "
 
 case "$ACTION" in
     'start')

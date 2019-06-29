@@ -14,7 +14,7 @@ force=0
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
-HADOOP_ENV_PATH=
+HADOOP_ENV_PATH="/opt/TDH/etc"
 
 if [ -r "./etc/$HADOOP_ENV" ]; then                 # local directory 1st
     . ./etc/$HADOOP_ENV
@@ -22,12 +22,8 @@ if [ -r "./etc/$HADOOP_ENV" ]; then                 # local directory 1st
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then         # /etc/hadoop/  primary
     . /etc/hadoop/$HADOOP_ENV
     HADOOP_ENV_PATH="/etc/hadoop"
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then                # /opt/TDH   is default
+elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then        # /opt/TDH   is default
     . $HADOOP_ENV_PATH/$HADOOP_ENV
-    HADOOP_ENV_PATH="/opt/TDH/etc"
-elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then    # $HOME is last
-    . $HOME/hadoop/etc/$HADOOP_ENV
-    HADOOP_ENV_PATH="$HOME/hadoop/etc"
 fi
 
 if [ -z "$TDH_VERSION" ]; then
@@ -35,7 +31,8 @@ if [ -z "$TDH_VERSION" ]; then
     exit 1
 else
     echo ""
-    echo "$PNAME v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})"
+    echo "$PNAME v${TDH_VERSION}"
+    echo "   (${HADOOP_ENV_PATH}/${HADOOP_ENV})"
     echo ""
 fi
 

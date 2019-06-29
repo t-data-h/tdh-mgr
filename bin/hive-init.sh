@@ -31,6 +31,10 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+
+HIVE_VER=$(readlink -f $HIVE_HOME)
+HIVE_VER=${HIVE_VER##*\/}
+
 # -----------
 
 
@@ -72,7 +76,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " ------ Hive ---------"
+echo " ------- $HIVE_VER ---------- "
 
 case "$ACTION" in
 
