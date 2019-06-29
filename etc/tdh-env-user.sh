@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export TDH_ENV_USER=1
-export TDH_VERSION="0.6.9"
+export TDH_VERSION="0.7.0"
 
 
 # Assume that JAVA_HOME is already set or managed by the system.
@@ -13,14 +13,6 @@ export TDH_VERSION="0.6.9"
 if [ -z "$JAVA_HOME" ]; then
     echo "Error JAVA_HOME is not set"
     exit 1
-fi
-
-# HADOOP_CONF_DIR should always be set by user prior to sourcing the Environment
-# to support switching environments.
-if [ -z "$HADOOP_CONF_DIR" ]; then
-    echo "Warning! HADOOP_CONF_DIR is not set!"
-    export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
-    echo "=> Setting default HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
 fi
 
 export HADOOP_USER="${USER}"
@@ -32,11 +24,19 @@ export HADOOP_PID_DIR="/tmp"
 # enable mysqld docker container by name
 export TDHDOCKER_MYSQL="tdh-mysql1"
 
+# HADOOP_CONF_DIR should always be set by user prior to sourcing the Environment
+# to support switching environments.
+if [ -z "$HADOOP_CONF_DIR" ]; then
+    echo "Warning! HADOOP_CONF_DIR is not set!"
+    export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
+    echo "=> Setting default HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
+fi
+
 # Set components home
 export HADOOP_COMMON_HOME="$HADOOP_HOME"
 export HADOOP_HDFS_HOME="$HADOOP_COMMON_HOME"
 export HADOOP_MAPRED_HOME="$HADOOP_COMMON_HOME"
-export YARN_HOME="$HADOOP_COMMON_HOME"
+export HADOOP_YARN_HOME="$HADOOP_COMMON_HOME"
 export HBASE_HOME="$HADOOP_ROOT/hbase"
 export HBASE_CONF_DIR="$HBASE_HOME/conf"
 export HIVE_HOME="$HADOOP_ROOT/hive"
