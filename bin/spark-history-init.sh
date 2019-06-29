@@ -14,10 +14,8 @@ if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then        # /opt/TDH   is default
+elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
     . /opt/TDH/etc/$HADOOP_ENV
-elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then    # $HOME is last
-    . $HOME/hadoop/etc/$HADOOP_ENV
 fi
 
 if [ -z "$TDH_VERSION" ]; then
@@ -29,16 +27,14 @@ if [ -z "$SPARK_USER" ]; then
     SPARK_USER="$HADOOP_USER"
 fi
 
-SPARK_VER=$(readlink -f $SPARK_HOME)
-SPARK_VER=${SPARK_VER##*\/}
-
+SPARK_VER=$(readlink $SPARK_HOME)
 # -----------
 
 
 usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $TDH_VERSION"
+    echo "  TDH Version: $TDH_VERSION"
 }
 
 
@@ -66,7 +62,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " ------- $SPARK_VER --------- "
+echo " ------ $SPARK_VER ---------- "
 
 case "$ACTION" in
     'start')

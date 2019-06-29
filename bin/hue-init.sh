@@ -18,16 +18,16 @@ if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then        # /opt/TDH   is default
+elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
     . /opt/TDH/etc/$HADOOP_ENV
-elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then    # $HOME is last
-    . $HOME/hadoop/etc/$HADOOP_ENV
 fi
 
 if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+
+HUE_VER=$(readlink $HUE_HOME)
 # -----------
 
 
@@ -35,7 +35,7 @@ fi
 usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $TDH_VERSION"
+    echo "  TDH Version: $TDH_VERSION"
 }
 
 
