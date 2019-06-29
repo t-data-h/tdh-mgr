@@ -40,22 +40,6 @@ usage()
 }
 
 
-get_process_pids()
-{
-    local key="$1"
-    local pids=
-    PID=0
-
-    pids=$(ps awwwx | grep "$key" | grep -v "grep" | awk '{ print $1 }')
-
-    for p in $pids; do
-        PID=$p
-        break
-    done
-
-    return 0
-}
-
 
 check_process_pidfile()
 {
@@ -154,7 +138,7 @@ case "$ACTION" in
     'stop')
         check_process_pidfile $HB_PIDFILE
 
-        echo "Stopping HBase..."
+        echo "Stopping HBase [$PID]..."
         ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null )
 
         check_process $HB_THRIFT_PSKEY

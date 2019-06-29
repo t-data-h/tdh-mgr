@@ -26,7 +26,7 @@ export MAVEN_OPTS="-Xms256m -Xmx512m"
 mvn clean package -Pdist,native,docs -DskipTests -Dtar
 ```
 
-#### Building HBase (v1.1)
+#### Building HBase (v1.3)
 
 **Prerequisites:**
   * snappy
