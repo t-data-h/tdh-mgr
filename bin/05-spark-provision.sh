@@ -32,8 +32,8 @@ if ! [ -d $SPARK_PATH ]; then
 fi
 
 SPARK_JAR=$(ls -1 $SPARK_PATH/yarn/*shuffle*.jar)
-YARN_LINK=$(ls -1 $HADOOP_HOME/share/hadoop/yarn/lib/*shuffle*.jar)
-YARN_JAR=$(readlink -f $YARN_LINK)
+YARN_LINK=$(ls -1 $HADOOP_HOME/share/hadoop/yarn/lib/*shuffle*.jar 2> /dev/null)
+YARN_JAR=$(readlink -f $YARN_LINK 2> /dev/null)
 
 if [ -z "$SPARK_JAR" ]; then
     echo "Fatal Error locating the Spark Shuffle JAR"

@@ -1,6 +1,10 @@
 #!/bin/bash
 #
 #  Initialize tdh installation.
+#
+PNAME=${0##*\/}
+AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
+
 hadooproot="$1"
 etchadoop="/etc/hadoop"
 
