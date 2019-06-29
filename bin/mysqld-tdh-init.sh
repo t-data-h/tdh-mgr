@@ -47,7 +47,7 @@ if [ -z "$TDHDOCKER_MYSQL" ]; then
     exit 0;  # exit silently as no container name is provided or set
 fi
 
-echo " ------- MySQL ------- "
+echo " ------- mysql-5.7.26 -------- "
 
 case "$ACTION" in
     'start')

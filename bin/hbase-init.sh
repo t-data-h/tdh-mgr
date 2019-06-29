@@ -30,6 +30,10 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+
+HBASE_VER=$(readlink -f $HBASE_HOME)
+HBASE_VER=${HBASE_VER##*\/}
+
 # -----------
 
 
@@ -121,7 +125,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " ------ HBase -------- "
+echo " ------- $HBASE_VER --------- "
 
 case "$ACTION" in
     'start')

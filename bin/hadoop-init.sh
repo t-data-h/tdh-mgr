@@ -22,14 +22,16 @@ elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
 elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
     . /opt/TDH/etc/$HADOOP_ENV
-elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-    . $HOME/hadoop/etc/$HADOOP_ENV
 fi
 
 if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+
+HADOOP_VER=$(readlink -f $HADOOP_HOME)
+HADOOP_VER=${HADOOP_VER##*\/}
+
 # -----------
 
 
@@ -59,7 +61,7 @@ show_status()
 {
     local rt=0
 
-    echo " ------ Hadoop ------- "
+    echo " ------- $HADOOP_VER -------- "
 
     hostip_is_valid
     rt=$?

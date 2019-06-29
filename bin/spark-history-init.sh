@@ -24,12 +24,15 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
-# -----------
 
 if [ -z "$SPARK_USER" ]; then
     SPARK_USER="$HADOOP_USER"
 fi
 
+SPARK_VER=$(readlink -f $SPARK_HOME)
+SPARK_VER=${SPARK_VER##*\/}
+
+# -----------
 
 
 usage()
@@ -63,7 +66,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " ------ Spark2 ------- "
+echo " ------- $SPARK_VER --------- "
 
 case "$ACTION" in
     'start')
