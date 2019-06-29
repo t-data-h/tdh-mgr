@@ -2,7 +2,6 @@
 #
 #   Wrapper script to operate on all hadoop ecosystem init scripts.
 #   These can be provided via HADOOP_ECOSYSTEM_INITS
-#  Timothy C. Arland <tcarland@gmail.com>
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
