@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+PNAME=${0##*\/}
+AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HOST=$(hostname -f)
 rt=
