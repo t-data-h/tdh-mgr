@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export TDH_ENV_USER=1
-export TDH_VERSION="0.6.5"
+export TDH_VERSION="0.6.6"
 
 
 # Assume that JAVA_HOME is already set or managed by the system.
