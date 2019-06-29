@@ -9,20 +9,20 @@ AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # default init script list
 INITS="hadoop-init.sh mysqld-tdh-init.sh hbase-init.sh hive-init.sh \
-kafka-init.sh spark-history-init.sh hue-init.sh"
+kafka-init.sh spark-history-init.sh hue-init.sh zeppelin-init.sh"
 force=0
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 HADOOP_ENV_PATH="/opt/TDH/etc"
 
-if [ -r "./etc/$HADOOP_ENV" ]; then                 # local directory 1st
+if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
     HADOOP_ENV_PATH="./etc"
-elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then         # /etc/hadoop/  primary
+elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
     HADOOP_ENV_PATH="/etc/hadoop"
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then        # /opt/TDH   is default
+elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
     . $HADOOP_ENV_PATH/$HADOOP_ENV
 fi
 

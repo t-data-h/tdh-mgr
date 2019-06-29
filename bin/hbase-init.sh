@@ -22,8 +22,6 @@ elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
 elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
     . /opt/TDH/etc/$HADOOP_ENV
-elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
-    . $HOME/hadoop/etc/$HADOOP_ENV
 fi
 
 if [ -z "$TDH_VERSION" ]; then
@@ -31,17 +29,14 @@ if [ -z "$TDH_VERSION" ]; then
     exit 1
 fi
 
-HBASE_VER=$(readlink -f $HBASE_HOME)
-HBASE_VER=${HBASE_VER##*\/}
-
+HBASE_VER=$(readlink $HBASE_HOME)
 # -----------
-
 
 
 usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $TDH_VERSION"
+    echo "  TDH Version: $TDH_VERSION"
 }
 
 
@@ -125,7 +120,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " ------- $HBASE_VER --------- "
+echo " ------ $HBASE_VER ---------- "
 
 case "$ACTION" in
     'start')

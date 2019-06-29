@@ -29,16 +29,14 @@ if [ -z "$TDH_VERSION" ]; then
     exit 1
 fi
 
-HADOOP_VER=$(readlink -f $HADOOP_HOME)
-HADOOP_VER=${HADOOP_VER##*\/}
-
+HADOOP_VER=$(readlink $HADOOP_HOME)
 # -----------
 
 
 usage()
 {
     echo "$PNAME {start|stop|status}"
-    echo "  Version: $TDH_VERSION"
+    echo "  TDH Version: $TDH_VERSION"
 }
 
 
@@ -61,16 +59,16 @@ show_status()
 {
     local rt=0
 
-    echo " ------- $HADOOP_VER -------- "
-
     hostip_is_valid
     rt=$?
     if [ $rt -ne 0 ]; then
-        echo "    Unable to find a network interface. "
+        echo "    Unable to locate the host network interface. "
         echo "    Please verify networking is configured properly."
         echo ""
         return $rt
     fi
+        
+    echo " ------ $HADOOP_VER --------- "
 
     check_process_pidfile $NN_PIDFILE
     rt=$?
@@ -147,7 +145,7 @@ case "$ACTION" in
             exit $rt
         fi
 
-        echo " ------ Hadoop ------- "
+        echo " ------ $HADOOP_VER --------- "
         echo "Starting HDFS..."
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh 2>&1 > /dev/null )
         echo "Starting YARN..."
@@ -155,7 +153,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        echo " ------ Hadoop ------- "
+        echo " ------ $HADOOP_VER --------- "
         check_process_pidfile $RM_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
