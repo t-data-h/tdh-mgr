@@ -31,8 +31,7 @@ if [ -z "$TDH_VERSION" ]; then
     exit 1
 else
     echo ""
-    echo "$PNAME v${TDH_VERSION}"
-    echo "   (${HADOOP_ENV_PATH}/${HADOOP_ENV})"
+    echo "$PNAME v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})"
     echo ""
 fi
 
