@@ -28,10 +28,6 @@ fi
 if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
-else
-    echo ""
-    echo "$PNAME v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})"
-    echo ""
 fi
 
 if [ -n "$HADOOP_ECOSYSTEM_INITS" ]; then
@@ -61,7 +57,7 @@ usage()
 version()
 {
     echo ""
-    echo "  TDH Environment v${TDH_VERSION}"
+    echo "$PNAME v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})"
     echo ""
 }
 
