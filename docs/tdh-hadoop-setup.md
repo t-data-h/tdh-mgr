@@ -251,11 +251,11 @@ $SPARK_HOME/bin"
 
 #### Format the Namenode/Datanode
 
-  Once the environment is setup, the **/opt/tdh/hadoop/bin/hadoop** binary should
+  Once the environment is setup, the **hadoop** and **hdfs* binary should
 be in the path. The following will format the namenode as specified in **hdfs-site.xml**.
 ```
-# mkdir -p /opt/hadoop/hdfs/namenode
-# mkdir -p /opt/hadoop/hdfs/datanode
+# mkdir -p /data/hdfs/namenode
+# mkdir -p /data/hdfs/datanode
 # sudo -u $USER hadoop namenode -format
 ```
 
