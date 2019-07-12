@@ -23,11 +23,23 @@
     </property>
     <property>
         <name>dfs.namenode.rpc-address</name>
-        <value>tdh-m01:50070</value>
+        <value>tdh-m01:50080</value>
     </property>
     <property>
         <name>dfs.namenode.secondary.http-address</name>
-        <value>tdh-m02:50070</value>
+        <value>tdh-m02:50090</value>
+    </property>
+    <property>
+        <name>dfs.datanode.address</name>
+        <value>0.0.0.0:50010</value>
+    </property>
+    <property>
+        <name>dfs.datanode.http.address</name>
+        <value>0.0.0.0:50075</value>
+    </property>
+    <property>
+        <name>dfs.datanode.ipc.address</name>
+        <value>0.0.0.0:50020</value>
     </property>
     <property>
         <name>dfs.replication</name>
