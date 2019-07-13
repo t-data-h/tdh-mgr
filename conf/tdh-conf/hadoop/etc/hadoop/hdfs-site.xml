@@ -23,7 +23,7 @@
     </property>
     <property>
         <name>dfs.namenode.rpc-address</name>
-        <value>tdh-m01:50080</value>
+        <value>tdh-m01:8020</value>
     </property>
     <property>
         <name>dfs.namenode.secondary.http-address</name>
