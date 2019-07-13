@@ -40,7 +40,6 @@ usage()
 }
 
 
-
 check_process_pidfile()
 {
     local pidf="$1"
