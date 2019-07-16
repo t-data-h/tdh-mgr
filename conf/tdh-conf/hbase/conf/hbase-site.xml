@@ -41,12 +41,12 @@
         <name>hbase.regionserver.port</name>
         <value>16020</value>
     </property>
-
+<!--
     <property>
         <name>hbase.regionserver.info.bindAddress</name>
         <value>10.138.0.60</value>
     </property>
-
+-->
     <property>
         <name>hbase.regionserver.info.port</name>
         <value>16030</value>
@@ -74,7 +74,7 @@
 
     <property>
         <name>hbase.zookeeper.quorum</name>
-        <value>tdh</value>
+        <value>tdh-m01</value>
     </property>
 
     <property>

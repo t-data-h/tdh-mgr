@@ -9,9 +9,6 @@ AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 HIVEMETASTORE="MetaStore"
 HIVESERVER2="HiveServer2"
-HIVE_LOGDIR="${HADOOP_LOGDIR}/hive"
-METASTORE_LOG="${HIVE_LOGDIR}/hive-metastore.log"
-HIVESERVER2_LOG="${HIVE_LOGDIR}/hiveserver2.log"
 METADB="mysqld"
 
 # ----------- preamble
@@ -31,6 +28,9 @@ if [ -z "$TDH_VERSION" ]; then
 fi
 
 HIVE_VER=$(readlink $HIVE_HOME)
+HIVE_LOGDIR="${HADOOP_LOGDIR}/hive"
+METASTORE_LOG="${HIVE_LOGDIR}/hive-metastore.log"
+HIVESERVER2_LOG="${HIVE_LOGDIR}/hiveserver2.log"
 # -----------
 
 
@@ -95,6 +95,8 @@ case "$ACTION" in
             echo " HiveServer2 is already running [$PID]"
             exit $rt
         fi
+
+        ( mkdir -p $HIVE_LOGDIR )
 
         echo "Starting Hive MetaStore..."
         ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $METASTORE_LOG & )

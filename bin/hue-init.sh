@@ -7,10 +7,6 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-HUE_HOME="$HADOOP_ROOT/hue"
-HUE_KEY="hue runserver"
-HUE_LOGDIR="$HADOOP_LOGDIR"
-
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 
@@ -27,10 +23,15 @@ if [ -z "$TDH_VERSION" ]; then
     exit 1
 fi
 
-HUE_VER=$(readlink $HUE_HOME)
 # -----------
 
+HUE_VER=$(readlink $HUE_HOME)
 
+HUE_HOME="$HADOOP_ROOT/hue"
+HUE_KEY="hue runserver"
+HUE_LOGDIR="$HADOOP_LOGDIR"
+
+# -----------
 
 usage()
 {

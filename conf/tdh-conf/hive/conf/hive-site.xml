@@ -33,7 +33,7 @@
 
   <property>
      <name>hive.metastore.warehouse.dir</name>
-     <value>/hive/warehouse</value>
+     <value>/hive/warehouse/default</value>
      <description>location of default database for the warehouse</description>
   </property>
 
@@ -101,4 +101,3 @@
   </property>
 
 </configuration>
-
