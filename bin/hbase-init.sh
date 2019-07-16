@@ -7,12 +7,6 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
-RS_PIDFILE="/tmp/hbase-${HADOOP_USER}-1-regionserver.pid"
-ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
-HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
-HB_THRIFTLOG="${HADOOP_LOGDIR}/hbase/hbase-thriftserver.log"
-
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 
@@ -29,9 +23,18 @@ if [ -z "$TDH_VERSION" ]; then
     exit 1
 fi
 
-HBASE_VER=$(readlink $HBASE_HOME)
 # -----------
 
+HBASE_VER=$(readlink $HBASE_HOME)
+
+HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
+RS_PIDFILE="/tmp/hbase-${HADOOP_USER}-1-regionserver.pid"
+ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
+HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
+HBASE_LOGDIR="${HADOOP_LOGDIR}/hbase"
+HB_THRIFTLOG="${HBASE_LOGDIR}/hbase-thriftserver.log"
+
+# -----------
 
 usage()
 {
@@ -118,6 +121,8 @@ case "$ACTION" in
         if [ $rt -ne 0 ]; then
             echo " RegionServer is already running  [$PID]"
         fi
+
+        ( mkdir -p $HBASE_LOGDIR )
 
         if [ $rt -eq 0 ]; then
             echo "Starting HBase..."

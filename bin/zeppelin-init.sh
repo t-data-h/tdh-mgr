@@ -7,11 +7,6 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-ZEPPELIN_HOME="$HADOOP_ROOT/zeppelin"
-ZKEY="ZeppelinServer"
-ZPID=0
-
-
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 
@@ -28,9 +23,14 @@ if [ -z "$TDH_VERSION" ]; then
     exit 1
 fi
 
-ZEPPELIN_VER=$(readlink $ZEPPELIN_HOME)
 # -----------
 
+ZEPPELIN_VER=$(readlink $ZEPPELIN_HOME)
+ZEPPELIN_HOME="$HADOOP_ROOT/zeppelin"
+ZKEY="ZeppelinServer"
+ZPID=0
+
+# -----------
 
 usage()
 {
