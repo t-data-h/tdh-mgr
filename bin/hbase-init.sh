@@ -31,8 +31,15 @@ HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
 RS_PIDFILE="/tmp/hbase-${HADOOP_USER}-1-regionserver.pid"
 ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
 HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
+
 HBASE_LOGDIR="${HADOOP_LOGDIR}/hbase"
-HB_THRIFTLOG="${HBASE_LOGDIR}/hbase-thriftserver.log"
+HBASE_THRIFTLOG="${HBASE_LOGDIR}/hbase-thriftserver.log"
+
+HBASE_MASTER_BINDADDRESS=$( grep -A1 'hbase.master.info.bindAddress' \
+  ${HBASE_HOME}/conf/hbase-site.xml | grep value | \
+  sed -E 's/.*<value>(.*)<\/value>/\1/' | awk -F':' '{ print $1 }' )
+HOST=$(hostname -s)
+HOST_ADDR=$(hostname -i)
 
 # -----------
 
@@ -71,28 +78,43 @@ show_status()
         echo " Zookeeper is not running"
     fi
 
-    check_process_pidfile $HB_PIDFILE
-    rt=$?
-    if [ $rt -ne 0 ]; then
-        echo " HBase Master          [$PID]"
+    if [ "$HBASE_MASTER_BINDADDRESS" == "$HOST_ADDR" ]; then
+        check_process_pidfile $HB_PIDFILE
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " HBase Master          [$PID]"
+        else
+            echo " HBase Master is not running"
+        fi
     else
-        echo " HBase Master is not running"
+        master=$(host $HBASE_MASTER_BINDADDRESS)
+        echo " HBase Master          [$( host $HBASE_MASTER_BINDADDRESS )]"
     fi
 
-    check_process_pidfile $RS_PIDFILE
-    rt=$?
-    if [ $rt -ne 0 ]; then
-        echo " HBase RegionServer    [$PID]"
-    else
-        echo " RegionServer is not running"
-    fi
+    set -f
+    IFS=$'\n'
+
+    for rs in $( cat ${HBASE_HOME}/conf/regionservers ); do
+        ( echo $rs | grep $HOST )
+        if [ $? -eq 0 ] || [ "$dn" == "localhost" ]; then
+            check_process_pidfile $RS_PIDFILE
+            rt=$?
+            if [ $rt -ne 0 ]; then
+                echo " HBase RegionServer    [$PID]"
+            else
+                echo " HBase RegionServer is not running"
+            fi
+        else
+            echo " HBase RegionServer    [$rs]"
+        fi
+    done
 
     #get_process_pid $HB_THRIFT_PSKEY
     check_process "$HB_THRIFT_PSKEY"
     if [ $rt -ne 0 ]; then
         echo " HBase ThriftServer    [$PID]"
     else
-        echo " ThriftServer is not running"
+        echo " HBase ThriftServer is not running"
     fi
 
     return $ret
