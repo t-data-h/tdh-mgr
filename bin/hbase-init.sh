@@ -35,11 +35,12 @@ HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
 HBASE_LOGDIR="${HADOOP_LOGDIR}/hbase"
 HBASE_THRIFTLOG="${HBASE_LOGDIR}/hbase-thriftserver.log"
 
-HBASE_MASTER_BINDADDRESS=$( grep -A1 'hbase.master.info.bindAddress' \
-  ${HBASE_HOME}/conf/hbase-site.xml | grep value | \
-  sed -E 's/.*<value>(.*)<\/value>/\1/' | awk -F':' '{ print $1 }' )
 HOST=$(hostname -s)
 HOST_ADDR=$(hostname -i)
+HB_ADDR=$( grep -A1 'hbase.master.info.bindAddress' ${HBASE_HOME}/conf/hbase-site.xml | \
+  grep value | \
+  sed -E 's/.*<value>(.*)<\/value>/\1/' | \
+  awk -F':' '{ print $1 }' )
 
 # -----------
 

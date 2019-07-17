@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export TDH_ENV_USER=1
-export TDH_VERSION="0.7.6"
+export TDH_VERSION="0.7.7"
 
 
 # Assume that JAVA_HOME is already set or managed by the system.
@@ -22,7 +22,7 @@ export HADOOP_LOGDIR="/var/log/hadoop"
 export HADOOP_PID_DIR="/tmp"
 
 # enable mysqld docker container by name
-export TDHDOCKER_MYSQL="tdh-mysql1"
+export TDH_DOCKER_MYSQL="tdh-mysql1"
 
 # HADOOP_CONF_DIR should always be set by user prior to sourcing the Environment
 # to support switching environments.
