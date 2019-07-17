@@ -22,7 +22,7 @@ export HADOOP_LOGDIR="/var/log/hadoop"
 export HADOOP_PID_DIR="/tmp"
 
 # enable mysqld docker container by name
-export TDHDOCKER_MYSQL="tdh-mysql1"
+export TDH_DOCKER_MYSQL="tdh-mysql1"
 
 # HADOOP_CONF_DIR should always be set by user prior to sourcing the Environment
 # to support switching environments.
