@@ -32,7 +32,7 @@ fi
 HIVE_VER=$(readlink $HIVE_HOME)
 HIVE_LOGDIR="${HADOOP_LOGDIR}/hive"
 METASTORE_LOG="${HIVE_LOGDIR}/hive-metastore.log"
-HIVESERVER2_LOG="${HIVE_LOGDIR}/hiveserver2.log"
+HIVESERVER2_LOG="${HIVE_LOGDIR}/hive-server2.log"
 
 HOST=$(hostname -s)
 HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | \

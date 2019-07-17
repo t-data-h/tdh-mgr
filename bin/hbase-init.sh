@@ -79,7 +79,7 @@ show_status()
         echo " Zookeeper is not running"
     fi
 
-    if [ "$HBASE_MASTER_BINDADDRESS" == "$HOST_ADDR" ]; then
+    if [ "$HB_ADDR" == "$HOST_ADDR" ]; then
         check_process_pidfile $HB_PIDFILE
         rt=$?
         if [ $rt -ne 0 ]; then
@@ -88,8 +88,7 @@ show_status()
             echo " HBase Master is not running"
         fi
     else
-        master=$(host $HBASE_MASTER_BINDADDRESS)
-        echo " HBase Master          [$( host $HBASE_MASTER_BINDADDRESS )]"
+        echo " HBase Master          [$( host $HB_ADDR )]"
     fi
 
     set -f

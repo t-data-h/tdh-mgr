@@ -53,4 +53,4 @@
 # Folder containing extra libraries required for hive compilation/execution can be controlled by:
 # export HIVE_AUX_JARS_PATH=
 
-#HADOOP_HOME=/opt/TDH/hadoop
+HADOOP_HOME=/opt/TDH/hadoop
