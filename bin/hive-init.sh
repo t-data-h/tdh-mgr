@@ -27,12 +27,18 @@ if [ -z "$TDH_VERSION" ]; then
     exit 1
 fi
 
+# -----------
+
 HIVE_VER=$(readlink $HIVE_HOME)
 HIVE_LOGDIR="${HADOOP_LOGDIR}/hive"
 METASTORE_LOG="${HIVE_LOGDIR}/hive-metastore.log"
 HIVESERVER2_LOG="${HIVE_LOGDIR}/hiveserver2.log"
-# -----------
 
+HOST=$(hostname -s)
+HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | grep value | \
+  sed  -E 's/.*<value>thrift:\/\/(.*)<\/value>/\1/' | awk -F':' '{ print $1 }' )
+
+# -----------
 
 usage()
 {
@@ -43,20 +49,25 @@ usage()
 
 show_status()
 {
-    check_process $HIVEMETASTORE
-    rt=$?
-    if [ $rt -ne 0 ]; then
-        echo " Hive Metastore        [$PID]"
-    else
-        echo " Hive Metastore is not running"
-    fi
+    ( echo $HIVE_SERVER | grep $HOST > /dev/null )
+    if [ $? -eq 0 ]; then
+        check_process $HIVEMETASTORE
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " Hive Metastore        [$PID]"
+        else
+            echo " Hive Metastore is not running"
+        fi
 
-    check_process $HIVESERVER2
-    rt=$?
-    if [ $rt -ne 0 ]; then
-        echo " HiveServer2           [$PID]"
+        check_process $HIVESERVER2
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " Hive Server           [$PID]"
+        else
+            echo " Hive Server is not running"
+        fi
     else
-        echo " HiveServer2 is not running"
+            echo " Hive Server           [$HIVESERVER]"
     fi
 
     return $rt
