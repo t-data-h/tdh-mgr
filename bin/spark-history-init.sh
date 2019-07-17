@@ -27,9 +27,15 @@ if [ -z "$SPARK_USER" ]; then
     SPARK_USER="$HADOOP_USER"
 fi
 
-SPARK_VER=$(readlink $SPARK_HOME)
 # -----------
 
+SPARK_VER=$(readlink $SPARK_HOME)
+SHS_HOST=$( grep 'spark.yarn.historyServer.address' ${SPARK_HOME}/conf/spark-defaults.conf | \
+  awk -F'=' '{ print $2 }' | \
+  sed -E 's/http:\/\/(.*):.*/\1/' )
+HOST=$(hostname -s)
+
+# -----------
 
 usage()
 {
@@ -40,18 +46,24 @@ usage()
 
 show_status()
 {
-    local ret=0
+    local rt=0
 
-    check_process "$SPARK_ID"
-    ret=$?
+    ( echo $SHS_HOST | grep $HOST > /dev/null )
 
-    if [ $ret -ne 0 ]; then
-        echo " Spark2 HistoryServer  [$PID]"
+    if [ $? -eq 0 ]; then
+        check_process "$SPARK_ID"
+        rt=$?
+
+        if [ $rt -ne 0 ]; then
+            echo " Spark2 HistoryServer  [$PID]"
+        else
+            echo " Spark2 HistoryServer is not running"
+        fi
     else
-        echo " Spark2 HistoryServer is not running"
+         echo " Spark2 HistoryServer  [$SHS_HOST]"
     fi
 
-    return $ret
+    return $rt
 }
 
 
