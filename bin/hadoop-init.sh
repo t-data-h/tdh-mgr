@@ -29,7 +29,25 @@ if [ -z "$TDH_VERSION" ]; then
     exit 1
 fi
 
+# -----------
+
 HADOOP_VER=$(readlink $HADOOP_HOME)
+
+HOST=$( hostname -s )
+NN_HOST=$( grep -A1 'dfs.namenode.http-address' ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | grep value | \
+  sed -E 's/.*<value>(.*)<\/value>/\1/' | awk -F':' '{ print $1 }' )
+SN_HOST=$( grep -A1 secondary ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | grep value | \
+  sed -E 's/.*<value>(.*)<\/value>/\1/' | awk -F':' '{ print $1 }' )
+RM_HOST=$( grep -A1 'yarn.resourcemanager.address' ${HADOOP_HOME}/etc/hadoop/yarn-site.xml | grep value | \
+  sed -E 's/.*<value>(.*)<\/value>/\1/' | awk -F':' '{ print $1 }' )
+
+( echo $NN_HOST | grep $HOST )
+IS_NN=$?
+( echo $SN_HOST | grep $HOST )
+IS_SN=$?
+( echo $RM_HOST | grep $HOST )
+IS_RM=$?
+
 # -----------
 
 
@@ -70,45 +88,67 @@ show_status()
 
     echo " ------ $HADOOP_VER --------- "
 
-    check_process_pidfile $NN_PIDFILE
-    rt=$?
-    if [ $rt -ne 0 ]; then
-        echo " HDFS Namenode         [$PID]"
+    if [ $IS_NN -eq 0 ]; then
+        check_process_pidfile $NN_PIDFILE
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " HDFS Namenode         [$PID]"
+        else
+            echo " HDFS Primary Namenode is not running"
+        fi
     else
-        echo " HDFS Primary Namenode is not running"
+        echo " HDFS Namenode         [$NN_HOST]"
     fi
 
-    check_process_pidfile $SN_PIDFILE
-    rt=$?
-    if [ $rt -ne 0 ]; then
-        echo " HDFS Sec.NameNode     [$PID]"
+    if [ $IS_SN -eq 0 ]; then
+        check_process_pidfile $SN_PIDFILE
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " HDFS Sec.NameNode     [$PID]"
+        else
+            echo " HDFS Secondary Namenode is not running"
+        fi
     else
-        echo " HDFS Secondary Namenode is not running"
+        echo " HDFS Sec.Namenode     [$SN_HOST]"
     fi
 
-    check_process_pidfile $DN_PIDFILE
-    rt=$?
-    if [ $rt -ne 0 ]; then
-        echo " HDFS Datanode         [$PID]"
+    if [ $IS_RM -eq 0 ]; then
+        check_process_pidfile $RM_PIDFILE
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " YARN ResourceManager  [$PID]"
+        else
+            echo " YARN ResourceManager is not running"
+        fi
     else
-        echo " HDFS Datanode is not running"
+        echo " YARN ResourceManager  [$RM_HOST]"
     fi
 
-    check_process_pidfile $RM_PIDFILE
-    rt=$?
-    if [ $rt -ne 0 ]; then
-        echo " YARN ResourceManager  [$PID]"
-    else
-        echo " YARN ResourceManager is not running"
-    fi
+    set -f
+    IFS=$'\n'
+    
+    for dn in $( cat ${HADOOP_HOME}/etc/hadoop/slaves ); do
+        ( echo $dn | grep $HOST )
+        if [ $? -eq 0 ] || [ "$dn" == "localhost" ]; then
+            check_process_pidfile $DN_PIDFILE
+            rt=$?
+            if [ $rt -ne 0 ]; then
+                echo " HDFS Datanode         [$PID]"
+            else
+                echo " HDFS Datanode is not running"
+            fi
 
-    check_process_pidfile $NM_PIDFILE
-    rt=$?
-    if [ $rt -ne 0 ]; then
-        echo " YARN NodeManager      [$PID]"
-    else
-        echo " YARN NodeManager is not running"
-    fi
+            check_process_pidfile $NM_PIDFILE
+            rt=$?
+            if [ $rt -ne 0 ]; then
+                echo " YARN NodeManager      [$PID]"
+            else
+                echo " YARN NodeManager is not running"
+            fi
+        else
+                echo " HDFS Datanode         [$dn]"
+        fi
+    done
 
     return $rt
 }
