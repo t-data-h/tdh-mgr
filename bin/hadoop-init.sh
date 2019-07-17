@@ -34,12 +34,18 @@ fi
 HADOOP_VER=$(readlink $HADOOP_HOME)
 
 HOST=$( hostname -s )
-NN_HOST=$( grep -A1 'dfs.namenode.http-address' ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | grep value | \
-  sed -E 's/.*<value>(.*)<\/value>/\1/' | awk -F':' '{ print $1 }' )
-SN_HOST=$( grep -A1 secondary ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | grep value | \
-  sed -E 's/.*<value>(.*)<\/value>/\1/' | awk -F':' '{ print $1 }' )
-RM_HOST=$( grep -A1 'yarn.resourcemanager.address' ${HADOOP_HOME}/etc/hadoop/yarn-site.xml | grep value | \
-  sed -E 's/.*<value>(.*)<\/value>/\1/' | awk -F':' '{ print $1 }' )
+NN_HOST=$( grep -A1 'dfs.namenode.http-address' ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | \
+  grep value | \
+  sed -E 's/.*<value>(.*)<\/value>/\1/' | \
+  awk -F':' '{ print $1 }' )
+SN_HOST=$( grep -A1 secondary ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | \
+  grep value | \
+  sed -E 's/.*<value>(.*)<\/value>/\1/' | \
+  awk -F':' '{ print $1 }' )
+RM_HOST=$( grep -A1 'yarn.resourcemanager.address' ${HADOOP_HOME}/etc/hadoop/yarn-site.xml | \
+  grep value | \
+  sed -E 's/.*<value>(.*)<\/value>/\1/' | \
+  awk -F':' '{ print $1 }' )
 
 ( echo $NN_HOST | grep $HOST )
 IS_NN=$?
@@ -126,7 +132,7 @@ show_status()
 
     set -f
     IFS=$'\n'
-    
+
     for dn in $( cat ${HADOOP_HOME}/etc/hadoop/slaves ); do
         ( echo $dn | grep $HOST )
         if [ $? -eq 0 ] || [ "$dn" == "localhost" ]; then
