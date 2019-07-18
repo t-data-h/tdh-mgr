@@ -43,7 +43,7 @@ usage()
 show_status()
 {
     get_process_pid "$HUE_KEY"
-    if [ $HPID -ne 0 ]; then
+    if [ $HPID -eq 0 ]; then
         echo " Hue Web Server        [$HPID]"
     else
         echo " Hue is not running"
@@ -62,7 +62,7 @@ case "$ACTION" in
         check_process "$HUE_KEY"
 
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " Hue is already running [$PID]"
             exit $rt
         fi
@@ -75,7 +75,7 @@ case "$ACTION" in
         check_process "$HUE_KEY"
 
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Stopping Hue [$PID]..."
             ( sudo -u $HADOOP_USER kill $PID )
             sleep 1

@@ -47,7 +47,7 @@ show_status()
     check_process $SPARK_ID
 
     rt=$?
-    if [ $rt -ne 0 ]; then
+    if [ $rt -eq 0 ]; then
         echo " Spark Standalone      [$PID]"
     else
         echo " Spark Standalone Server is not running"
@@ -67,7 +67,7 @@ case "$ACTION" in
         check_process $SPARK_ID
 
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Error: Spark Master is already running [$PID]"
             exit $rt
         fi
@@ -80,7 +80,7 @@ case "$ACTION" in
         check_process $SPARK_ID
 
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Stopping Spark Standalone..."
             ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/stop-all.sh )
         else
