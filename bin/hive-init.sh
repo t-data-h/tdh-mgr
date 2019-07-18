@@ -130,6 +130,8 @@ case "$ACTION" in
         echo "Starting Hive MetaStore..."
         ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $HIVE_METASTORE_LOG & )
 
+        rt=$?
+        
         echo "Starting HiveServer2..."
         ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVE_SERVER2_LOG & )
         ;;
