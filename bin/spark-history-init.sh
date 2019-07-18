@@ -55,12 +55,12 @@ show_status()
         rt=$?
 
         if [ $rt -eq 0 ]; then
-            echo " Spark2 HistoryServer  [$PID]"
+            echo " Spark2 HistoryServer    [${HOST}:${PID}]"
         else
             echo " Spark2 HistoryServer is not running"
         fi
     else
-         echo " Spark2 HistoryServer  [$SHS_HOST]"
+         echo " Spark2 HistoryServer    [${SHS_HOST}]"
     fi
 
     return $rt

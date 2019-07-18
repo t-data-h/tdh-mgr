@@ -173,12 +173,13 @@ show_status()
         fi
 
         # YARN NodeManager
-        if [ $is_lo ]; then
+        if [ $is_lo -eq 0 ]; then
             check_process_pidfile $NM_PIDFILE
         else
             check_remote_pidfile $dn $NM_PIDFILE
         fi
         rt=$?
+
         if [ $rt -eq 0 ]; then
             echo " YARN NodeManager        [${dn}:${PID}]"
         else

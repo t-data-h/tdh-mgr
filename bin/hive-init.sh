@@ -36,9 +36,9 @@ HIVESERVER2_LOG="${HIVE_LOGDIR}/hive-server2.log"
 
 HOST=$(hostname -s)
 HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | \
-  grep value | \
-  sed  -E 's/.*<value>thrift:\/\/(.*)<\/value>/\1/' | \
-  awk -F':' '{ print $1 }' )
+    grep value | \
+    sed  -E 's/.*<value>thrift:\/\/(.*)<\/value>/\1/' | \
+    awk -F':' '{ print $1 }' )
 
 # -----------
 
@@ -46,6 +46,22 @@ usage()
 {
     echo "$PNAME {start|stop|status}"
     echo "  TDH Version: $TDH_VERSION"
+}
+
+check_remote_process()
+{
+    local host="$1"
+    local pkey="$2"
+    local rt=1
+
+    PID=$( ssh $host "pid=\$(ps ax | grep $pkey | grep -v grep | awk '{ print \$1 }'); \
+        if [[ -n \$pid ]]; then \
+            if ps ax | grep \$pid | grep -v grep 2>&1> /dev/null; then \
+            echo $pid; exit 0; else exit 1; fi; \
+        fi ")
+    rt=$?
+
+    return $rt
 }
 
 
@@ -56,20 +72,20 @@ show_status()
         check_process $HIVEMETASTORE
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo " Hive Metastore        [$PID]"
+            echo " Hive Metastore          [${HOST}:${PID}]"
         else
-            echo " Hive Metastore is not running"
+            echo " Hive Metastore          is not running"
         fi
 
         check_process $HIVESERVER2
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo " Hive Server           [$PID]"
+            echo " Hive Server             [${HOST}:${PID}]"
         else
-            echo " Hive Server is not running"
+            echo " Hive Server             is not running"
         fi
     else
-            echo " Hive Server           [$HIVESERVER]"
+            echo " Hive Server             [$HIVESERVER]"
     fi
 
     return $rt
