@@ -27,6 +27,14 @@
         <name>yarn.resourcemanager.scheduler.address</name>
         <value>tdh-m01:8030</value>
     </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.address</name>
+        <value>tdh-m01:8088</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.admin.address</name>
+        <value>tdh-m01:8033</value>
+    </property>
     <!--
     <property>
         <name>yarn.nodemanager.bind-host</name>
