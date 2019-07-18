@@ -55,7 +55,7 @@ show_status()
     if [ $? -eq 0 ]; then
         check_process $HIVEMETASTORE
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " Hive Metastore        [$PID]"
         else
             echo " Hive Metastore is not running"
@@ -63,7 +63,7 @@ show_status()
 
         check_process $HIVESERVER2
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " Hive Server           [$PID]"
         else
             echo " Hive Server is not running"
@@ -90,21 +90,21 @@ case "$ACTION" in
     'start')
         check_process $METADB
         rt=$?
-        if [ $rt -eq 0 ]; then
+        if [ $rt -eq 1 ]; then
             echo "Mysqld is not running! aborting..."
             exit $rt
         fi
 
         check_process $HIVEMETASTORE
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " MetaStore is already running  [$PID]"
             exit $rt
         fi
 
         check_process $HIVESERVER2
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " HiveServer2 is already running [$PID]"
             exit $rt
         fi
@@ -121,7 +121,7 @@ case "$ACTION" in
     'stop')
         check_process $HIVEMETASTORE
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Stopping Hive MetaStore [$PID]..."
             ( sudo -u $HADOOP_USER kill $PID )
         else
@@ -130,7 +130,7 @@ case "$ACTION" in
 
         check_process $HIVESERVER2
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Stopping HiveServer2 [$PID]..."
             ( sudo -u $HADOOP_USER kill $PID )
         else

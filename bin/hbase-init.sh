@@ -55,7 +55,7 @@ check_process_pidfile()
 {
     local pidf="$1"
     local pid=0
-    local rt=0
+    local rt=1
 
     if [ -r $pidf ]; then
         pid=$(cat $pidf)
@@ -73,7 +73,7 @@ show_status()
 
     check_process_pidfile $ZK_PIDFILE
     rt=$?
-    if [ $rt -ne 0 ]; then
+    if [ $rt -eq 0 ]; then
         echo " Zookeeper             [$PID]"
     else
         echo " Zookeeper is not running"
@@ -82,13 +82,13 @@ show_status()
     if [ "$HB_ADDR" == "$HOST_ADDR" ]; then
         check_process_pidfile $HB_PIDFILE
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " HBase Master          [$PID]"
         else
             echo " HBase Master is not running"
         fi
-    else
-        echo " HBase Master          [$( host $HB_ADDR )]"
+    #else
+        #echo " HBase Master          [$( host $HB_ADDR )]"
     fi
 
     set -f
@@ -99,7 +99,7 @@ show_status()
         if [ $? -eq 0 ] || [ "$dn" == "localhost" ]; then
             check_process_pidfile $RS_PIDFILE
             rt=$?
-            if [ $rt -ne 0 ]; then
+            if [ $rt -eq 0 ]; then
                 echo " HBase RegionServer    [$PID]"
             else
                 echo " HBase RegionServer is not running"
@@ -111,7 +111,7 @@ show_status()
 
     #get_process_pid $HB_THRIFT_PSKEY
     check_process "$HB_THRIFT_PSKEY"
-    if [ $rt -ne 0 ]; then
+    if [ $rt -eq 0 ]; then
         echo " HBase ThriftServer    [$PID]"
     else
         echo " HBase ThriftServer is not running"
@@ -134,13 +134,13 @@ case "$ACTION" in
     'start')
         check_process_pidfile $HB_PIDFILE
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " HBase Master is already running  [$PID]"
         fi
 
         check_process_pidfile $RS_PIDFILE
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " RegionServer is already running  [$PID]"
         fi
 
@@ -153,11 +153,11 @@ case "$ACTION" in
 
         check_process $HB_THRIFT_PSKEY
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " ThriftServer is already running  [$PID]"
         else
             echo "Starting HBase ThriftServer..."
-            ( sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start 2>&1 > $HB_THRIFTLOG & )
+            ( sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start 2>&1 > $HBASE_THRIFTLOG & )
         fi
         ;;
 
@@ -170,7 +170,7 @@ case "$ACTION" in
         check_process $HB_THRIFT_PSKEY
         rt=$?
 
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Stopping HBase ThriftServer [$PID]..."
             ( sudo -u $HADOOP_USER kill $PID )
         else

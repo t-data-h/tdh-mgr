@@ -51,7 +51,7 @@ case "$ACTION" in
     'start')
         check_process "$TDHMYSQL"
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Mysql Daemon already running [$PID]"
         else
             echo "Starting mysqld docker..."
@@ -63,7 +63,7 @@ case "$ACTION" in
     'stop')
         check_process "$TDHMYSQL"
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Stopping Mysql Container $TDH_DOCKER_MYSQL [$PID]..."
             ( docker stop $TDH_DOCKER_MYSQL > /dev/null )
         else
@@ -75,7 +75,7 @@ case "$ACTION" in
     'status')
         check_process "$TDHMYSQL"
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " MySQL Daemon          [$PID]"
         else
             echo " MySQL Daemon is not running"

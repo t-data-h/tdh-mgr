@@ -49,7 +49,7 @@ show_status()
     check_process "$KAFKA_ID"
     rt=$?
 
-    if [ $rt -ne 0 ]; then
+    if [ $rt -eq 0 ]; then
         echo " Kafka Broker          [$PID]"
     else
         echo " Kafka Broker is not running"
@@ -74,7 +74,7 @@ case "$ACTION" in
     'start')
         check_process $KAFKA_ID
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " Kafka Broker is already running"
             exit $rt
         fi
@@ -90,7 +90,7 @@ case "$ACTION" in
     'stop')
         check_process $KAFKA_ID
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Stopping Kafka Broker [$PID]"
             ( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null )
             rt=0

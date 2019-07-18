@@ -54,7 +54,7 @@ show_status()
         check_process "$SPARK_ID"
         rt=$?
 
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo " Spark2 HistoryServer  [$PID]"
         else
             echo " Spark2 HistoryServer is not running"
@@ -80,7 +80,7 @@ case "$ACTION" in
     'start')
         check_process "$SPARK_ID"
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Error: Spark2 HistoryServer is already running [$PID]"
             exit $rt
         fi
@@ -92,7 +92,7 @@ case "$ACTION" in
     'stop')
         check_process "$SPARK_ID"
         rt=$?
-        if [ $rt -ne 0 ]; then
+        if [ $rt -eq 0 ]; then
             echo "Stopping Spark2 HistoryServer [$PID]"
             ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/stop-history-server.sh 2>&1 > /dev/null )
         else
