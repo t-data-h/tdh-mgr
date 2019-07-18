@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export TDH_ENV_USER=1
-export TDH_VERSION="0.7.8"
+export TDH_VERSION="0.7.9"
 
 
 # Assume that JAVA_HOME is already set or managed by the system.
@@ -81,17 +81,17 @@ check_process_pid()
 
     if ps ax | grep $pid | grep -v grep 2>&1> /dev/null ; then
         PID=$pid
-        return 1
+        return 0
     fi
 
-    return 0
+    return 1
 }
 
 
 check_process()
 {
     local key="$1"
-    local rt=0
+    local rt=1
 
     if [ -z "$key" ]; then
         return $rt
@@ -131,7 +131,7 @@ hostip_is_valid()
     IFS=$'\n'
 
     #for line in `ifconfig | grep inet`; do ip=$( echo $line | awk '{ print $2 }' )
-    for line in `ip addr list | grep "inet "`
+    for line in $(/sbin/ip addr list | grep "inet ")
     do
         IFS=' '
         iface=$(echo $line | awk -F' ' '{ print $NF }')
