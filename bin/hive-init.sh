@@ -31,8 +31,8 @@ fi
 
 HIVE_VER=$(readlink $HIVE_HOME)
 HIVE_LOGDIR="${HADOOP_LOGDIR}/hive"
-METASTORE_LOG="${HIVE_LOGDIR}/hive-metastore.log"
-HIVESERVER2_LOG="${HIVE_LOGDIR}/hive-server2.log"
+HIVE_METASTORE_LOG="${HIVE_LOGDIR}/hive-metastore.log"
+HIVE_SERVER2_LOG="${HIVE_LOGDIR}/hive-server2.log"
 
 HOST=$(hostname -s)
 HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | \
@@ -74,7 +74,7 @@ show_status()
         if [ $rt -eq 0 ]; then
             echo " Hive Metastore          [${HOST}:${PID}]"
         else
-            echo " Hive Metastore          is not running"
+            echo " Hive Metastore          [${HIVE_SERVER}] is not running"
         fi
 
         check_process $HIVESERVER2
@@ -82,10 +82,10 @@ show_status()
         if [ $rt -eq 0 ]; then
             echo " Hive Server             [${HOST}:${PID}]"
         else
-            echo " Hive Server             is not running"
+            echo " Hive Server             [${HIVE_SERVER}] is not running"
         fi
     else
-            echo " Hive Server             [$HIVESERVER]"
+            echo " Hive Server             [${HIVE_SERVER}]"
     fi
 
     return $rt
@@ -128,10 +128,10 @@ case "$ACTION" in
         ( mkdir -p $HIVE_LOGDIR )
 
         echo "Starting Hive MetaStore..."
-        ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $METASTORE_LOG & )
+        ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $HIVE_METASTORE_LOG & )
 
         echo "Starting HiveServer2..."
-        ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVESERVER2_LOG & )
+        ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVE_SERVER2_LOG & )
         ;;
 
     'stop')
