@@ -54,9 +54,9 @@ show_status()
     rt=$?
 
     if [ $rt -eq 0 ]; then
-        echo -e " Kafka Broker             \e[32m\e[1m OK   \e[0m [${HOST}:${PID}]"
+        echo -e " Kafka Broker           | \e[32m\e[1m OK  \e[0m [ ${HOST}:${PID}]"
     else
-        echo -e " Kafka Broker             \e[31m\e[1m DEAD \e[0m [$HOST]"
+        echo -e " Kafka Broker           | \e[31m\e[1m DEAD\e[0m | [$HOST]"
     fi
 
     return $rt
@@ -76,7 +76,7 @@ if [ -n "$CONFIG" ]; then
     KAFKA_CFG="$CONFIG"
 fi
 
-echo " ----- $KAFKA_VER ------ "
+echo " ------ $KAFKA_VER ------- "
 
 case "$ACTION" in
     'start')

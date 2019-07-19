@@ -8,6 +8,8 @@ PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 TDHMYSQL="mysqld --"
+MYSQL_VER="mysql-5.7.26"
+
 
 ## ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -45,7 +47,7 @@ if [ -z "$TDH_DOCKER_MYSQL" ]; then
     exit 0;  # exit silently as no container name is provided or set
 fi
 
-echo " ------ mysql-5.7.26 --------- "
+echo " -------- $MYSQL_VER --------- "
 
 case "$ACTION" in
     'start')
@@ -76,9 +78,9 @@ case "$ACTION" in
         check_process "$TDHMYSQL"
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " MySQL Daemon             \e[32m\e[1m OK   \e[0m [$TDH_DOCKER_MYSQL:$PID]"
+            echo -e " MySQL Daemon            |\e[32m\e[1m OK  \e[0m| [$TDH_DOCKER_MYSQL:$PID]"
         else
-            echo -e " MySQL Daemon             \e[31m\e[1m DEAD \e[0m [$TDH_DOCKER_MYSQL]"
+            echo -e " MySQL Daemon            |\e[31m\e[1m DEAD\e[0m| [$TDH_DOCKER_MYSQL]"
         fi
         ;;
     *)
