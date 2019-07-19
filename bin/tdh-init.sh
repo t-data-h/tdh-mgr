@@ -124,6 +124,8 @@ show_status()
     force=1
     run_action "status"
     rt=$?
+    
+    echo " -------------------------------- "
 
     return $rt
 }
@@ -138,6 +140,8 @@ rt=0
 if [ $# -eq 0 ]; then
     usage
 fi
+
+echo ""
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -166,7 +170,7 @@ while [ $# -gt 0 ]; do
     esac
     shift
 done
-
 rt=$?
+
 
 exit $rt
