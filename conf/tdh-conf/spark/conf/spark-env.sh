@@ -92,6 +92,14 @@ if [ -n "$HADOOP_HOME" ]; then
 fi
 export LD_LIBRARY_PATH
 
+if [ -z "$HBASE_HOME" ]; then
+    export HBASE_HOME="/opt/TDH/hbase"
+fi
+
+if [ -z "$HIVE_HOME" ]; then
+    export HIVE_HOME="/opt/TDH/hive"
+fi
+
 PYLIB="$SPARK_HOME/python/lib"
 if [ -f "$PYLIB/pyspark.zip" ]; then
   PYSPARK_ARCHIVES_PATH=
@@ -129,7 +137,7 @@ SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$SPARK_LIBRARY_PATH/*"
 # hadoop
 SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$($HADOOP_HOME/bin/hadoop classpath)"
 # hbase
-SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$HBASE_CONF_DIR:$HBASE_HOME/lib/*"
+SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$HBASE_HOME/conf/*:$HBASE_HOME/lib/*"
 # hive
 SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$HIVE_HOME/conf/hive-site.xml:$HIVE_HOME/lib/*"
 # kafka
