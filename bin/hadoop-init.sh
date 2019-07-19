@@ -116,9 +116,9 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo " HDFS Namenode           [${NN_HOST}:${PID}]"
+        echo -e " HDFS Namenode            \e[32m\e[1m OK   \e[0m [${NN_HOST}:${PID}]"
     else
-        echo " HDFS Primary Namenode   [$NN_HOST] is not running"
+        echo -e " HDFS Primary Namenode    \e[31m\e[1m DEAD \e[0m [$NN_HOST]"
     fi
 
     # HDFS Secondary Namenode
@@ -130,9 +130,9 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo " HDFS Sec.NameNode       [${SN_HOST}:${PID}]"
+        echo -e " HDFS Sec.NameNode        \e[32m\e[1m OK   \e[0m [${SN_HOST}:${PID}]"
     else
-        echo " HDFS Secondary Namenode [${SN_HOST}] is not running"
+        echo -e " HDFS Secondary Namenode  \e[31m\e[1m DEAD \e[0m [${SN_HOST}]"
     fi
 
     # YARN ResourceManager
@@ -144,9 +144,9 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo " YARN ResourceManager    [${RM_HOST}:${PID}]"
+        echo -e " YARN ResourceManager     \e[32m\e[1m OK   \e[0m [${RM_HOST}:${PID}]"
     else
-        echo " YARN ResourceManager    [${RM_HOST}] is not running"
+        echo -e " YARN ResourceManager     \e[31m\e[1m DEAD \e[0m [${RM_HOST}]"
     fi
 
     set -f
@@ -167,9 +167,9 @@ show_status()
         fi
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo " HDFS Datanode           [${dn}:${PID}]"
+            echo -e " HDFS Datanode            \e[32m\e[1m OK   \e[0m [${dn}:${PID}]"
         else
-            echo " HDFS Datanode           [${dn}] is not running"
+            echo -e " HDFS Datanode            \e[31m\e[1m DEAD \e[0m [${dn}]"
         fi
 
         # YARN NodeManager
@@ -181,9 +181,9 @@ show_status()
         rt=$?
 
         if [ $rt -eq 0 ]; then
-            echo " YARN NodeManager        [${dn}:${PID}]"
+            echo -e " YARN NodeManager         \e[32m\e[1m OK   \e[0m [${dn}:${PID}"
         else
-            echo " YARN NodeManager        [$dn] is not running"
+            echo -e " YARN NodeManager         \e[31m\e[1m DEAD \e[0m [$dn]"
         fi
     done
 

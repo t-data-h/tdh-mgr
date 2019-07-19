@@ -72,20 +72,20 @@ show_status()
         check_process $HIVEMETASTORE
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo " Hive Metastore          [${HOST}:${PID}]"
+            echo -e " Hive Metastore           \e[32m\e[1m OK   \e[0m [${HOST}:${PID}]"
         else
-            echo " Hive Metastore          [${HIVE_SERVER}] is not running"
+            echo -e " Hive Metastore           \e[31m\e[1m DEAD \e[0m [${HIVE_SERVER}]"
         fi
 
         check_process $HIVESERVER2
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo " Hive Server             [${HOST}:${PID}]"
+            echo -e " Hive Server              \e[32m\e[1m OK   \e[0m [${HOST}:${PID}]"
         else
-            echo " Hive Server             [${HIVE_SERVER}] is not running"
+            echo -e " Hive Server              \e[31m\e[1m DEAD \e[0m [${HIVE_SERVER}]"
         fi
     else
-            echo " Hive Server             [${HIVE_SERVER}]"
+            echo -e " Hive Server             [${HIVE_SERVER}]"
     fi
 
     return $rt
@@ -131,7 +131,7 @@ case "$ACTION" in
         ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $HIVE_METASTORE_LOG & )
 
         rt=$?
-        
+
         echo "Starting HiveServer2..."
         ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVE_SERVER2_LOG & )
         ;;

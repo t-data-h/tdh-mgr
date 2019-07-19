@@ -43,13 +43,14 @@ usage()
 show_status()
 {
     get_process_pid "$HUE_KEY"
-    if [ $HPID -eq 0 ]; then
-        echo " Hue Web Server        [$HPID]"
+    rt=$?
+    if [ $rt -eq 0 ]; then
+        echo -e " Hue Web Server          [$PID]"
     else
-        echo " Hue is not running"
+        echo -e " Hue Web Server          not running"
     fi
 
-    return $HPID
+    return $rt
 }
 
 

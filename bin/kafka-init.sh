@@ -54,9 +54,9 @@ show_status()
     rt=$?
 
     if [ $rt -eq 0 ]; then
-        echo " Kafka Broker            [${HOST}:${PID}]"
+        echo -e " Kafka Broker             \e[32m\e[1m OK   \e[0m [${HOST}:${PID}]"
     else
-        echo " Kafka Broker            [$HOST] is not running"
+        echo -e " Kafka Broker             \e[31m\e[1m DEAD \e[0m [$HOST]"
     fi
 
     return $rt
