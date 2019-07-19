@@ -47,11 +47,11 @@ RM_HOST=$( grep -A1 'yarn.resourcemanager.address' ${HADOOP_HOME}/etc/hadoop/yar
   sed -E 's/.*<value>(.*)<\/value>/\1/' | \
   awk -F':' '{ print $1 }' )
 
-( echo $NN_HOST | grep $HOST > /dev/null )
+( echo $NN_HOST | grep $HOST 2>&1 > /dev/null )
 IS_NN=$?
-( echo $SN_HOST | grep $HOST > /dev/null )
+( echo $SN_HOST | grep $HOST 2>&1 > /dev/null )
 IS_SN=$?
-( echo $RM_HOST | grep $HOST > /dev/null )
+( echo $RM_HOST | grep $HOST 2>&1 > /dev/null )
 IS_RM=$?
 
 # -----------
