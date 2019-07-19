@@ -125,7 +125,7 @@ show_status()
     run_action "status"
     rt=$?
     
-    echo " ------------------------------ "
+    echo " -------------------------------- "
 
     return $rt
 }
