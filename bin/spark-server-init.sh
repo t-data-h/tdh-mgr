@@ -48,9 +48,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo " Spark Standalone      [$PID]"
+        echo -e " Spark Standalone        [$PID]"
     else
-        echo " Spark Standalone Server is not running"
+        echo -e " Spark Standalone Server not running"
     fi
 
     return $rt

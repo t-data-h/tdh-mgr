@@ -55,9 +55,9 @@ show_status()
         rt=$?
 
         if [ $rt -eq 0 ]; then
-            echo " Spark2 HistoryServer    [${HOST}:${PID}]"
+            echo -e " Spark2 HistoryServer     \e[32m\e[1m OK   \e[0m [${SHS_HOST}:${PID}]"
         else
-            echo " Spark2 HistoryServer is not running"
+            echo -e " Spark2 HistoryServer     \e[31m\e[1m DEAD \e[0m [${SHS_HOST}]"
         fi
     else
          echo " Spark2 HistoryServer    [${SHS_HOST}]"
@@ -87,6 +87,7 @@ case "$ACTION" in
 
         echo "Starting Spark2 HistoryServer"
         ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/start-history-server.sh 2>&1 > /dev/null  )
+        rt=$?
         ;;
 
     'stop')

@@ -29,6 +29,7 @@ ZEPPELIN_VER=$(readlink $ZEPPELIN_HOME)
 ZEPPELIN_HOME="$HADOOP_ROOT/zeppelin"
 ZKEY="ZeppelinServer"
 ZPID=0
+HOST=$(hostname -s)
 
 # -----------
 
@@ -44,11 +45,11 @@ show_status()
     check_process "$ZKEY"
 
     rt=$?
-    if [ $rt -ne 0 ]; then
-        echo " Zeppelin              [$PID]"
+    if [ $rt -eq 0 ]; then
+        echo -e " Zeppelin Server          \e[32m\e[1m OK   \e[0m [${HOST}:${PID}]"
         rt=0
     else
-        echo " Zeppelin is not running"
+        echo -e " Zeppelin Server          \e[31m\e[1m DEAD \e[0m [${HOST}]"
         rt=1
     fi
 
@@ -84,7 +85,7 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo "Stopping Zeppelin [$ZPID]..."
+            echo "Stopping Zeppelin [$PID]..."
             ( sudo -u $HADOOP_USER $ZEPPELIN_HOME/bin/zeppelin-daemon.sh stop )
             rt=0
             #sleep 1

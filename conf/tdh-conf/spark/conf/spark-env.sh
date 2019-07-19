@@ -92,6 +92,14 @@ if [ -n "$HADOOP_HOME" ]; then
 fi
 export LD_LIBRARY_PATH
 
+if [ -z "$HBASE_HOME" ]; then
+    export HBASE_HOME="/opt/TDH/hbase"
+fi
+
+if [ -z "$HIVE_HOME" ]; then
+    export HIVE_HOME="/opt/TDH/hive"
+fi
+
 PYLIB="$SPARK_HOME/python/lib"
 if [ -f "$PYLIB/pyspark.zip" ]; then
   PYSPARK_ARCHIVES_PATH=
@@ -110,7 +118,7 @@ export SPARK_MASTER_WEBUI_PORT=18080
 export SPARK_MASTER_PORT=7077
 export SPARK_WORKER_PORT=7078
 export SPARK_WORKER_WEBUI_PORT=18081
-export SPARK_WORKER_DIR=/var/run/spark/work
+export SPARK_WORKER_DIR=/tmp/spark/work
 export SPARK_LOG_DIR=/var/log/hadoop/spark
 export SPARK_PID_DIR=/tmp
 
@@ -118,7 +126,7 @@ export HADOOP_CONF_DIR=${HADOOP_CONF_DIR:-/etc/hadoop/conf}
 
 if [[ -d $SPARK_HOME/python ]]
 then
-    for i in 
+    for i in
     do
         SPARK_DIST_CLASSPATH=${SPARK_DIST_CLASSPATH}:$i
     done
@@ -127,12 +135,11 @@ fi
 # spark
 SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$SPARK_LIBRARY_PATH/*"
 # hadoop
-SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$(/opt/TDH/hadoop/bin/hadoop classpath)"
+SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$($HADOOP_HOME/bin/hadoop classpath)"
 # hbase
-SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$HBASE_CONF_DIR:$HBASE_HOME/lib/*"
+SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$HBASE_HOME/conf/*:$HBASE_HOME/lib/*"
 # hive
 SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$HIVE_HOME/conf/hive-site.xml:$HIVE_HOME/lib/*"
 # kafka
 SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$KAFKA_HOME/libs/*"
 #echo "SPARK_DIST_CLASSPATH=\"$SPARK_DIST_CLASSPATH\""
-

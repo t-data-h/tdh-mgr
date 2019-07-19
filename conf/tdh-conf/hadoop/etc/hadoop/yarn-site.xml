@@ -27,6 +27,14 @@
         <name>yarn.resourcemanager.scheduler.address</name>
         <value>tdh-m01:8030</value>
     </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.address</name>
+        <value>tdh-m01:8088</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.admin.address</name>
+        <value>tdh-m01:8033</value>
+    </property>
     <!--
     <property>
         <name>yarn.nodemanager.bind-host</name>
@@ -54,13 +62,15 @@
         <value>3</value>
         <description>Ratio between virtual memory to physical memory when setting memory limits for containers. Container allocations are expressed in terms of physical memory, and virtual memory usage is allowed to exceed this allocation by this ratio. Default is 2.1</description>
     </property>
-    <!--
+    <property>
+        <name>yarn.nodemanager.pmem-check-enabled</name>
+        <value>false</value>
+    </property>
     <property>
         <name>yarn.nodemanager.vmem-check-enabled</name>
         <value>false</value>
-	    <description>Whether virtual memory limits will be enforced for containers.</description>
+	<description>Whether virtual memory limits will be enforced for containers.</description>
     </property>
-    -->
     <!-- Container memory -->
     <property>
         <name>yarn.nodemanager.resource.memory-mb</name>
@@ -83,6 +93,10 @@
     <property>
         <name>yarn.nodemanager.aux-services.spark_shuffle.class</name>
         <value>org.apache.spark.network.yarn.YarnShuffleService</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.local-dirs</name>
+        <value>/data/hdfs/nm/nm-local-dir</value>
     </property>
     <!--
     <property>
