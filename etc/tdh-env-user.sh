@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 
 export TDH_ENV_USER=1
-export TDH_VERSION="0.8.1"
+export TDH_VERSION="0.8.2"
 
 
 # Assume that JAVA_HOME is already set or managed by the system.
@@ -107,6 +107,22 @@ check_process()
     return $rt
 }
 
+
+check_remote_process()
+{
+    local host="$1"
+    local pkey="$2"
+    local rt=1
+
+    PID=$( ssh $host "ps ax | grep $pkey | grep -v grep | awk '{ print \$1 }'" )
+
+    rt=$?
+    if [ -z "$PID" ]; then
+        rt=1
+    fi
+
+    return $rt
+}
 
 #  Validates that our configured hostname as provided by `hostname -f`
 #  locally resolves to an interface other than the loopback

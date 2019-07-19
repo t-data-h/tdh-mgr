@@ -48,44 +48,25 @@ usage()
     echo "  TDH Version: $TDH_VERSION"
 }
 
-check_remote_process()
-{
-    local host="$1"
-    local pkey="$2"
-    local rt=1
-
-    PID=$( ssh $host "pid=\$(ps ax | grep $pkey | grep -v grep | awk '{ print \$1 }'); \
-        if [[ -n \$pid ]]; then \
-            if ps ax | grep \$pid | grep -v grep 2>&1> /dev/null; then \
-            echo $pid; exit 0; else exit 1; fi; \
-        fi ")
-    rt=$?
-
-    return $rt
-}
-
 
 show_status()
 {
-    ( echo $HIVE_SERVER | grep $HOST > /dev/null )
-    if [ $? -eq 0 ]; then
-        check_process $HIVEMETASTORE
-        rt=$?
-        if [ $rt -eq 0 ]; then
-            echo -e " Hive Metastore           \e[32m\e[1m OK   \e[0m [${HOST}:${PID}]"
-        else
-            echo -e " Hive Metastore           \e[31m\e[1m DEAD \e[0m [${HIVE_SERVER}]"
-        fi
-
-        check_process $HIVESERVER2
-        rt=$?
-        if [ $rt -eq 0 ]; then
-            echo -e " Hive Server              \e[32m\e[1m OK   \e[0m [${HOST}:${PID}]"
-        else
-            echo -e " Hive Server              \e[31m\e[1m DEAD \e[0m [${HIVE_SERVER}]"
-        fi
+    check_remote_process $HIVE_SERVER $HIVEMETASTORE
+    
+    rt=$?
+    if [ $rt -eq 0 ]; then
+        echo -e " Hive Metastore         | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
     else
-            echo -e " Hive Server             [${HIVE_SERVER}]"
+        echo -e " Hive Metastore         | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
+    fi
+
+    check_remote_process $HIVE_SERVER $HIVESERVER2
+    
+    rt=$?
+    if [ $rt -eq 0 ]; then
+        echo -e " Hive Server            | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
+    else
+        echo -e " Hive Server            | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
     fi
 
     return $rt
@@ -99,58 +80,59 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " ------- $HIVE_VER ---------- "
+echo " -------- $HIVE_VER ----------- "
 
 case "$ACTION" in
 
     'start')
-        check_process $METADB
-        rt=$?
-        if [ $rt -eq 1 ]; then
-            echo "Mysqld is not running! aborting..."
-            exit $rt
-        fi
+        check_remote_process $HIVE_SERVER $HIVEMETASTORE
 
-        check_process $HIVEMETASTORE
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo " MetaStore is already running  [$PID]"
+            echo " Hive MetaStore is already running  [${HIVE_SERVER}:${PID}]"
             exit $rt
         fi
 
-        check_process $HIVESERVER2
+        check_remote_process $HIVE_SERVER $HIVESERVER2
+
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo " HiveServer2 is already running [$PID]"
+            echo " HiveServer2 is already running [${HIVE_SERVER}:${PID}]"
             exit $rt
         fi
 
-        ( mkdir -p $HIVE_LOGDIR )
+        ( ssh $HIVE_SERVER "mkdir -p $HIVE_LOGDIR" )
 
         echo "Starting Hive MetaStore..."
-        ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $HIVE_METASTORE_LOG & )
+        #( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $HIVE_METASTORE_LOG & )
+        ( ssh $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $HIVE_METASTORE_LOG &" )
 
         rt=$?
 
         echo "Starting HiveServer2..."
-        ( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVE_SERVER2_LOG & )
+        #( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVE_SERVER2_LOG & )
+        ( ssh $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVE_SERVER2_LOG &" )
         ;;
 
     'stop')
-        check_process $HIVEMETASTORE
+        check_remote_process $HIVE_SERVER $HIVEMETASTORE
+        
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping Hive MetaStore [$PID]..."
-            ( sudo -u $HADOOP_USER kill $PID )
+            echo "Stopping Hive MetaStore [${HIVE_SERVER}:${PID}]..."
+            #( sudo -u $HADOOP_USER kill $PID )
+            ( ssh $HIVE_SERVER "kill $PID" )
         else
             echo "Hive Metastore process not found..."
         fi
 
-        check_process $HIVESERVER2
+        check_remote_process $HIVE_SERVER $HIVESERVER2
+        
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping HiveServer2 [$PID]..."
-            ( sudo -u $HADOOP_USER kill $PID )
+            echo "Stopping HiveServer2 [${HIVE_SERVER}:${PID}]..."
+            #( sudo -u $HADOOP_USER kill $PID )
+            ( ssh $HIVE_SERVER "kill $PID" )
         else
             echo "HiveServer2 process not found..."
         fi

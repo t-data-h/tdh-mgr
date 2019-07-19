@@ -46,10 +46,10 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Zeppelin Server          \e[32m\e[1m OK   \e[0m [${HOST}:${PID}]"
+        echo -e " Zeppelin Server        | \e[32m\e[1m OK  \e[0m | [${HOST}:${PID}]"
         rt=0
     else
-        echo -e " Zeppelin Server          \e[31m\e[1m DEAD \e[0m [${HOST}]"
+        echo -e " Zeppelin Server        | \e[31m\e[1m DEAD\e[0m | [${HOST}]"
         rt=1
     fi
 
@@ -62,7 +62,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " ----- $ZEPPELIN_VER -------- "
+echo " ------- $ZEPPELIN_VER -------- "
 
 case "$ACTION" in
     'start')
