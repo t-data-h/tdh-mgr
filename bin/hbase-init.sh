@@ -120,6 +120,8 @@ show_status()
     for rs in $( cat ${HBASE_HOME}/conf/regionservers ); do
         ( echo $rs | grep $HOST > /dev/null )
         rt=$?
+        
+        echo "                                 ------------ "
 
         if [ $rt -eq 0 ] || [ "$rs" == "localhost" ]; then
             check_process_pidfile $RS_PIDFILE
@@ -128,9 +130,9 @@ show_status()
         fi
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " HBase RegionServer       \e[32m\e[1m OK   \e[0m [${rs}:${PID}]"
+            echo -e "       RegionServer       \e[32m\e[1m OK   \e[0m [${rs}:${PID}]"
         else
-            echo -e " HBase RegionServer       \e[31m\e[1m DEAD \e[0m [$rs]"
+            echo -e "       RegionServer       \e[31m\e[1m DEAD \e[0m [$rs]"
         fi
     done
 

@@ -148,7 +148,7 @@ show_status()
     else
         echo -e " YARN ResourceManager     \e[31m\e[1m DEAD \e[0m [${RM_HOST}]"
     fi
-
+    
     set -f
     IFS=$'\n'
     is_lo=1
@@ -156,6 +156,8 @@ show_status()
     for dn in $( cat ${HADOOP_HOME}/etc/hadoop/slaves ); do
         ( echo $dn | grep $HOST > /dev/null )
         rt=$?
+            
+        echo "                                 ------------ "
 
         # HDFS Datanode
         if [ $rt -eq 0 ] || [ "$dn" == "localhost" ]; then
@@ -167,9 +169,9 @@ show_status()
         fi
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " HDFS Datanode            \e[32m\e[1m OK   \e[0m [${dn}:${PID}]"
+            echo -e "      Datanode            \e[32m\e[1m OK   \e[0m [${dn}:${PID}]"
         else
-            echo -e " HDFS Datanode            \e[31m\e[1m DEAD \e[0m [${dn}]"
+            echo -e "      Datanode            \e[31m\e[1m DEAD \e[0m [${dn}]"
         fi
 
         # YARN NodeManager
@@ -181,9 +183,9 @@ show_status()
         rt=$?
 
         if [ $rt -eq 0 ]; then
-            echo -e " YARN NodeManager         \e[32m\e[1m OK   \e[0m [${dn}:${PID}]"
+            echo -e "      NodeManager         \e[32m\e[1m OK   \e[0m [${dn}:${PID}]"
         else
-            echo -e " YARN NodeManager         \e[31m\e[1m DEAD \e[0m [$dn]"
+            echo -e "      NodeManager         \e[31m\e[1m DEAD \e[0m [$dn]"
         fi
     done
 
