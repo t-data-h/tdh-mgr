@@ -21,6 +21,8 @@ elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
     . /opt/TDH/etc/$HADOOP_ENV
 fi
 
+# -----------
+
 if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
@@ -32,8 +34,10 @@ if [ -z "$KAFKA_HOME" ]; then
 fi
 
 KAFKA_VER=$(readlink $KAFKA_HOME)
-# -----------
 
+HOST=$(hostname -s)
+
+# -----------
 
 usage()
 {
@@ -50,9 +54,9 @@ show_status()
     rt=$?
 
     if [ $rt -eq 0 ]; then
-        echo " Kafka Broker          [$PID]"
+        echo -e " Kafka Broker             \e[32m\e[1m OK   \e[0m [${HOST}:${PID}]"
     else
-        echo " Kafka Broker is not running"
+        echo -e " Kafka Broker             \e[31m\e[1m DEAD \e[0m [$HOST]"
     fi
 
     return $rt
@@ -68,6 +72,10 @@ ACTION="$1"
 CONFIG="$2"
 rt=0
 
+if [ -n "$CONFIG" ]; then
+    KAFKA_CFG="$CONFIG"
+fi
+
 echo " ----- $KAFKA_VER ------ "
 
 case "$ACTION" in
@@ -77,10 +85,6 @@ case "$ACTION" in
         if [ $rt -eq 0 ]; then
             echo " Kafka Broker is already running"
             exit $rt
-        fi
-
-        if [ -n "$CONFIG" ]; then
-            KAFKA_CFG="$CONFIG"
         fi
 
         echo "Starting Kafka Broker..."
