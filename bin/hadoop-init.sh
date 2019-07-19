@@ -116,7 +116,7 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " HDFS Primary Namenode  | \e[32m\e[1m OK  \e[0m| [${NN_HOST}:${PID}]"
+        echo -e " HDFS Primary Namenode  | \e[32m\e[1m OK \e[0m | [${NN_HOST}:${PID}]"
     else
         echo -e " HDFS Primary Namenode  | \e[31m\e[1mDEAD\e[0m | [$NN_HOST]"
     fi
@@ -130,7 +130,7 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Secondary NameNode     | \e[32m\e[1m OK  \e[0m| [${SN_HOST}:${PID}]"
+        echo -e " Secondary NameNode     | \e[32m\e[1m OK \e[0m | [${SN_HOST}:${PID}]"
     else
         echo -e " Secondary Namenode     | \e[31m\e[1mDEAD\e[0m | [${SN_HOST}]"
     fi
@@ -144,7 +144,7 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " YARN ResourceManager   | \e[32m\e[1m OK  \e[0m| [${RM_HOST}:${PID}]"
+        echo -e " YARN ResourceManager   | \e[32m\e[1m OK \e[0m | [${RM_HOST}:${PID}]"
     else
         echo -e " YARN ResourceManager   | \e[31m\e[1mDEAD\e[0m | [${RM_HOST}]"
     fi

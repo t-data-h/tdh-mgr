@@ -108,6 +108,22 @@ check_process()
 }
 
 
+check_remote_process()
+{
+    local host="$1"
+    local pkey="$2"
+    local rt=1
+
+    PID=$( ssh $host "ps ax | grep $pkey | grep -v grep | awk '{ print \$1 }'" )
+
+    rt=$?
+    if [ -z "$PID" ]; then
+        rt=1
+    fi
+
+    return $rt
+}
+
 #  Validates that our configured hostname as provided by `hostname -f`
 #  locally resolves to an interface other than the loopback
 hostip_is_valid()

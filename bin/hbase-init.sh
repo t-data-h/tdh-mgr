@@ -90,7 +90,7 @@ show_status()
     check_process_pidfile $ZK_PIDFILE
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Zookeeper              | \e[32m\e[1m OK  \e[0m| [${HOST}:${PID}]"
+        echo -e " Zookeeper              | \e[32m\e[1m OK \e[0m | [${HOST}:${PID}]"
     else
         echo -e " Zookeeper              | \e[31m\e[1mDEAD\e[0m | [$HOST]"
     fi
@@ -102,14 +102,14 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " HBase Master           | \e[32m\e[1m OK  \e[0m| [${HOST}:${PID}]"
+        echo -e " HBase Master           | \e[32m\e[1m OK \e[0m | [${HOST}:${PID}]"
     else
         echo -e " HBase Master           | \e[31m\e[1mDEAD\e[0m | [$HOST]"
     fi
 
     check_process "$HB_THRIFT_PSKEY"
     if [ $rt -eq 0 ]; then
-        echo -e " HBase ThriftServer     | \e[32m\e[1m OK  \e[0m| [${HOST}:${PID}]"
+        echo -e " HBase ThriftServer     | \e[32m\e[1m OK \e[0m | [${HOST}:${PID}]"
     else
         echo -e " HBase ThriftServer     | \e[31m\e[1mDEAD\e[0m | [$HOST]"
     fi
@@ -130,7 +130,7 @@ show_status()
         fi
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e "    RegionServer        | \e[32m\e[1m OK  \e[0m| [${rs}:${PID}]"
+            echo -e "    RegionServer        | \e[32m\e[1m OK \e[0m | [${rs}:${PID}]"
         else
             echo -e "    RegionServer        | \e[31m\e[1mDEAD\e[0m | [$rs]"
         fi

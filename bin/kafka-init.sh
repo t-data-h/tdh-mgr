@@ -34,8 +34,8 @@ if [ -z "$KAFKA_HOME" ]; then
 fi
 
 KAFKA_VER=$(readlink $KAFKA_HOME)
-
 HOST=$(hostname -s)
+BROKERS="${KAFKA_HOME}/config/brokers"
 
 # -----------
 
@@ -50,14 +50,16 @@ show_status()
 {
     local rt=0
 
-    check_process "$KAFKA_ID"
-    rt=$?
+    for broker in $( cat ${KAFKA_HOME}/config/brokers ); do
+        check_remote_process $broker $KAFKA_ID
+        rt=$?
 
-    if [ $rt -eq 0 ]; then
-        echo -e " Kafka Broker           | \e[32m\e[1m OK  \e[0m [ ${HOST}:${PID}]"
-    else
-        echo -e " Kafka Broker           | \e[31m\e[1m DEAD\e[0m | [$HOST]"
-    fi
+        if [ $rt -eq 0 ]; then
+            echo -e " Kafka Broker           | \e[32m\e[1m OK \e[0m | [${broker}:${PID}]"
+        else
+            echo -e " Kafka Broker           | \e[31m\e[1mDEAD\e[0m | [${broker}]"
+        fi
+    done
 
     return $rt
 }
@@ -76,31 +78,47 @@ if [ -n "$CONFIG" ]; then
     KAFKA_CFG="$CONFIG"
 fi
 
+if ! [ -e ${BROKERS} ]; then
+    echo "Error locating broker host config: '${BROKERS}'"
+    exit 1
+fi
+
 echo " ------ $KAFKA_VER ------- "
 
 case "$ACTION" in
     'start')
-        check_process $KAFKA_ID
-        rt=$?
-        if [ $rt -eq 0 ]; then
-            echo " Kafka Broker is already running"
-            exit $rt
-        fi
+        for broker in $( cat ${BROKERS} ); do
+            check_remote_process $broker $KAFKA_ID
+        
+            rt=$?
+        
+            if [ $rt -eq 0 ]; then
+                echo " Kafka Broker [${broker}:${PID}] is already running"
+                exit $rt
+            fi
+            
+            echo "Starting Kafka Broker  [${broker}]"
+            #( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG 2>&1 > /dev/null )
+            ( ssh $broker "${KAFKA_HOME}/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG 2>&1 > /dev/null" )
 
-        echo "Starting Kafka Broker..."
-        ( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG 2>&1 > /dev/null )
+            rt=$?
+        done
         ;;
 
     'stop')
-        check_process $KAFKA_ID
-        rt=$?
-        if [ $rt -eq 0 ]; then
-            echo "Stopping Kafka Broker [$PID]"
-            ( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null )
-            rt=0
-        else
-            echo "Kafka Broker not found."
-        fi
+        for broker in $( cat ${BROKERS} ); do
+            check_remote_process $broker $KAFKA_ID
+            
+            rt=$?
+            if [ $rt -eq 0 ]; then
+                echo "Stopping Kafka Broker [${broker}:${PID}]"
+                #( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null )
+                ( ssh $broker "$KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null" )
+                rt=0
+            else
+                echo "Kafka Broker not found."
+            fi
+        done
         ;;
 
     'status'|'info')

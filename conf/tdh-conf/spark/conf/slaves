@@ -16,4 +16,6 @@
 #
 
 # A Spark Worker will be started on each of the machines listed below.
-localhost
+tdh-d01
+tdh-d02
+tdh-d03
