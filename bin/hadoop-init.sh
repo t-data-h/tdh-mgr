@@ -181,7 +181,7 @@ show_status()
         rt=$?
 
         if [ $rt -eq 0 ]; then
-            echo -e " YARN NodeManager         \e[32m\e[1m OK   \e[0m [${dn}:${PID}"
+            echo -e " YARN NodeManager         \e[32m\e[1m OK   \e[0m [${dn}:${PID}]"
         else
             echo -e " YARN NodeManager         \e[31m\e[1m DEAD \e[0m [$dn]"
         fi
