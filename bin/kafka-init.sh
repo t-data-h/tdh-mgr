@@ -55,9 +55,9 @@ show_status()
         rt=$?
 
         if [ $rt -eq 0 ]; then
-            echo -e " Kafka Broker           | \e[32m\e[1m OK \e[0m | [${broker}:${PID}]"
+            echo -e "  Kafka Broker          | \e[32m\e[1m OK \e[0m | [${broker}:${PID}]"
         else
-            echo -e " Kafka Broker           | \e[31m\e[1mDEAD\e[0m | [${broker}]"
+            echo -e "  Kafka Broker          | \e[31m\e[1mDEAD\e[0m | [${broker}]"
         fi
     done
 
@@ -83,7 +83,7 @@ if ! [ -e ${BROKERS} ]; then
     exit 1
 fi
 
-echo " ------ $KAFKA_VER ------- "
+echo -e " ------ \e[96m$KAFKA_VER\e[0m ------- "
 
 case "$ACTION" in
     'start')
@@ -114,9 +114,10 @@ case "$ACTION" in
                 echo "Stopping Kafka Broker [${broker}:${PID}]"
                 #( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null )
                 ( ssh $broker "$KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null" )
-                rt=0
+                rt=$?
             else
                 echo "Kafka Broker not found."
+                rt=0
             fi
         done
         ;;

@@ -47,7 +47,7 @@ if [ -z "$TDH_DOCKER_MYSQL" ]; then
     exit 0;  # exit silently as no container name is provided or set
 fi
 
-echo " -------- $MYSQL_VER --------- "
+echo -e " -------- \e[96m$MYSQL_VER\e[0m --------- "
 
 case "$ACTION" in
     'start')
@@ -78,9 +78,9 @@ case "$ACTION" in
         check_process "$TDHMYSQL"
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " MySQL Daemon           | \e[32m\e[1m OK \e[0m | [$TDH_DOCKER_MYSQL:$PID]"
+            echo -e "  MySQL Daemon          | \e[32m\e[1m OK \e[0m | [$TDH_DOCKER_MYSQL:$PID]"
         else
-            echo -e " MySQL Daemon           | \e[31m\e[1mDEAD\e[0m | [$TDH_DOCKER_MYSQL]"
+            echo -e "  MySQL Daemon          | \e[31m\e[1mDEAD\e[0m | [$TDH_DOCKER_MYSQL]"
         fi
         ;;
     *)
