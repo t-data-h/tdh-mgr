@@ -55,18 +55,18 @@ show_status()
     
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Hive Metastore         | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
+        echo -e "  Hive Metastore        | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
     else
-        echo -e " Hive Metastore         | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
+        echo -e "  Hive Metastore        | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
     fi
 
     check_remote_process $HIVE_SERVER $HIVESERVER2
     
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Hive Server            | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
+        echo -e "  Hive Server           | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
     else
-        echo -e " Hive Server            | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
+        echo -e "  Hive Server           | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
     fi
 
     return $rt
@@ -80,7 +80,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " -------- $HIVE_VER ----------- "
+echo -e " -------- \e[96m$HIVE_VER\e[0m ----------- "
 
 case "$ACTION" in
 
@@ -103,15 +103,15 @@ case "$ACTION" in
 
         ( ssh $HIVE_SERVER "mkdir -p $HIVE_LOGDIR" )
 
-        echo "Starting Hive MetaStore..."
+        echo "Starting Hive MetaStore on $HIVE_SERVER..."
         #( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $HIVE_METASTORE_LOG & )
-        ( ssh $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $HIVE_METASTORE_LOG &" )
+        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore >/dev/null 2>&1 &" )
 
         rt=$?
 
-        echo "Starting HiveServer2..."
+        echo "Starting HiveServer2 on $HIVE_SERVER..."
         #( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVE_SERVER2_LOG & )
-        ( ssh $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVE_SERVER2_LOG &" )
+        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 >/dev/null 2>&1 &" )
         ;;
 
     'stop')
@@ -123,7 +123,7 @@ case "$ACTION" in
             #( sudo -u $HADOOP_USER kill $PID )
             ( ssh $HIVE_SERVER "kill $PID" )
         else
-            echo "Hive Metastore process not found..."
+            echo "Hive Metastore not found..."
         fi
 
         check_remote_process $HIVE_SERVER $HIVESERVER2
@@ -134,7 +134,7 @@ case "$ACTION" in
             #( sudo -u $HADOOP_USER kill $PID )
             ( ssh $HIVE_SERVER "kill $PID" )
         else
-            echo "HiveServer2 process not found..."
+            echo "Hive Server2 not found..."
         fi
         rt=0
         ;;

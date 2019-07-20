@@ -60,7 +60,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " ------ $SPARK_VER ------- "
+echo -e " ------ \e[96m$SPARK_VER\e[0m ------- "
 
 case "$ACTION" in
     'start')

@@ -52,9 +52,9 @@ show_status()
     rt=$?
     
     if [ $rt -eq 0 ]; then
-        echo -e " Spark2 HistoryServer   | \e[32m\e[1m OK \e[0m | [${SHS_HOST}:${PID}]"
+        echo -e "  Spark2 HistoryServer  | \e[32m\e[1m OK \e[0m | [${SHS_HOST}:${PID}]"
     else
-        echo -e " Spark2 HistoryServer   | \e[31m\e[1mDEAD\e[0m | [${SHS_HOST}]"
+        echo -e "  Spark2 HistoryServer  | \e[31m\e[1mDEAD\e[0m | [${SHS_HOST}]"
     fi
 
     return $rt
@@ -68,7 +68,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " -------- $SPARK_VER ---------- "
+echo -e " -------- \e[96m$SPARK_VER\e[0m ---------- "
 
 case "$ACTION" in
     'start')

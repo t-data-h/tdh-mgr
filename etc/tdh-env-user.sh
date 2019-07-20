@@ -1,15 +1,13 @@
 #!/bin/bash
-#  hadoop-env-user.sh
-#  Sets up the environment for TDH components.
+#
+#  tdh-env-user.sh  -  Sets up the environment for TDH components.
 #
 #  Timothy C. Arland <tcarland@gmail.com>
-
 export TDH_ENV_USER=1
-export TDH_VERSION="0.8.2"
 
+export TDH_VERSION="0.8.3"
 
-# Assume that JAVA_HOME is already set or managed by the system.
-#export JAVA_HOME=${JAVA_HOME}
+# JAVA_HOME should already be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
     echo "Error JAVA_HOME is not set"
     exit 1
@@ -21,13 +19,13 @@ export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
 export HADOOP_PID_DIR="/tmp"
 
-# enable mysqld docker container by name
+# set mysqld docker container by name
 export TDH_DOCKER_MYSQL="tdh-mysql1"
 
-# HADOOP_CONF_DIR should always be set by user prior to sourcing the Environment
-# to support switching environments.
+# HADOOP_CONF_DIR should always be set by user prior to including 
+# this file to support switching environments.
 if [ -z "$HADOOP_CONF_DIR" ]; then
-    echo "Warning! HADOOP_CONF_DIR is not set!"
+    echo "=> Warning! HADOOP_CONF_DIR is not set!"
     export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
     echo "=> Setting default HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
 fi
@@ -65,6 +63,8 @@ fi
 
 # -----------------------------------------------
 #  NOTE:  Do not edit below this line.
+#
+#  tdh-env-functions
 #
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${HADOOP_HOME}/lib/native
 
@@ -123,6 +123,7 @@ check_remote_process()
 
     return $rt
 }
+
 
 #  Validates that our configured hostname as provided by `hostname -f`
 #  locally resolves to an interface other than the loopback

@@ -105,7 +105,7 @@ show_status()
         return $rt
     fi
 
-    echo " -------- $HADOOP_VER --------- "
+    echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
 
     # HDFS Primary Namenode
     #
@@ -116,9 +116,9 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " HDFS Primary Namenode  | \e[32m\e[1m OK \e[0m | [${NN_HOST}:${PID}]"
+        echo -e " HDFS Namenode (pri.)   | \e[32m\e[1m OK \e[0m | [${NN_HOST}:${PID}]"
     else
-        echo -e " HDFS Primary Namenode  | \e[31m\e[1mDEAD\e[0m | [$NN_HOST]"
+        echo -e " HDFS Namenode (pri.)   | \e[31m\e[1mDEAD\e[0m | [$NN_HOST]"
     fi
 
     # HDFS Secondary Namenode
@@ -130,9 +130,9 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Secondary NameNode     | \e[32m\e[1m OK \e[0m | [${SN_HOST}:${PID}]"
+        echo -e " HDFS NameNode (sec.)   | \e[32m\e[1m OK \e[0m | [${SN_HOST}:${PID}]"
     else
-        echo -e " Secondary Namenode     | \e[31m\e[1mDEAD\e[0m | [${SN_HOST}]"
+        echo -e " HDFS Namenode (sec.)   | \e[31m\e[1mDEAD\e[0m | [${SN_HOST}]"
     fi
 
     # YARN ResourceManager
@@ -236,7 +236,7 @@ case "$ACTION" in
         check_process_pidfile $RM_PIDFILE
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping YARN [$PID]..."
+            echo "Stopping YARN [${RM_HOST}:${PID}]..."
             ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
         else
             echo " YARN ResourceManager not running or not found."
@@ -251,7 +251,7 @@ case "$ACTION" in
         check_process_pidfile $NN_PIDFILE
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping HDFS [$PID]..."
+            echo "Stopping HDFS [${NN_HOST}:${PID}]..."
             ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh 2>&1 > /dev/null )
         fi
         rt=0
