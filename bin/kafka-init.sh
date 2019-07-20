@@ -114,9 +114,10 @@ case "$ACTION" in
                 echo "Stopping Kafka Broker [${broker}:${PID}]"
                 #( sudo -u $HADOOP_USER $KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null )
                 ( ssh $broker "$KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null" )
-                rt=0
+                rt=$?
             else
                 echo "Kafka Broker not found."
+                rt=0
             fi
         done
         ;;

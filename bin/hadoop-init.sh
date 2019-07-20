@@ -236,7 +236,7 @@ case "$ACTION" in
         check_process_pidfile $RM_PIDFILE
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping YARN [$PID]..."
+            echo "Stopping YARN [${RM_HOST}:${PID}]..."
             ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
         else
             echo " YARN ResourceManager not running or not found."
@@ -251,7 +251,7 @@ case "$ACTION" in
         check_process_pidfile $NN_PIDFILE
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping HDFS [$PID]..."
+            echo "Stopping HDFS [${NN_HOST}:${PID}]..."
             ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh 2>&1 > /dev/null )
         fi
         rt=0
