@@ -87,31 +87,32 @@ show_status()
 {
     local rt=0
 
-    check_process_pidfile $ZK_PIDFILE
-    rt=$?
-    if [ $rt -eq 0 ]; then
-        echo -e " Zookeeper              | \e[32m\e[1m OK \e[0m | [${HOST}:${PID}]"
-    else
-        echo -e " Zookeeper              | \e[31m\e[1mDEAD\e[0m | [$HOST]"
-    fi
-
     if [ "$HB_ADDR" == "$HOST_ADDR" ]; then
         check_process_pidfile $HB_PIDFILE
     else
         check_remote_pidfile $(host $HB_ADDR) $HB_PIDFILE
     fi
+
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " HBase Master           | \e[32m\e[1m OK \e[0m | [${HOST}:${PID}]"
+        echo -e "  HBase Master          | \e[32m\e[1m OK \e[0m | [${HOST}:${PID}]"
     else
-        echo -e " HBase Master           | \e[31m\e[1mDEAD\e[0m | [$HOST]"
+        echo -e "  HBase Master          | \e[31m\e[1mDEAD\e[0m | [$HOST]"
+    fi
+
+    check_process_pidfile $ZK_PIDFILE
+    rt=$?
+    if [ $rt -eq 0 ]; then
+        echo -e "    Zookeeper           | \e[32m\e[1m OK \e[0m | [${HOST}:${PID}]"
+    else
+        echo -e "    Zookeeper           | \e[31m\e[1mDEAD\e[0m | [$HOST]"
     fi
 
     check_process "$HB_THRIFT_PSKEY"
     if [ $rt -eq 0 ]; then
-        echo -e " HBase ThriftServer     | \e[32m\e[1m OK \e[0m | [${HOST}:${PID}]"
+        echo -e "    ThriftServer        | \e[32m\e[1m OK \e[0m | [${HOST}:${PID}]"
     else
-        echo -e " HBase ThriftServer     | \e[31m\e[1mDEAD\e[0m | [$HOST]"
+        echo -e "    ThriftServer        | \e[31m\e[1mDEAD\e[0m | [$HOST]"
     fi
         
     echo -e "    ------------        |------|"
@@ -147,7 +148,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " -------- $HBASE_VER ---------- "
+echo -e " -------- \e[96m$HBASE_VER\e[0m ---------- "
 
 case "$ACTION" in
     'start')

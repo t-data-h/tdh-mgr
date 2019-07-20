@@ -62,7 +62,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " ------- $ZEPPELIN_VER -------- "
+echo -e " ------- \e[96m$ZEPPELIN_VER\e[0m -------- "
 
 case "$ACTION" in
     'start')

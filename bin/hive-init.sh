@@ -55,18 +55,18 @@ show_status()
     
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Hive Metastore         | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
+        echo -e "   Hive Metastore       | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
     else
-        echo -e " Hive Metastore         | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
+        echo -e "   Hive Metastore       | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
     fi
 
     check_remote_process $HIVE_SERVER $HIVESERVER2
     
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Hive Server            | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
+        echo -e "   Hive Server          | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
     else
-        echo -e " Hive Server            | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
+        echo -e "   Hive Server          | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
     fi
 
     return $rt
@@ -80,7 +80,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo " -------- $HIVE_VER ----------- "
+echo -e " -------- \e[96m$HIVE_VER\e[0m ----------- "
 
 case "$ACTION" in
 
