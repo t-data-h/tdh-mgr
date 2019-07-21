@@ -22,3 +22,24 @@ versions:
 
 Refer to the setup document in *docs/tdh-hadoop-setup.md* for building
 up a TDH distribution from scratch.
+
+### Management scripts
+
+  The main entrypoint to cluster mgmt. is the script *tdh-init.sh*. This 
+works much like a standard in it script with *start|stop|status* options.
+This in turn calls various ecosystem *init* functions to perform actions 
+on various components.  Which components can be set via the environment
+using the variable *HADOOP_ECOSYSTEM_INITS*. Each component has its own
+init script for the same options (notice a direct 'restart' option is 
+not provided).
+
+  The conf directory provides cluster configuration in a manner than 
+allows for a given environment config to be 'overlaid' on the cluster
+directory (eg. /opt/TDH).
+
+  Further managment such as configuration updates or other operations 
+is provided by a separate project (for now). The *tdh-gcp* project 
+provides scripts and ansible playbooks for deploying a TDH cluster to 
+Google Cloud Platform.
+
+  
