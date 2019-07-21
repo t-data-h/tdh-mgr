@@ -29,7 +29,7 @@ HBASE_VER=$(readlink $HBASE_HOME)
 
 HB_MASTERS="${HBASE_HOME}/conf/masters"
 HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
-RS_PIDFILE="/tmp/hbase-${HADOOP_USER}-regionserver.pid"
+RS_PIDFILE="/tmp/hbase-${HADOOP_USER}*-regionserver.pid"
 ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
 HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
 
@@ -60,7 +60,7 @@ check_process_pidfile()
     local rt=1
 
     if [ -r $pidf ]; then
-        pid=$(cat $pidf)
+        pid=$(cat $pidf >/dev/null 2>&1)
         check_process_pid $pid
         rt=$?
     fi
@@ -138,14 +138,8 @@ show_status()
     IFS=$'\n'
 
     for rs in $( cat ${HBASE_HOME}/conf/regionservers ); do
-        ( echo $rs | grep $HOST 2>&1 > /dev/null )
-        rt=$?
 
-        if [ $rt -eq 0 ] || [ "$rs" == "localhost" ]; then
-            check_process_pidfile $RS_PIDFILE
-        else
-            check_remote_pidfile $rs $RS_PIDFILE
-        fi
+        check_remote_pidfile $rs $RS_PIDFILE
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -195,7 +189,6 @@ case "$ACTION" in
         else
             echo "Starting HBase ThriftServer..."
             ( sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start 2>&1 > $HBASE_THRIFTLOG & )
-            #( ssh -n $HBASE_MASTER "nohup $HBASE_HOME/bin/hbase thrift start >$HBASE_THRIFTLOG 2>&1 &" )
         fi
         rt=0
         ;;
@@ -205,9 +198,8 @@ case "$ACTION" in
 
         echo "Stopping HBase Master [${HBASE_MASTER}:${PID}]..."
         ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null )
-        #( ssh $HBASE_MASTER "sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null" )
 
-        check_process $HBASE_MASTER $HB_THRIFT_PSKEY
+        check_process $HB_THRIFT_PSKEY
 
         rt=$?
         if [ $rt -eq 0 ]; then

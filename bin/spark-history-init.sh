@@ -81,7 +81,6 @@ case "$ACTION" in
         fi
 
         echo "Starting Spark2 HistoryServer"
-        #( sudo -u $HADOOP_USER $SPARK_HOME/sbin/start-history-server.sh 2>&1 > /dev/null  )
         ( ssh $SHS_HOST "$SPARK_HOME/sbin/start-history-server.sh 2>&1 > /dev/null" )
         
         rt=$?
@@ -93,7 +92,6 @@ case "$ACTION" in
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping Spark2 HistoryServer [$PID]"
-            #( sudo -u $HADOOP_USER $SPARK_HOME/sbin/stop-history-server.sh 2>&1 > /dev/null )
             ( ssh $SHS_HOST "$SPARK_HOME/sbin/stop-history-server.sh 2>&1 > /dev/null" )
         else
             echo "Spark2 HistoryServer not found.."

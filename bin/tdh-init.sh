@@ -56,9 +56,7 @@ usage()
 
 version()
 {
-    echo ""
-    echo "$PNAME v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})"
-    echo ""
+    printf "$PNAME v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
 }
 
 
@@ -121,6 +119,7 @@ show_status()
 {
     local rt=0
 
+    version
     force=1
     run_action "status"
     rt=$?
@@ -140,8 +139,6 @@ rt=0
 if [ $# -eq 0 ]; then
     usage
 fi
-
-echo ""
 
 while [ $# -gt 0 ]; do
     case "$1" in

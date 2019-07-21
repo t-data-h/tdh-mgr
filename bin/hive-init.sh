@@ -104,13 +104,11 @@ case "$ACTION" in
         ( ssh $HIVE_SERVER "mkdir -p $HIVE_LOGDIR" )
 
         echo "Starting Hive MetaStore on $HIVE_SERVER..."
-        #( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service metastore 2>&1 > $HIVE_METASTORE_LOG & )
         ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore >/dev/null 2>&1 &" )
 
         rt=$?
 
         echo "Starting HiveServer2 on $HIVE_SERVER..."
-        #( sudo -u $HADOOP_USER nohup $HIVE_HOME/bin/hive --service hiveserver2 2>&1 > $HIVE_SERVER2_LOG & )
         ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 >/dev/null 2>&1 &" )
         ;;
 
@@ -120,7 +118,6 @@ case "$ACTION" in
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping Hive MetaStore [${HIVE_SERVER}:${PID}]..."
-            #( sudo -u $HADOOP_USER kill $PID )
             ( ssh $HIVE_SERVER "kill $PID" )
         else
             echo "Hive Metastore not found..."
@@ -131,7 +128,6 @@ case "$ACTION" in
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping HiveServer2 [${HIVE_SERVER}:${PID}]..."
-            #( sudo -u $HADOOP_USER kill $PID )
             ( ssh $HIVE_SERVER "kill $PID" )
         else
             echo "Hive Server2 not found..."

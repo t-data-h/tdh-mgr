@@ -43,19 +43,6 @@
      <description>Whether bucketing is enforced. If true, while inserting into the table, bucketing is enforced. </description>
   </property>
 
-<!--
-  <property>
-    <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:derby:;databaseName=metastore_db;create=true</value>
-    <description>JDBC connect string for a JDBC metastore</description>
-  </property>
-
-  <property>
-    <name>javax.jdo.option.ConnectionDriverName</name>
-    <value>com.apache.derby.jdbc.EmbeddedDriver</value>
-    <description>Driver class name for a JDBC metastore</description>
-  </property>
--->
   <property>
      <name>hive.hwi.war.file</name>
      <value>lib/hive-hwi-1.2.1.jar</value>
@@ -86,7 +73,7 @@
 
   <property>
     <name>hive.metastore.uris</name>
-    <value>thrift://tdh-m01:9083</value>
+    <value>thrift://tdh-m02:9083</value>
     <description>IP address (or hostname) and port of the metastore host</description>
   </property>
 
