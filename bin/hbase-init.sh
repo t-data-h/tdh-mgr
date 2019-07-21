@@ -60,7 +60,7 @@ check_process_pidfile()
     local rt=1
 
     if [ -r $pidf ]; then
-        pid=$(cat $pidf)
+        pid=$(cat $pidf >/dev/null 2>&1)
         check_process_pid $pid
         rt=$?
     fi
@@ -201,7 +201,7 @@ case "$ACTION" in
         ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null )
         #( ssh $HBASE_MASTER "sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null" )
 
-        check_process $HBASE_MASTER $HB_THRIFT_PSKEY
+        check_process $HB_THRIFT_PSKEY
 
         rt=$?
         if [ $rt -eq 0 ]; then
