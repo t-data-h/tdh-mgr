@@ -213,7 +213,7 @@ case "$ACTION" in
             exit $rt
         fi
 
-        echo " ------ $HADOOP_VER --------- "
+        echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
         echo "Starting HDFS..."
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh 2>&1 > /dev/null )
         echo "Starting YARN..."
@@ -221,28 +221,12 @@ case "$ACTION" in
         ;;
 
     'stop')
-        echo " ------ $HADOOP_VER --------- "
-        #check_process_pidfile $RM_PIDFILE
-        #rt=$?
-        #if [ $rt -eq 0 ]; then
-            echo "Stopping YARN [${RM_HOST}:${PID}]..."
-            ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
-        #else
-            echo " YARN ResourceManager not running or not found."
-        #fi
+        echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
+        echo "Stopping YARN [${RM_HOST}:${PID}]..."
+        ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
 
-        #check_process_pidfile $NM_PIDFILE
-        #rt=$?
-        #if [ $rt -eq 0 ]; then
-            #( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
-        #fi
-
-        #check_process_pidfile $NN_PIDFILE
-        #rt=$?
-        #if [ $rt -eq 0 ]; then
-            echo "Stopping HDFS [${NN_HOST}:${PID}]..."
-            ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh 2>&1 > /dev/null )
-        #fi
+        echo "Stopping HDFS [${NN_HOST}:${PID}]..."
+        ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh 2>&1 > /dev/null )
         rt=0
         ;;
 

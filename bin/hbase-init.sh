@@ -189,7 +189,6 @@ case "$ACTION" in
         else
             echo "Starting HBase ThriftServer..."
             ( sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start 2>&1 > $HBASE_THRIFTLOG & )
-            #( ssh -n $HBASE_MASTER "nohup $HBASE_HOME/bin/hbase thrift start >$HBASE_THRIFTLOG 2>&1 &" )
         fi
         rt=0
         ;;
@@ -199,7 +198,6 @@ case "$ACTION" in
 
         echo "Stopping HBase Master [${HBASE_MASTER}:${PID}]..."
         ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null )
-        #( ssh $HBASE_MASTER "sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null" )
 
         check_process $HB_THRIFT_PSKEY
 
