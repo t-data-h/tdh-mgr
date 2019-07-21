@@ -151,22 +151,12 @@ show_status()
     
     set -f
     IFS=$'\n'
-    is_lo=1
 
     for dn in $( cat ${HADOOP_HOME}/etc/hadoop/slaves ); do
-        ( echo $dn | grep $HOST > /dev/null )
-        rt=$?
-            
         echo -e "    ------------        |------|"
 
-        # HDFS Datanode
-        if [ $rt -eq 0 ] || [ "$dn" == "localhost" ]; then
-            is_lo=0
-            check_process_pidfile $DN_PIDFILE
-        else
-            is_lo=1
-            check_remote_pidfile $dn $DN_PIDFILE
-        fi
+        check_remote_pidfile $dn $DN_PIDFILE
+
         rt=$?
         if [ $rt -eq 0 ]; then
             echo -e "    Datanode            | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
@@ -174,14 +164,9 @@ show_status()
             echo -e "    Datanode            | \e[31m\e[1mDEAD\e[0m | [${dn}]"
         fi
 
-        # YARN NodeManager
-        if [ $is_lo -eq 0 ]; then
-            check_process_pidfile $NM_PIDFILE
-        else
-            check_remote_pidfile $dn $NM_PIDFILE
-        fi
-        rt=$?
+        check_remote_pidfile $dn $NM_PIDFILE
 
+        rt=$?
         if [ $rt -eq 0 ]; then
             echo -e "    NodeManager         | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
         else
@@ -203,18 +188,22 @@ rt=0
 
 case "$ACTION" in
     'start')
-        check_process_pidfile $RM_PIDFILE
-        rt=$?
-        if [ $rt -eq 0 ]; then
-            echo " YARN Resource Manager is already running  [$PID]"
-            exit $rt
+        if [ $IS_RM -eq 0 ]; then
+            check_process_pidfile $RM_PIDFILE
+            rt=$?
+            if [ $rt -eq 0 ]; then
+                echo " YARN Resource Manager is already running  [$PID]"
+                exit $rt
+            fi
         fi
 
-        check_process_pidfile $NN_PIDFILE
-        rt=$?
-        if [ $rt -eq 0 ]; then
-            echo " HDFS Namenode is already running  [$PID]"
-            exit $rt
+        if [ $IS_NN -eq 0 ]; then 
+            check_process_pidfile $NN_PIDFILE
+            rt=$?
+            if [ $rt -eq 0 ]; then
+                echo " HDFS Namenode is already running  [$PID]"
+                exit $rt
+            fi
         fi
 #
         hostip_is_valid
@@ -233,27 +222,27 @@ case "$ACTION" in
 
     'stop')
         echo " ------ $HADOOP_VER --------- "
-        check_process_pidfile $RM_PIDFILE
-        rt=$?
-        if [ $rt -eq 0 ]; then
+        #check_process_pidfile $RM_PIDFILE
+        #rt=$?
+        #if [ $rt -eq 0 ]; then
             echo "Stopping YARN [${RM_HOST}:${PID}]..."
             ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
-        else
+        #else
             echo " YARN ResourceManager not running or not found."
-        fi
+        #fi
 
-        check_process_pidfile $NM_PIDFILE
-        rt=$?
-        if [ $rt -eq 0 ]; then
-            ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
-        fi
+        #check_process_pidfile $NM_PIDFILE
+        #rt=$?
+        #if [ $rt -eq 0 ]; then
+            #( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
+        #fi
 
-        check_process_pidfile $NN_PIDFILE
-        rt=$?
-        if [ $rt -eq 0 ]; then
+        #check_process_pidfile $NN_PIDFILE
+        #rt=$?
+        #if [ $rt -eq 0 ]; then
             echo "Stopping HDFS [${NN_HOST}:${PID}]..."
             ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh 2>&1 > /dev/null )
-        fi
+        #fi
         rt=0
         ;;
 

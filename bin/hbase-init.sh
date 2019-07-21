@@ -29,7 +29,7 @@ HBASE_VER=$(readlink $HBASE_HOME)
 
 HB_MASTERS="${HBASE_HOME}/conf/masters"
 HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
-RS_PIDFILE="/tmp/hbase-${HADOOP_USER}-regionserver.pid"
+RS_PIDFILE="/tmp/hbase-${HADOOP_USER}*-regionserver.pid"
 ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
 HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
 
@@ -138,14 +138,8 @@ show_status()
     IFS=$'\n'
 
     for rs in $( cat ${HBASE_HOME}/conf/regionservers ); do
-        ( echo $rs | grep $HOST 2>&1 > /dev/null )
-        rt=$?
 
-        if [ $rt -eq 0 ] || [ "$rs" == "localhost" ]; then
-            check_process_pidfile $RS_PIDFILE
-        else
-            check_remote_pidfile $rs $RS_PIDFILE
-        fi
+        check_remote_pidfile $rs $RS_PIDFILE
 
         rt=$?
         if [ $rt -eq 0 ]; then
