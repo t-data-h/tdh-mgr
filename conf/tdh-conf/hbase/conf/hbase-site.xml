@@ -21,7 +21,6 @@
  */
 -->
 <configuration>
-
     <property>
         <name>hbase.master.port</name>
         <value>16000</value>
@@ -44,7 +43,7 @@
 <!--
     <property>
         <name>hbase.regionserver.info.bindAddress</name>
-        <value>10.138.0.60</value>
+        <value>0.0.0.0</value>
     </property>
 -->
     <property>
@@ -86,6 +85,4 @@
         <name>hbase.coprocessor.enabled</name>
         <value>true</value>
     </property>
-
-
 </configuration>
