@@ -60,7 +60,7 @@ check_process_pidfile()
     local rt=1
 
     if [ -r $pidf ]; then
-        pid=$(cat $pidf >/dev/null 2>&1)
+        pid=$(cat $pidf 2>/dev/null)
         check_process_pid $pid
         rt=$?
     fi
@@ -75,9 +75,9 @@ check_remote_pidfile()
     local pidf="$2"
     local rt=1
 
-    PID=$( ssh $host "pid=\$(cat $pidf 2> /dev/null); \
+    PID=$( ssh $host "pid=\$(cat $pidf 2>/dev/null); \
         if [[ -z \$pid ]]; then exit 1; fi; \
-        if ps ax | grep \$pid | grep -v grep 2>&1> /dev/null ; then \
+        if ps ax | grep \$pid | grep -v grep ; then \
         echo \$pid; else exit 1; fi" )
     rt=$?
 
@@ -197,7 +197,7 @@ case "$ACTION" in
         check_process_pidfile $HB_PIDFILE
 
         echo "Stopping HBase Master [${HBASE_MASTER}:${PID}]..."
-        ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null )
+        ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh >/dev/null 2>&1 )
 
         check_process $HB_THRIFT_PSKEY
 

@@ -28,7 +28,7 @@
 
     <property>
         <name>hbase.master.info.bindAddress</name>
-        <value>10.138.0.60</value>
+        <value>10.10.6.4</value>
     </property>
 
     <property>
