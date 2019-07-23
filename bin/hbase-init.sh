@@ -77,7 +77,7 @@ check_remote_pidfile()
 
     PID=$( ssh $host "pid=\$(cat $pidf 2>/dev/null); \
         if [[ -z \$pid ]]; then exit 1; fi; \
-        if ps ax | grep \$pid | grep -v grep ; then \
+        if ps ax | grep \$pid | grep -v grep >/dev/null 2&>1 ; then \
         echo \$pid; else exit 1; fi" )
     rt=$?
 
@@ -131,7 +131,7 @@ show_status()
     else
         echo -e "    ThriftServer        | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
-        
+
     echo -e "    ------------        |------|"
 
     set -f
