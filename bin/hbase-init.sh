@@ -31,7 +31,11 @@ HB_MASTERS="${HBASE_HOME}/conf/masters"
 HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
 RS_PIDFILE="/tmp/hbase-${HADOOP_USER}*-regionserver.pid"
 ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
-HB_THRIFT_PSKEY=".hbase.thrift.ThriftServer"
+
+HB_MASTER_ID=".hbase.master.HMaster"
+HB_REGION_ID=".hbase.regionserver.HRegionServer"
+HB_THRIFT_ID=".hbase.thrift.ThriftServer"
+HB_ZK_ID=".hbase.zookeeper.HQuorumPeer"
 
 HBASE_LOGDIR="${HADOOP_LOGDIR}/hbase"
 HBASE_THRIFTLOG="${HBASE_LOGDIR}/hbase-thriftserver.log"
@@ -60,7 +64,7 @@ check_process_pidfile()
     local rt=1
 
     if [ -r $pidf ]; then
-        pid=$(cat $pidf >/dev/null 2>&1)
+        pid=$(cat $pidf 2>/dev/null)
         check_process_pid $pid
         rt=$?
     fi
@@ -75,9 +79,9 @@ check_remote_pidfile()
     local pidf="$2"
     local rt=1
 
-    PID=$( ssh $host "pid=\$(cat $pidf 2> /dev/null); \
+    PID=$( ssh $host "pid=\$(cat $pidf 2>/dev/null); \
         if [[ -z \$pid ]]; then exit 1; fi; \
-        if ps ax | grep \$pid | grep -v grep 2>&1> /dev/null ; then \
+        if ps ax | grep \$pid | grep -v grep >/dev/null 2>&1 ; then \
         echo \$pid; else exit 1; fi" )
     rt=$?
 
@@ -90,13 +94,13 @@ show_status()
     local rt=0
     local islo=1
 
-    ( echo $HBASE_MASTER | grep $HOST 2>&1 > /dev/null )
+    ( echo $HBASE_MASTER | grep $HOST >/dev/null 2>&1 )
     is_lo=$?
 
-    if [ $islo -eq 0 ]; then
+    if [ $is_lo -eq 0 ]; then
         check_process_pidfile $HB_PIDFILE
     else
-        check_remote_pidfile $HBASE_MASTER $HB_PIDFILE
+        check_remote_process $HBASE_MASTER $HB_MASTER_ID
     fi
 
     rt=$?
@@ -106,10 +110,10 @@ show_status()
         echo -e "  HBase Master          | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
-    if [ $islo -eq 0 ]; then
+    if [ $is_lo -eq 0 ]; then
         check_process_pidfile $ZK_PIDFILE
     else
-        check_remote_pidfile $HBASE_MASTER $ZK_PIDFILE
+        check_remote_process $HBASE_MASTER $HB_ZK_ID
     fi
 
     rt=$?
@@ -119,10 +123,10 @@ show_status()
         echo -e "    Zookeeper           | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
-    if [ $islo -eq 0 ]; then
-        check_process $HB_THRIFT_PSKEY
+    if [ $is_lo -eq 0 ]; then
+        check_process $HB_THRIFT_ID
     else
-        check_remote_process $HBASE_MASTER $HB_THRIFT_PSKEY
+        check_remote_process $HBASE_MASTER $HB_THRIFT_ID
     fi
 
     rt=$?
@@ -131,7 +135,7 @@ show_status()
     else
         echo -e "    ThriftServer        | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
-        
+
     echo -e "    ------------        |------|"
 
     set -f
@@ -139,7 +143,7 @@ show_status()
 
     for rs in $( cat ${HBASE_HOME}/conf/regionservers ); do
 
-        check_remote_pidfile $rs $RS_PIDFILE
+        check_remote_process $rs $HB_REGION_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -197,7 +201,7 @@ case "$ACTION" in
         check_process_pidfile $HB_PIDFILE
 
         echo "Stopping HBase Master [${HBASE_MASTER}:${PID}]..."
-        ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh 2>&1 > /dev/null )
+        ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh >/dev/null 2>&1 )
 
         check_process $HB_THRIFT_PSKEY
 
@@ -212,7 +216,7 @@ case "$ACTION" in
         ;;
 
     'status'|'info')
-        rt= show_status
+        show_status
         ;;
     *)
         usage
