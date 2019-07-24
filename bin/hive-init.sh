@@ -104,12 +104,12 @@ case "$ACTION" in
         ( ssh $HIVE_SERVER "mkdir -p $HIVE_LOGDIR" )
 
         echo "Starting Hive MetaStore on $HIVE_SERVER..."
-        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore >/dev/null 2>&1 &" )
+        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore >$HIVE_METASTORE_LOG 2>&1 &" )
 
         rt=$?
 
         echo "Starting HiveServer2 on $HIVE_SERVER..."
-        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 >/dev/null 2>&1 &" )
+        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 >$HIVE_SERVER2_LOG 2>&1 &" )
         ;;
 
     'stop')
