@@ -7,10 +7,6 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-HIVEMETASTORE="MetaStore"
-HIVESERVER2="HiveServer2"
-METADB="mysqld"
-
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 
@@ -26,10 +22,14 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
-
 # -----------
 
 HIVE_VER=$(readlink $HIVE_HOME)
+
+HIVEMETASTORE="MetaStore"
+HIVESERVER2="HiveServer2"
+METADB="mysqld"
+
 HIVE_LOGDIR="${HADOOP_LOGDIR}/hive"
 HIVE_METASTORE_LOG="${HIVE_LOGDIR}/hive-metastore.log"
 HIVE_SERVER2_LOG="${HIVE_LOGDIR}/hive-server2.log"

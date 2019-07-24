@@ -7,9 +7,6 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-KAFKA_ID="kafka.Kafka"
-KAFKA_CFG="config/server.properties"
-
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 
@@ -20,7 +17,6 @@ elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
 elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
     . /opt/TDH/etc/$HADOOP_ENV
 fi
-
 # -----------
 
 if [ -z "$TDH_VERSION" ]; then
@@ -34,6 +30,10 @@ if [ -z "$KAFKA_HOME" ]; then
 fi
 
 KAFKA_VER=$(readlink $KAFKA_HOME)
+
+KAFKA_ID="kafka.Kafka"
+KAFKA_CFG="config/server.properties"
+
 HOST=$(hostname -s)
 BROKERS="${KAFKA_HOME}/config/brokers"
 

@@ -7,16 +7,6 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-NN_PIDFILE="-namenode.pid"
-SN_PIDFILE="-secondarynamenode.pid"
-DN_PIDFILE="-datanode.pid"
-RM_PIDFILE="-resourcemanager.pid"
-NM_PIDFILE="-nodemanager.pid"
-
-DN_ID="datanode.DataNode"
-NM_ID="nodemanager.NodeManager"
-
-
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 
@@ -32,10 +22,15 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
-
 # -----------
 
 HADOOP_VER=$(readlink $HADOOP_HOME)
+
+NN_ID="namenode.NameNode"
+SN_ID="namenode.SecondaryNameNode"
+RM_ID="resourcemanager.ResourceManager"
+DN_ID="datanode.DataNode"
+NM_ID="nodemanager.NodeManager"
 
 HOST=$( hostname -s )
 NN_HOST=$( grep -A1 'dfs.namenode.http-address' ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | \
@@ -68,34 +63,6 @@ usage()
 }
 
 
-check_process_pidfile()
-{
-    local pidf=$(ls /tmp/*-${HADOOP_USER}$1 2> /dev/null)
-    local rt=1
-
-    if [ -n "$pidf" ] && [ -r $pidf ]; then
-        PID=$(cat ${pidf})
-        check_process_pid $PID
-        rt=$?
-    fi
-
-    return $rt
-}
-
-check_remote_pidfile()
-{
-    local host="$1"
-    local pidfkey="$2"
-    local rt=1
-
-    PID=$( ssh $host "pidf=\$(ls /tmp/*-${HADOOP_USER}${pidfkey} 2> /dev/null); \
-        if [ -n \"\$pidf\" ]; then cat \$pidf; else exit 1; fi" )
-    rt=$?
-
-    return $rt
-}
-
-
 show_status()
 {
     local rt=0
@@ -114,9 +81,9 @@ show_status()
     # HDFS Primary Namenode
     #
     if [ $IS_NN -eq 0 ]; then
-        check_process_pidfile $NN_PIDFILE
+        check_process $NN_ID
     else
-        check_remote_pidfile $NN_HOST $NN_PIDFILE
+        check_remote_process $NN_HOST $NN_ID
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -128,9 +95,9 @@ show_status()
     # HDFS Secondary Namenode
     #
     if [ $IS_SN -eq 0 ]; then
-        check_process_pidfile $SN_PIDFILE
+        check_process $SN_ID
     else
-        check_remote_pidfile $SN_HOST $SN_PIDFILE
+        check_remote_process $SN_HOST $SN_ID
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -142,9 +109,9 @@ show_status()
     # YARN ResourceManager
     #
     if [ $IS_RM -eq 0 ]; then
-        check_process_pidfile $RM_PIDFILE
+        check_process $RM_ID
     else
-        check_remote_pidfile ${RM_HOST} ${RM_PIDFILE}
+        check_remote_process $RM_HOST $RM_ID
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -159,7 +126,6 @@ show_status()
     for dn in $( cat ${HADOOP_HOME}/etc/hadoop/slaves ); do
         echo -e "    ------------        |------|"
 
-        #check_remote_pidfile $dn $DN_PIDFILE
         check_remote_process $dn $DN_ID
 
         rt=$?
@@ -169,7 +135,6 @@ show_status()
             echo -e "    Datanode            | \e[31m\e[1mDEAD\e[0m | [${dn}]"
         fi
 
-        #check_remote_pidfile $dn $NM_PIDFILE
         check_remote_process $dn $NM_ID
 
         rt=$?
@@ -195,7 +160,7 @@ rt=0
 case "$ACTION" in
     'start')
         if [ $IS_RM -eq 0 ]; then
-            check_process_pidfile $RM_PIDFILE
+            check_process $RM_ID
             rt=$?
             if [ $rt -eq 0 ]; then
                 echo " YARN Resource Manager is already running  [$PID]"
@@ -204,7 +169,7 @@ case "$ACTION" in
         fi
 
         if [ $IS_NN -eq 0 ]; then 
-            check_process_pidfile $NN_PIDFILE
+            check_process $NN_ID
             rt=$?
             if [ $rt -eq 0 ]; then
                 echo " HDFS Namenode is already running  [$PID]"
