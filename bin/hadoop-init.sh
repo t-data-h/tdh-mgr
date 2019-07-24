@@ -13,6 +13,10 @@ DN_PIDFILE="-datanode.pid"
 RM_PIDFILE="-resourcemanager.pid"
 NM_PIDFILE="-nodemanager.pid"
 
+DN_ID="datanode.DataNode"
+NM_ID="nodemanager.NodeManager"
+
+
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 
@@ -155,7 +159,8 @@ show_status()
     for dn in $( cat ${HADOOP_HOME}/etc/hadoop/slaves ); do
         echo -e "    ------------        |------|"
 
-        check_remote_pidfile $dn $DN_PIDFILE
+        #check_remote_pidfile $dn $DN_PIDFILE
+        check_remote_process $dn $DN_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -164,7 +169,8 @@ show_status()
             echo -e "    Datanode            | \e[31m\e[1mDEAD\e[0m | [${dn}]"
         fi
 
-        check_remote_pidfile $dn $NM_PIDFILE
+        #check_remote_pidfile $dn $NM_PIDFILE
+        check_remote_process $dn $NM_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then

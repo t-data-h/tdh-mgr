@@ -77,7 +77,7 @@ check_remote_pidfile()
 
     PID=$( ssh $host "pid=\$(cat $pidf 2>/dev/null); \
         if [[ -z \$pid ]]; then exit 1; fi; \
-        if ps ax | grep \$pid | grep -v grep >/dev/null 2&>1 ; then \
+        if ps ax | grep \$pid | grep -v grep >/dev/null 2>&1 ; then \
         echo \$pid; else exit 1; fi" )
     rt=$?
 
@@ -90,10 +90,10 @@ show_status()
     local rt=0
     local islo=1
 
-    ( echo $HBASE_MASTER | grep $HOST 2>&1 > /dev/null )
+    ( echo $HBASE_MASTER | grep $HOST >/dev/null 2>&1 )
     is_lo=$?
 
-    if [ $islo -eq 0 ]; then
+    if [ $is_lo -eq 0 ]; then
         check_process_pidfile $HB_PIDFILE
     else
         check_remote_pidfile $HBASE_MASTER $HB_PIDFILE
@@ -106,7 +106,7 @@ show_status()
         echo -e "  HBase Master          | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
-    if [ $islo -eq 0 ]; then
+    if [ $is_lo -eq 0 ]; then
         check_process_pidfile $ZK_PIDFILE
     else
         check_remote_pidfile $HBASE_MASTER $ZK_PIDFILE
@@ -119,7 +119,7 @@ show_status()
         echo -e "    Zookeeper           | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
-    if [ $islo -eq 0 ]; then
+    if [ $is_lo -eq 0 ]; then
         check_process $HB_THRIFT_PSKEY
     else
         check_remote_process $HBASE_MASTER $HB_THRIFT_PSKEY
@@ -212,7 +212,7 @@ case "$ACTION" in
         ;;
 
     'status'|'info')
-        rt= show_status
+        show_status
         ;;
     *)
         usage
