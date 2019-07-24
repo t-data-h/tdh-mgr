@@ -22,15 +22,11 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
-
 # -----------
 
 HBASE_VER=$(readlink $HBASE_HOME)
 
 HB_MASTERS="${HBASE_HOME}/conf/masters"
-HB_PIDFILE="/tmp/hbase-${HADOOP_USER}-master.pid"
-RS_PIDFILE="/tmp/hbase-${HADOOP_USER}*-regionserver.pid"
-ZK_PIDFILE="/tmp/hbase-${HADOOP_USER}-zookeeper.pid"
 
 HB_MASTER_ID=".hbase.master.HMaster"
 HB_REGION_ID=".hbase.regionserver.HRegionServer"
@@ -40,13 +36,13 @@ HB_ZK_ID=".hbase.zookeeper.HQuorumPeer"
 HBASE_LOGDIR="${HADOOP_LOGDIR}/hbase"
 HBASE_THRIFTLOG="${HBASE_LOGDIR}/hbase-thriftserver.log"
 
-if ! [ -e $HB_MASTERS ]; then
-    echo "$PNAME: Error determining master. "
+HOST=$(hostname -s)
+HBASE_MASTER=$(cat $HBASE_HOME/conf/masters 2>/dev/null)
+
+if [ -z "$HBASE_MASTER" ]; then
+    echo "$PNAME: Error determining hbase master. "
     exit 1
 fi
-
-HOST=$(hostname -s)
-HBASE_MASTER=$(cat $HBASE_HOME/conf/masters)
 
 # -----------
 
@@ -57,48 +53,16 @@ usage()
 }
 
 
-check_process_pidfile()
-{
-    local pidf="$1"
-    local pid=0
-    local rt=1
-
-    if [ -r $pidf ]; then
-        pid=$(cat $pidf 2>/dev/null)
-        check_process_pid $pid
-        rt=$?
-    fi
-
-    return $rt
-}
-
-
-check_remote_pidfile()
-{
-    local host="$1"
-    local pidf="$2"
-    local rt=1
-
-    PID=$( ssh $host "pid=\$(cat $pidf 2>/dev/null); \
-        if [[ -z \$pid ]]; then exit 1; fi; \
-        if ps ax | grep \$pid | grep -v grep >/dev/null 2>&1 ; then \
-        echo \$pid; else exit 1; fi" )
-    rt=$?
-
-    return $rt
-}
-
-
 show_status()
 {
     local rt=0
     local islo=1
 
     ( echo $HBASE_MASTER | grep $HOST >/dev/null 2>&1 )
-    is_lo=$?
+    islo=$?
 
-    if [ $is_lo -eq 0 ]; then
-        check_process_pidfile $HB_PIDFILE
+    if [ $islo -eq 0 ]; then
+        check_process $HB_MASTER_ID
     else
         check_remote_process $HBASE_MASTER $HB_MASTER_ID
     fi
@@ -110,8 +74,8 @@ show_status()
         echo -e "  HBase Master          | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
-    if [ $is_lo -eq 0 ]; then
-        check_process_pidfile $ZK_PIDFILE
+    if [ $islo -eq 0 ]; then
+        check_process $HB_ZK_ID
     else
         check_remote_process $HBASE_MASTER $HB_ZK_ID
     fi
@@ -123,7 +87,7 @@ show_status()
         echo -e "    Zookeeper           | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
-    if [ $is_lo -eq 0 ]; then
+    if [ $islo -eq 0 ]; then
         check_process $HB_THRIFT_ID
     else
         check_remote_process $HBASE_MASTER $HB_THRIFT_ID
@@ -175,7 +139,7 @@ case "$ACTION" in
     'start')
         ( mkdir -p $HBASE_LOGDIR )
 
-        check_process_pidfile $HB_PIDFILE
+        check_process $HB_MASTER_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -185,7 +149,7 @@ case "$ACTION" in
             ( $HBASE_HOME/bin/start-hbase.sh 2>&1 > /dev/null )
         fi
 
-        check_process $HB_THRIFT_PSKEY
+        check_process $HB_THRIFT_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -198,7 +162,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_process_pidfile $HB_PIDFILE
+        check_process $HB_MASTER_ID
 
         echo "Stopping HBase Master [${HBASE_MASTER}:${PID}]..."
         ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh >/dev/null 2>&1 )

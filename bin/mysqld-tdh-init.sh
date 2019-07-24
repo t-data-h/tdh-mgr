@@ -7,10 +7,6 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-TDHMYSQL="mysqld --"
-MYSQL_VER="mysql-5.7.26"
-
-
 ## ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 
@@ -27,6 +23,10 @@ if [ -z "$TDH_VERSION" ]; then
     exit 1
 fi
 # -----------
+
+TDHMYSQL="mysqld --"
+MYSQL_VER="mysql-5.7.26"
+
 
 
 usage()

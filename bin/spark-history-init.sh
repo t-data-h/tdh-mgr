@@ -5,8 +5,6 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-SPARK_ID="org.apache.spark.deploy.history.HistoryServer"
-
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 
@@ -30,6 +28,7 @@ fi
 # -----------
 
 SPARK_VER=$(readlink $SPARK_HOME)
+SPARK_ID="org.apache.spark.deploy.history.HistoryServer"
 SHS_HOST=$( grep 'spark.yarn.historyServer.address' ${SPARK_HOME}/conf/spark-defaults.conf | \
   awk -F'=' '{ print $2 }' | \
   sed -E 's/http:\/\/(.*):.*/\1/' )
