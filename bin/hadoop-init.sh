@@ -123,7 +123,12 @@ show_status()
     set -f
     IFS=$'\n'
 
-    for dn in $( cat ${HADOOP_HOME}/etc/hadoop/slaves ); do
+    nodes="${HADOOP_HOME}/etc/hadoop/workers"
+    if ! [ -e $nodes ]; then
+        nodes="${HADOOP_HOME}/etc/hadoop/slaves"
+    fi
+
+    for dn in $( cat ${nodes} ); do
         echo -e "    ------------        |------|"
 
         check_remote_process $dn $DN_ID

@@ -28,7 +28,7 @@ HBASE_VER=$(readlink $HBASE_HOME)
 
 HB_MASTERS="${HBASE_HOME}/conf/masters"
 
-HB_MASTER_ID=".hbase.master.HMaster"
+HB_MASTER_ID=".hbase.master.HMaster start"
 HB_REGION_ID=".hbase.regionserver.HRegionServer"
 HB_THRIFT_ID=".hbase.thrift.ThriftServer"
 HB_ZK_ID=".hbase.zookeeper.HQuorumPeer"
@@ -167,7 +167,7 @@ case "$ACTION" in
         echo "Stopping HBase Master [${HBASE_MASTER}:${PID}]..."
         ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh >/dev/null 2>&1 )
 
-        check_process $HB_THRIFT_PSKEY
+        check_process $HB_THRIFT_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
