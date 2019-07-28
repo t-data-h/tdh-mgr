@@ -15,10 +15,10 @@ instructions are based on building a distribution using the following
 versions:
 
 - Hadoop 2.7.x
-- HBase  1.1.x - 1.2
+- HBase  1.3.x
 - Hive   1.2.x
-- Spark  1.6.x - 2.3.x
-- Kafka  0.10.x
+- Spark  1.6.x - 2.4.x
+- Kafka  0.10.x or 2.2.x
 
 System Prerequisites: https://gist.github.com/tcarland/3d10c22885ec655a0c2435676c1ae7b1
 Mysqld Configuration: https://gist.github.com/tcarland/64e300606d83782e4150ce2db053b733

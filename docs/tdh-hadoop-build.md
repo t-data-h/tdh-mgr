@@ -4,7 +4,7 @@ Building Hadoop and Various Ecosystem Components
 
  A guide for building hadoop and other ecosystem components from source.
 
-#### Building Hadoop (v2.7.4)
+#### Building Hadoop (v2.7.7)
 
 **Prerequisites:**
  * Oracle JDK 1.8
@@ -20,7 +20,7 @@ $ make
 $ make install
 ```
 
-Hadoop 2.7.4:
+Hadoop 2.7.7:
 ```
 export MAVEN_OPTS="-Xms256m -Xmx512m"
 mvn clean package -Pdist,native,docs -DskipTests -Dtar
