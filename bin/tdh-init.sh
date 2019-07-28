@@ -120,7 +120,6 @@ show_status()
     local rt=0
 
     version
-    force=1
     run_action "status"
     rt=$?
     
@@ -168,6 +167,5 @@ while [ $# -gt 0 ]; do
     shift
 done
 rt=$?
-
 
 exit $rt
