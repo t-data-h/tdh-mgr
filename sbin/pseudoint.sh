@@ -1,7 +1,9 @@
 #!/bin/bash
 #
-#  Sets up oud internal IP or pseudo-ip on a given interface. By default
-#  vmnet8 from vmware is used.
+#  Sets up an internal IP or pseudo-ip on a given interface. By default
+#  vmnet8 (vmware) is used, but vbox works as well.  Primarily for 
+#  running TDH as pseudo-distributed in a closed environment (no network).
+#  (eg. laptop)
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
@@ -28,8 +30,8 @@ usage()
     echo "Usage: $PNAME [-i interface]  start|stop|status"
     echo "  -h|--help      : Display usage info and exit."
     echo "  -i|--interface : Name of a system interface; default is 'vmnet8'"
-    echo "  -I|--ip        : Alternate bind address to use, the default is:"
-    echo "                     $(hostname -i)/24"
+    echo "  -I|--ip        : Alternate bind address to use, in CIDR format."
+    echo "                   the default is: \$(hostname -i)/24"
     echo "  -V|--version   : Display version and exit"
     echo ""
     echo "   Note the /24 netmask is the default used above, but the netmask"
