@@ -73,7 +73,7 @@ show_status()
         echo "    Unable to locate the host network interface. "
         echo "    Please verify networking is configured properly."
         echo ""
-        return $rt
+        return 3
     fi
 
     echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "

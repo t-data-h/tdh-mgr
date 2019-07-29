@@ -71,7 +71,7 @@ run_action()
         rt=$?
 
         if [ $rt -ne 0 ] && [ $force -eq 0 ]; then
-            echo "Error in init script! aborting.."
+            echo "Caught Error in script: '$cmd $action' Use -f to ignore."
             return $rt
         fi
     done
@@ -120,7 +120,6 @@ show_status()
     local rt=0
 
     version
-    force=1
     run_action "status"
     rt=$?
     
@@ -168,6 +167,5 @@ while [ $# -gt 0 ]; do
     shift
 done
 rt=$?
-
 
 exit $rt
