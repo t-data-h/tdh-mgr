@@ -13,7 +13,8 @@ for running remote status commands.
 
   TDH has been adapted as a simple multi-node distribution that can run
 on virtual instances.  A separate project, *tdh-gcp*, provides a framework
-for installing and distributing TDH assets on GCP via Ansible.
+for installing and distributing TDH assets on GCP via Ansible for multi-node 
+clusters.
 
 
 ### Configuring the Hadoop Distribution
