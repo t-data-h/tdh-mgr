@@ -36,16 +36,21 @@ fi
 if [[ $broker =~ ^.*\ .*$ ]]; then
     brokerid=${broker##* }
 fi
+broker=${broker%% *}
 
 if [ -z "$brokerid" ]; then
     echo "Warning! Broker ID not configured"
     exit 1
 fi
 
-broker=${broker%% *}
+if [[ $broker_id =~ ^[0-9]+$ ]]; then
+    echo "Setting Broker Id for '$broker' to '$brokerid'"
+else
+    echo "Broker ID is invalid"
+    exit 1
+fi
 
-echo "Setting Broker Id for '$broker' to '$brokerid'"
-
+echo "( sed -i "s/\(^broker.id=\).*/\1$brokerid/" $KAFKA_HOME/config/server.properties )"
 ( sed -i "s/\(^broker.id=\).*/\1$brokerid/" $KAFKA_HOME/config/server.properties )
 
 exit 0
