@@ -53,4 +53,5 @@ fi
 echo "( sed -i "s/\(^broker.id=\).*/\1$brokerid/" $KAFKA_HOME/config/server.properties )"
 ( sed -i "s/\(^broker.id=\).*/\1$brokerid/" $KAFKA_HOME/config/server.properties )
 
+echo "$PNAME Finished."
 exit 0
