@@ -43,7 +43,7 @@ if [ -z "$brokerid" ]; then
     exit 1
 fi
 
-if [[ $broker_id =~ ^[0-9]+$ ]]; then
+if [[ $brokerid =~ ^[0-9]+$ ]]; then
     echo "Setting Broker Id for '$broker' to '$brokerid'"
 else
     echo "Broker ID is invalid"
