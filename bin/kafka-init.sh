@@ -51,6 +51,7 @@ show_status()
     local rt=0
 
     for broker in $( cat ${KAFKA_HOME}/config/brokers ); do
+        broker=${broker%% *}
         check_remote_process $broker $KAFKA_ID
         rt=$?
 
