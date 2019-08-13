@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 export TDH_ENV_USER=1
 
-export TDH_VERSION="0.8.7"
+export TDH_VERSION="0.8.8"
 
 # JAVA_HOME should already be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
@@ -22,7 +22,7 @@ export HADOOP_PID_DIR="/tmp"
 # set mysqld docker container by name
 export TDH_DOCKER_MYSQL="tdh-mysql1"
 
-# HADOOP_CONF_DIR should always be set by user prior to including 
+# HADOOP_CONF_DIR should always be set by user prior to including
 # this file to support switching environments.
 if [ -z "$HADOOP_CONF_DIR" ]; then
     echo "=> Warning! HADOOP_CONF_DIR is not set!"

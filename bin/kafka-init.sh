@@ -50,7 +50,7 @@ show_status()
 {
     local rt=0
 
-    for broker in $( cat ${KAFKA_HOME}/config/brokers ); do
+    for broker in "$(cat ${KAFKA_HOME}/config/brokers)"; do
         broker=${broker%% *}
         check_remote_process $broker $KAFKA_ID
         rt=$?
@@ -90,14 +90,14 @@ case "$ACTION" in
     'start')
         for broker in $( cat ${BROKERS} ); do
             check_remote_process $broker $KAFKA_ID
-        
+
             rt=$?
-        
+
             if [ $rt -eq 0 ]; then
                 echo " Kafka Broker [${broker}:${PID}] is already running"
                 exit $rt
             fi
-            
+
             echo "Starting Kafka Broker  [${broker}]"
             ( ssh $broker "${KAFKA_HOME}/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG 2>&1 > /dev/null" )
 
@@ -108,7 +108,7 @@ case "$ACTION" in
     'stop')
         for broker in $( cat ${BROKERS} ); do
             check_remote_process $broker $KAFKA_ID
-            
+
             rt=$?
             if [ $rt -eq 0 ]; then
                 echo "Stopping Kafka Broker [${broker}:${PID}]"
