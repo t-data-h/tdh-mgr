@@ -133,7 +133,6 @@ show_status()
 #  MAIN
 # =================
 
-rt=0
 
 if [ $# -eq 0 ]; then
     usage
@@ -151,21 +150,26 @@ while [ $# -gt 0 ]; do
         -V|--version)
             version
             ;;
-        start)
-            start_all
-            ;;
-        stop)
-            stop_all
-            ;;
-        status|info)
-            show_status
-            ;;
         *)
-            usage
+            action="$1"
             ;;
     esac
     shift
 done
-rt=$?
 
-exit $rt
+case "$action" in
+    start)
+        start_all
+        ;;
+    stop)
+        stop_all
+        ;;
+    status|info)
+        show_status
+        ;;
+    *)
+        usage
+        ;;
+esac
+
+exit $?
