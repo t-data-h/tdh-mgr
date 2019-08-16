@@ -50,7 +50,7 @@ show_status()
 {
     local rt=0
 
-    for broker in "$(cat ${KAFKA_HOME}/config/brokers)"; do
+    for broker in "$(cat ${BROKERS})"; do
         broker=${broker%% *}
         check_remote_process $broker $KAFKA_ID
         rt=$?
@@ -88,7 +88,7 @@ echo -e " ------ \e[96m$KAFKA_VER\e[0m ------- "
 
 case "$ACTION" in
     'start')
-        for broker in $( cat ${BROKERS} ); do
+        for broker in "$(cat ${BROKERS})"; do
             check_remote_process $broker $KAFKA_ID
 
             rt=$?
@@ -106,7 +106,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        for broker in $( cat ${BROKERS} ); do
+        for broker in "$(cat ${BROKERS})"; do
             check_remote_process $broker $KAFKA_ID
 
             rt=$?

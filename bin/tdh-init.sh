@@ -146,9 +146,11 @@ while [ $# -gt 0 ]; do
             ;;
         -h|--help)
             usage
+            exit 0
             ;;
         -V|--version)
             version
+            exit 0
             ;;
         *)
             action="$1"
