@@ -30,7 +30,7 @@ brokerid=
 
 if [ -z "$broker" ]; then
     echo "Broker Id not found for $host"
-    exit 1
+    exit 0
 fi
 
 if [[ $broker =~ ^.*\ .*$ ]]; then
