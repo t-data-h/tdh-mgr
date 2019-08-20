@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-#   Wrapper script to operate on all hadoop ecosystem init scripts.
-#   These can be provided via HADOOP_ECOSYSTEM_INITS
+#  Wrapper script to operate on all hadoop ecosystem init scripts.
+#  The list of services can be provided via HADOOP_ECOSYSTEM_INITS
+#  environment variable.
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
