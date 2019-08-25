@@ -5,7 +5,7 @@
 #  Timothy C. Arland <tcarland@gmail.com>
 export TDH_ENV_USER=1
 
-export TDH_VERSION="0.8.9"
+export TDH_VERSION="0.9.0"
 
 # JAVA_HOME should already be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
@@ -18,9 +18,6 @@ export HADOOP_ROOT="/opt/TDH"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
 export HADOOP_PID_DIR="/tmp"
-
-# set mysqld docker container by name
-export TDH_DOCKER_MYSQL="tdh-mysql1"
 
 # HADOOP_CONF_DIR should always be set by user prior to including
 # this file to support switching environments.
@@ -51,6 +48,8 @@ $HIVE_HOME/bin:\
 $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
 
+# set a mysqld docker container by name
+export TDH_DOCKER_MYSQL="tdh-mysql1"
 
 # Kafka
 if [ -f "/etc/kafka/jaas.conf" ]; then
@@ -61,21 +60,22 @@ if [ -f "/etc/kafka/conf/kafka-client.conf" ]; then
     export ZKS=$( cat /etc/kafka/conf/kafka-client.conf | awk -F '=' '{ print $2 }' )
 fi
 
+
 # -----------------------------------------------
-#  NOTE:  Do not edit below this line.
+#  WARNING! Do not edit below this line.
 #
 #  tdh-env-functions
 #
+PID=
+
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${HADOOP_HOME}/lib/native
 
 if [ -n "$HADOOP_PATH" ]; then
     export PATH=${PATH:+${PATH}:}$HADOOP_PATH
 fi
 
-PID=
 
-
-check_process_pid()
+function check_process_pid()
 {
     local pid=$1
 
@@ -88,7 +88,7 @@ check_process_pid()
 }
 
 
-check_process()
+function check_process()
 {
     local key="$1"
     local rt=1
@@ -107,8 +107,8 @@ check_process()
     return $rt
 }
 
-
-check_remote_process()
+# Check a process on a remote host (via ssh) and set PID accordingly.
+function check_remote_process()
 {
     local host="$1"
     local pkey="$2"
@@ -127,7 +127,7 @@ check_remote_process()
 
 #  Validates that our configured hostname as provided by `hostname -f`
 #  locally resolves to an interface other than the loopback
-hostip_is_valid()
+function hostip_is_valid()
 {
     local hostid=$(hostname -s)
     local hostip=$(hostname -i)
@@ -166,4 +166,13 @@ hostip_is_valid()
     echo ""
 
     return $rt
+}
+
+
+function hconf()
+{
+    if [ -n "$1" ]; then
+        export HADOOP_CONF_DIR="$1"
+    fi
+    echo "HADOOP_CONF_DIR=$HADOOP_CONF_DIR"
 }
