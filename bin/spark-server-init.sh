@@ -2,8 +2,6 @@
 #
 #  Init script for Spark Standalone
 #
-#  Timothy C. Arland <tcarland@gmail.com>
-#
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 

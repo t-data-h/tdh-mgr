@@ -47,6 +47,7 @@ else
     if [ -n "$YARN_LINK" ]; then
         ( rm $YARN_LINK )
     fi
+    echo "Spark External Shuffle Jar for YARN is now linked."
     ( ln -s $SPARK_JAR $HADOOP_HOME/share/hadoop/yarn/lib )
 fi
 

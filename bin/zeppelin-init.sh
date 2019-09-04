@@ -1,8 +1,6 @@
 #!/bin/bash
-#  Custom init script for starting Apache Zeppelin
-#   (in a pseudo-distributed environment)
 #
-#  Timothy C. Arland <tcarland@gmail.com>
+#  Custom init script for starting Apache Zeppelin
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"

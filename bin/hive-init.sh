@@ -1,8 +1,6 @@
 #!/bin/bash
 #
-#  Init script for Hive
-#
-#  Timothy C. Arland <tcarland@gmail.com>
+#  Init script for Hive Services
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
@@ -83,7 +81,6 @@ rt=0
 echo -e " -------- \e[96m$HIVE_VER\e[0m ----------- "
 
 case "$ACTION" in
-
     'start')
         check_remote_process $HIVE_SERVER $HIVEMETASTORE
 

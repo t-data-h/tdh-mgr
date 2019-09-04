@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#  Ensure Spark's External Shuffle is configured properly
+#  Ensure Kafka Broker Id's are configured properly.
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"

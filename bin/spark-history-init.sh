@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-##  Timothy C. Arland <tcarland@gmail.com>
+#   Spark History Server init
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
@@ -29,10 +29,11 @@ fi
 
 SPARK_VER=$(readlink $SPARK_HOME)
 SPARK_ID="org.apache.spark.deploy.history.HistoryServer"
+
+HOST=$(hostname -s)
 SHS_HOST=$( grep 'spark.yarn.historyServer.address' ${SPARK_HOME}/conf/spark-defaults.conf | \
   awk -F'=' '{ print $2 }' | \
   sed -E 's/http:\/\/(.*):.*/\1/' )
-HOST=$(hostname -s)
 
 # -----------
 

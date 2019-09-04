@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+#  Initiate mysql schema(s)
+#
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 rt=
