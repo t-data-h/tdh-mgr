@@ -16,13 +16,13 @@ force=0
 HADOOP_ENV="tdh-env-user.sh"
 HADOOP_ENV_PATH="/opt/TDH/etc"
 
-if [ -r "./etc/$HADOOP_ENV" ]; then
+if [ -r "./etc/${HADOOP_ENV}" ]; then
     . ./etc/$HADOOP_ENV
     HADOOP_ENV_PATH="./etc"
-elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+elif [ -r "/etc/hadoop/${HADOOP_ENV}" ]; then
     . /etc/hadoop/$HADOOP_ENV
     HADOOP_ENV_PATH="/etc/hadoop"
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
+elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
     . $HADOOP_ENV_PATH/$HADOOP_ENV
 fi
 
@@ -57,7 +57,7 @@ usage()
 
 version()
 {
-    printf "$PNAME v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
+    printf "${PNAME} v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
 }
 
 

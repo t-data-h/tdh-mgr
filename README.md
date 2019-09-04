@@ -26,11 +26,11 @@ Apache projects, as binaries or built from source. The supporting scripts and
 instructions are based on building a distribution using the following
 versions:
 
-- Hadoop 2.7.x or Hadoop 3.2.0
-- HBase  1.3.x
-- Hive   1.2.x
-- Spark  2.4.x
-- Kafka  2.2.x
+- Hadoop 2.7.7 
+- HBase  1.3.3
+- Hive   1.2.1
+- Spark  2.4.3
+- Kafka  2.2.0
 
 Refer to the setup document in *docs/tdh-hadoop-setup.md* for setting
 up a TDH distribution from scratch.

@@ -25,8 +25,7 @@ fi
 # -----------
 
 TDHMYSQL="mysqld --"
-MYSQL_VER="mysql-5.7.26"
-
+MYSQL_VER="mysql-5.7.27"
 
 
 usage()

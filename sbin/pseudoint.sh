@@ -46,7 +46,7 @@ version()
         echo "TDH_ENV_USER not found!"
     else
         echo ""
-        echo "$PNAME Version: $TDH_VERSION by $AUTHOR"
+        echo "$PNAME (TDH) Version: $TDH_VERSION"
         echo ""
     fi
 }

@@ -2,8 +2,6 @@
 #
 #  Init script for the core hadoop services HDFS and YARN.
 #
-#  Timothy C. Arland <tcarland@gmail.com>
-#
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
@@ -33,14 +31,17 @@ DN_ID="datanode.DataNode"
 NM_ID="nodemanager.NodeManager"
 
 HOST=$( hostname -s )
+
 NN_HOST=$( grep -A1 'dfs.namenode.http-address' ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | \
   grep value | \
   sed -E 's/.*<value>(.*)<\/value>/\1/' | \
   awk -F':' '{ print $1 }' )
+
 SN_HOST=$( grep -A1 secondary ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | \
   grep value | \
   sed -E 's/.*<value>(.*)<\/value>/\1/' | \
   awk -F':' '{ print $1 }' )
+
 RM_HOST=$( grep -A1 'yarn.resourcemanager.address' ${HADOOP_HOME}/etc/hadoop/yarn-site.xml | \
   grep value | \
   sed -E 's/.*<value>(.*)<\/value>/\1/' | \
@@ -190,14 +191,17 @@ case "$ACTION" in
         fi
 
         echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
+
         echo "Starting HDFS..."
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh 2>&1 > /dev/null )
+
         echo "Starting YARN..."
         ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/start-yarn.sh 2>&1 > /dev/null )
         ;;
 
     'stop')
         echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
+
         echo "Stopping YARN [${RM_HOST}:${PID}]..."
         ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
 
