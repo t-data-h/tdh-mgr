@@ -13,7 +13,7 @@ if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then        # /opt/TDH   is default
+elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then        # /opt/TDH is default
     . /opt/TDH/etc/$HADOOP_ENV
 elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then    # $HOME is last
     . $HOME/hadoop/etc/$HADOOP_ENV

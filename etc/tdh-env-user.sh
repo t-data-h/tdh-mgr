@@ -4,7 +4,7 @@
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 export TDH_ENV_USER=1
-export TDH_VERSION="0.9.1"
+export TDH_VERSION="0.9.2"
 
 # JAVA_HOME should already be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
@@ -65,6 +65,7 @@ fi
 #
 #  tdh-env-functions
 #
+TDH_PNAME=${0##*\/}
 PID=
 
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${HADOOP_HOME}/lib/native
