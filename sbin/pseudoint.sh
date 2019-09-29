@@ -5,8 +5,6 @@
 #  running TDH as pseudo-distributed in a closed environment (no network).
 #  (eg. laptop)
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -27,7 +25,7 @@ fi
 usage()
 {
     echo ""
-    echo "Usage: $PNAME [-i interface]  start|stop|status"
+    echo "Usage: $TDH_PNAME [-i interface]  start|stop|status"
     echo "  -h|--help      : Display usage info and exit."
     echo "  -i|--interface : Name of a system interface; default is 'vmnet8'"
     echo "  -I|--ip        : Alternate bind address to use, in CIDR format."
@@ -46,7 +44,7 @@ version()
         echo "TDH_ENV_USER not found!"
     else
         echo ""
-        echo "$PNAME (TDH) Version: $TDH_VERSION"
+        echo "$TDH_PNAME (TDH) Version: $TDH_VERSION"
         echo ""
     fi
 }

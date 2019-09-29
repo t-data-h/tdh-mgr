@@ -2,30 +2,30 @@
 #
 #   Spark History Server init
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
+HADOOP_ENV_PATH="/opt/TDH/etc"
 
-if [ -r "./etc/$HADOOP_ENV" ]; then
+if [ -r "./etc/${HADOOP_ENV}" ]; then
     . ./etc/$HADOOP_ENV
-elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    HADOOP_ENV_PATH="./etc"
+elif [ -r "/etc/hadoop/${HADOOP_ENV}" ]; then
     . /etc/hadoop/$HADOOP_ENV
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
-    . /opt/TDH/etc/$HADOOP_ENV
+    HADOOP_ENV_PATH="/etc/hadoop"
+elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
+    . $HADOOP_ENV_PATH/$HADOOP_ENV
 fi
 
 if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+# -----------
 
 if [ -z "$SPARK_USER" ]; then
     SPARK_USER="$HADOOP_USER"
 fi
-
-# -----------
 
 SPARK_VER=$(readlink $SPARK_HOME)
 SPARK_ID="org.apache.spark.deploy.history.HistoryServer"
@@ -39,7 +39,7 @@ SHS_HOST=$( grep 'spark.yarn.historyServer.address' ${SPARK_HOME}/conf/spark-def
 
 usage()
 {
-    echo "$PNAME {start|stop|status}"
+    echo "$TDH_PNAME {start|stop|status}"
     echo "  TDH Version: $TDH_VERSION"
 }
 
@@ -101,6 +101,10 @@ case "$ACTION" in
 
     'status'|'info')
         show_status
+        ;;
+
+    --version|-V)
+        version
         ;;
     *)
         usage

@@ -2,8 +2,6 @@
 #
 #  Ensure Spark's External Shuffle is configured properly
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -40,6 +38,9 @@ if [ -z "$SPARK_JAR" ]; then
     exit 1
 fi
 
+
+rt=0
+
 if [ "$YARN_JAR" == "$SPARK_JAR" ]; then
     echo "Spark External Shuffle Jar for YARN is already linked to: "
     echo "  $SPARK_JAR"
@@ -47,9 +48,15 @@ else
     if [ -n "$YARN_LINK" ]; then
         ( rm $YARN_LINK )
     fi
-    echo "Spark External Shuffle Jar for YARN is now linked."
+    echo "( ln -s $SPARK_JAR $HADOOP_HOME/share/hadoop/yarn/lib )"
     ( ln -s $SPARK_JAR $HADOOP_HOME/share/hadoop/yarn/lib )
+    rt=$?
+    if [ $rt -ne 0 ]; then
+        echo "Error in creating link"
+    else
+        echo "Spark External Shuffle Jar for YARN is now linked."
+    fi
 fi
 
-echo "$PNAME Finished."
+echo "$TDH_PNAME Finished."
 exit 0

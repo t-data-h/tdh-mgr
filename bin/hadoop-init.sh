@@ -2,18 +2,19 @@
 #
 #  Init script for the core hadoop services HDFS and YARN.
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
+HADOOP_ENV_PATH="/opt/TDH/etc"
 
 if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
+    HADOOP_ENV_PATH="./etc"
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
+    HADOOP_ENV_PATH="/etc/hadoop"
 elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
-    . /opt/TDH/etc/$HADOOP_ENV
+    . $HADOOP_ENV_PATH/$HADOOP_ENV
 fi
 
 if [ -z "$TDH_VERSION" ]; then
@@ -59,7 +60,7 @@ IS_RM=$?
 
 usage()
 {
-    echo "$PNAME {start|stop|status}"
+    echo "$TDH_PNAME {start|stop|status}"
     echo "  TDH Version: $TDH_VERSION"
 }
 
@@ -213,6 +214,11 @@ case "$ACTION" in
     'status'|'info')
         show_status
         rt=$?
+        ;;
+
+    --version|-V)
+        echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
+        version
         ;;
     *)
         usage

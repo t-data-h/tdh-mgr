@@ -2,25 +2,25 @@
 #
 #  Custom init script for starting Apache Zeppelin
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
+HADOOP_ENV_PATH="/opt/TDH/etc"
 
-if [ -r "./etc/$HADOOP_ENV" ]; then
+if [ -r "./etc/${HADOOP_ENV}" ]; then
     . ./etc/$HADOOP_ENV
-elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
+    HADOOP_ENV_PATH="./etc"
+elif [ -r "/etc/hadoop/${HADOOP_ENV}" ]; then
     . /etc/hadoop/$HADOOP_ENV
-elif [ -r "opt/TDH/etc/$HADOOP_ENV" ]; then
-    . /opt/TDH/etc/$HADOOP_ENV
+    HADOOP_ENV_PATH="/etc/hadoop"
+elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
+    . $HADOOP_ENV_PATH/$HADOOP_ENV
 fi
 
 if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
-
 # -----------
 
 ZEPPELIN_VER=$(readlink $ZEPPELIN_HOME)
@@ -33,7 +33,7 @@ HOST=$(hostname -s)
 
 usage()
 {
-    echo "$PNAME {start|stop|status}"
+    echo "$TDH_PNAME {start|stop|status}"
     echo "  TDH Version: $TDH_VERSION"
 }
 

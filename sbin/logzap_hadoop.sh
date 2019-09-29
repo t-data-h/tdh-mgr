@@ -1,8 +1,5 @@
 #!/bin/bash
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-
 HADOOP_LOGDIR=
 dryrun=0
 
@@ -32,7 +29,7 @@ fi
 
 usage()
 {
-    echo "Usage: $PNAME [options]"
+    echo "Usage: $TDH_PNAME [options]"
     echo "  --dryrun | -n  =  Dryrun, files to be removed are listed only"
     echo "  --help   | -h  =  Display usage info and exit"
     echo ""
