@@ -217,6 +217,7 @@ case "$ACTION" in
         ;;
 
     --version|-V)
+        echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
         version
         ;;
     *)

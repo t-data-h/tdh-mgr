@@ -79,7 +79,7 @@ fi
 
 function version()
 {
-    printf "${PNAME} v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
+    printf "${TDH_PNAME} v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
 }
 
 
