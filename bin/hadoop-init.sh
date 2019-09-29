@@ -2,8 +2,6 @@
 #
 #  Init script for the core hadoop services HDFS and YARN.
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -59,7 +57,7 @@ IS_RM=$?
 
 usage()
 {
-    echo "$PNAME {start|stop|status}"
+    echo "$TDH_PNAME {start|stop|status}"
     echo "  TDH Version: $TDH_VERSION"
 }
 
@@ -213,6 +211,10 @@ case "$ACTION" in
     'status'|'info')
         show_status
         rt=$?
+        ;;
+
+    --version|-V)
+        version
         ;;
     *)
         usage

@@ -4,13 +4,6 @@
 #  The list of services can be provided via HADOOP_ECOSYSTEM_INITS
 #  environment variable.
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-
-# default init script list
-INITS="hadoop-init.sh mysqld-tdh-init.sh hbase-init.sh hive-init.sh \
-kafka-init.sh spark-history-init.sh hue-init.sh zeppelin-init.sh"
-force=0
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -36,11 +29,15 @@ if [ -n "$HADOOP_ECOSYSTEM_INITS" ]; then
 fi
 # -----------
 
+# default init script list
+INITS="hadoop-init.sh mysqld-tdh-init.sh hbase-init.sh hive-init.sh \
+kafka-init.sh spark-history-init.sh hue-init.sh zeppelin-init.sh"
+force=0
 
 usage()
 {
     echo ""
-    echo "Usage: $PNAME [-fh]  {start|stop|status}"
+    echo "Usage: $TDH_PNAME [-fh]  {start|stop|status}"
     echo "     -h|--help    : Show usage and exit"
     echo "     -f|--force   : Run all start/stop scripts ignoring any errors"
     echo "     -V|--version : Show TDH version and exit"
@@ -54,11 +51,6 @@ usage()
     echo ""
 }
 
-
-version()
-{
-    printf "${PNAME} v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
-}
 
 
 run_action()

@@ -2,8 +2,6 @@
 #
 #  Ensure Kafka Broker Id's are configured properly.
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -53,5 +51,5 @@ fi
 echo "( sed -i "s/\(^broker.id=\).*/\1$brokerid/" $KAFKA_HOME/config/server.properties )"
 ( sed -i "s/\(^broker.id=\).*/\1$brokerid/" $KAFKA_HOME/config/server.properties )
 
-echo "$PNAME Finished."
+echo "$TDH_PNAME Finished."
 exit 0

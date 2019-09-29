@@ -2,8 +2,6 @@
 #
 #  Ensure Spark's External Shuffle is configured properly
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -59,5 +57,5 @@ else
     fi
 fi
 
-echo "$PNAME Finished."
+echo "$TDH_PNAME Finished."
 exit 0

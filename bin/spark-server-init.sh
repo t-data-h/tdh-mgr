@@ -2,9 +2,6 @@
 #
 #  Init script for Spark Standalone
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-
 SPARK_PID="org.apache.spark.deploy.master.Master"
 
 # ----------- preamble
@@ -33,7 +30,7 @@ SPARK_VER=$(readlink $SPARK_HOME)
 
 usage()
 {
-    echo "$PNAME {start|stop|status}"
+    echo "$TDH_PNAME {start|stop|status}"
     echo "  TDH Version: $TDH_VERSION"
 }
 

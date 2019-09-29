@@ -4,8 +4,6 @@
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 ## ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -30,7 +28,7 @@ MYSQL_VER="mysql-5.7.27"
 
 usage()
 {
-    echo "$PNAME {start|stop|status}"
+    echo "$TDH_PNAME {start|stop|status}"
     echo "  TDH Version: $TDH_VERSION"
 }
 

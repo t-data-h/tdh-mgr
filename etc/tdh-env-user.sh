@@ -3,6 +3,8 @@
 #  tdh-env-user.sh  -  Sets up the environment for TDH components.
 #
 #  Timothy C. Arland <tcarland@gmail.com>
+AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
+
 export TDH_ENV_USER=1
 export TDH_VERSION="0.9.3"
 
@@ -73,6 +75,12 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${HADOOP_HOME}/lib
 if [ -n "$HADOOP_PATH" ]; then
     export PATH=${PATH:+${PATH}:}$HADOOP_PATH
 fi
+
+
+function version()
+{
+    printf "${PNAME} v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
+}
 
 
 function check_process_pid()

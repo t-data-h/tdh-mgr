@@ -2,8 +2,6 @@
 #
 #  Init script for Hive Services
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -42,7 +40,7 @@ HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | 
 
 usage()
 {
-    echo "$PNAME {start|stop|status}"
+    echo "$TDH_PNAME {start|stop|status}"
     echo "  TDH Version: $TDH_VERSION"
 }
 
@@ -135,6 +133,10 @@ case "$ACTION" in
     'status'|'info')
         show_status
         rt=$?
+        ;;
+
+    --version|-V)
+        version
         ;;
     *)
         usage

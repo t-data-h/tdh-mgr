@@ -2,7 +2,6 @@
 #
 #  Do a full Hive Metastore dump including the schema
 
-
 dbhost="$1"
 dbport="$2"
 dbname="$3"

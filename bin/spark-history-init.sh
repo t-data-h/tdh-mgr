@@ -2,8 +2,6 @@
 #
 #   Spark History Server init
 #
-PNAME=${0##*\/}
-AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -39,7 +37,7 @@ SHS_HOST=$( grep 'spark.yarn.historyServer.address' ${SPARK_HOME}/conf/spark-def
 
 usage()
 {
-    echo "$PNAME {start|stop|status}"
+    echo "$TDH_PNAME {start|stop|status}"
     echo "  TDH Version: $TDH_VERSION"
 }
 
@@ -101,6 +99,10 @@ case "$ACTION" in
 
     'status'|'info')
         show_status
+        ;;
+
+    --version|-V)
+        version
         ;;
     *)
         usage
