@@ -7,20 +7,23 @@
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
+HADOOP_ENV_PATH="/opt/TDH/etc"
 
 if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
+    HADOOP_ENV_PATH="./etc"
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
+    HADOOP_ENV_PATH="/etc/hadoop"
 elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
-    . /opt/TDH/etc/$HADOOP_ENV
+    . $HADOOP_ENV_PATH/$HADOOP_ENV
 fi
-# -----------
 
 if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+# -----------
 
 if [ -z "$KAFKA_HOME" ]; then
     echo "Error! KAFKA_HOME is not set. Check your hadoop env."

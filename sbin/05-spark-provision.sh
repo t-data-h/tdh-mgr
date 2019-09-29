@@ -38,6 +38,7 @@ if [ -z "$SPARK_JAR" ]; then
     exit 1
 fi
 
+
 rt=0
 
 if [ "$YARN_JAR" == "$SPARK_JAR" ]; then

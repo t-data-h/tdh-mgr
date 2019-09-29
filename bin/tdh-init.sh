@@ -23,16 +23,18 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
-
-if [ -n "$HADOOP_ECOSYSTEM_INITS" ]; then
-    INITS="$HADOOP_ECOSYSTEM_INITS"
-fi
 # -----------
 
 # default init script list
 INITS="hadoop-init.sh mysqld-tdh-init.sh hbase-init.sh hive-init.sh \
 kafka-init.sh spark-history-init.sh hue-init.sh zeppelin-init.sh"
 force=0
+
+if [ -n "$HADOOP_ECOSYSTEM_INITS" ]; then
+    INITS="$HADOOP_ECOSYSTEM_INITS"
+fi
+
+# -----------
 
 usage()
 {
@@ -50,7 +52,6 @@ usage()
     fi
     echo ""
 }
-
 
 
 run_action()
