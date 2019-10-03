@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 #  Initiate mysql schema(s)
+#   assume secret file '~/.my.cnf' is already configured.
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
