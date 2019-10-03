@@ -6,6 +6,12 @@
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
 
+if [ -z "$JAVA_HOME" ]; then
+    if [ -e '/etc/profile.d/jdk.sh' ]; then
+        . /etc/profile.d/jdk.sh
+    fi
+fi
+
 if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
