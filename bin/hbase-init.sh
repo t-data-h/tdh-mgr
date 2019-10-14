@@ -70,9 +70,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e "  HBase Master          | \e[32m\e[1m OK \e[0m | [${HBASE_MASTER}:${PID}]"
+        echo -e " HBase Master          | \e[32m\e[1m OK \e[0m | [${HBASE_MASTER}:${PID}]"
     else
-        echo -e "  HBase Master          | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
+        echo -e " HBase Master          | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
     if [ $islo -eq 0 ]; then
