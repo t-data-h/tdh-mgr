@@ -1,10 +1,13 @@
 #!/bin/bash
 #
+# Wrapper script for using EasyRSA3 to generate host certificates.
+# This utilizes an existing EasyRSA installation, which should be
+# provided by the -e or --easyrsa parameter.
 #
 PNAME=${0##*\/}
 
 easyrsa=
-reqorsign=0
+reqorsign=
 rt=1
 
 usage()
@@ -12,8 +15,8 @@ usage()
     echo ""
     echo "Usage: $PNAME [options] [action] host1 host2 ..."
     echo "  -h|--help            : Display help info and exit"
-    echo "  -e|--easyrsa <path>  : Path to easyrsa pki"
-    echo "    <action>           : Action is either 'gen' or 'sign'"
+    echo "  -e|--easyrsa <path>  : Path to EasyRSA (with existing pki)."
+    echo "    <action>           : Action is either 'gen-req' or 'sign'."
     echo ""
     echo "  TDH_HOSTS can be set to provide list of hosts and "
     echo "  will override any provided hosts"
@@ -58,15 +61,17 @@ fi
 
 if ! [ -e "./easyrsa" ]; then
     echo "Error locating EasyRSA!"
-    echo " Please provide the path the easyrsa3 pki directory via -e|--easyrsa"
+    echo " Please provide the path the easyrsa3 directory via -e|--easyrsa"
+    echo " Specifically the path to the easyrsa binary and './pki' subdir."
     exit $rt
 fi
 
 
 echo ""
-if [ $action == "req" ]; then
+if [[ ${action,,} =~ ^gen.* ]]; then
     echo "$PNAME Generating Certificate requests.."
-elif [ $action == "sign" ]; then
+    reqorsign=0
+elif [[ ${action,,} =~ ^sign$ ]; then
     echo "$PNAME Signing certificate requests.."
     reqorsign=1
 else

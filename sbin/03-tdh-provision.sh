@@ -1,12 +1,14 @@
 #!/bin/bash
 #
-#  Initialize tdh installation.
+#  Initialize tdh installation by configuring environment config
+#  to /etc/hadoop
 #
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 hadooproot="$1"
 etchadoop="/etc/hadoop"
+
 
 if [ -z "$hadooproot" ]; then
     hadooproot="/opt/TDH"
@@ -32,7 +34,7 @@ else
             ( sudo rm /opt/hadoop; sudo ln -s $hadooproot /opt/hadoop )
             echo "HADOOP_ROOT of '$hadooproot' linked to /opt/hadoop"
         else
-            echo "/opt/hadoop exists and is not a link"
+            echo "Warning! /opt/hadoop exists and is not a link."
         fi
     fi
 fi
