@@ -11,8 +11,10 @@ usage()
 {
     echo ""
     echo "Usage: $PNAME [options] [action] host1 host2 ..."
+    echo "  -h|--help            : Display help info and exit"
     echo "  -e|--easyrsa <path>  : Path to easyrsa pki"
-    echo "  Action is either 'gen' or 'sign'"
+    echo "    <action>           : Action is either 'gen' or 'sign'"
+    echo ""
     echo "  TDH_HOSTS can be set to provide list of hosts and "
     echo "  will override any provided hosts"
     echo ""
@@ -39,6 +41,7 @@ while [ $# -gt 0 ]; do
     shift
 done
 
+
 if [ -n "$TDH_HOSTS" ]; then
     hosts="$TDH_HOSTS"
 fi
@@ -49,7 +52,7 @@ if [ -z "$hosts" ]; then
     exit $rt
 fi
 
-if [ -n "$easyrsa" ] && [ -d $easyrsa ]; then
+if [ -n "$easyrsa" ] && [ -d "$easyrsa" ]; then
     cd $easyrsa
 fi
 
@@ -59,11 +62,12 @@ if ! [ -e "./easyrsa" ]; then
     exit $rt
 fi
 
+
 echo ""
 if [ $action == "req" ]; then
-    echo "$PNAME Generating Certificate requests for: $hosts"
+    echo "$PNAME Generating Certificate requests.."
 elif [ $action == "sign" ]; then
-    echo "$PNAME Signing certificate requests for: $hosts"
+    echo "$PNAME Signing certificate requests.."
     reqorsign=1
 else
     echo "Invalid action. Valid option should be 'req' or 'sign'"
@@ -80,9 +84,10 @@ for hostname in $hosts; do
     fi
 
     if [ $reqorsign -eq 0 ]; then   # gen-req
-        ( ./easyrsa gen-req $hostname nopass )
+        ( cd $easyrsa; ./easyrsa gen-req $hostname nopass )
     else   # sign req
-        ( ./easyrsa --subject-alt-name="DNS:${hostname},DNS:${shorntname}" sign-req serverclient $hostname )
+        ( cd $easyrsa; \
+         ./easyrsa --subject-alt-name="DNS:${hostname},DNS:${shortname}" sign-req serverclient $hostname )
     fi
 
     rt=$?
