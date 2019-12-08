@@ -37,6 +37,35 @@ usage()
 }
 
 
+ask()
+{
+    local prompt="y/n"
+    local default=
+    local REPLY=
+
+    while true; do
+        if [ "${2:-}" = "Y" ]; then
+            prompt="Y/n"
+            default=Y
+        elif [ "${2:-}" = "N" ]; then
+            prompt="y/N"
+            default=N
+        fi
+
+        read -p "$1 [$prompt] " REPLY
+
+        if [ -z "$REPLY" ]; then
+            REPLY=$default
+        fi
+
+        case "$REPLY" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+    done
+}
+
+
 # recursive rm of all files and directories save for
 # the top level directories in HADOOP_LOGDIR
 erase_all()
@@ -95,7 +124,14 @@ done
 
 
 echo "HADOOP_LOGDIR=$HADOOP_LOGDIR"
-erase_all "$HADOOP_LOGDIR"
+echo ""
+echo "Warning! This will permanently erase all files in the directory."
+ask  "Are you sure you wish to continue? (y/N)" "N"
 rt=$?
+
+if [ $rt -eq 0 ]; then
+    erase_all "$HADOOP_LOGDIR"
+    rt=$?
+fi
 
 exit $rt
