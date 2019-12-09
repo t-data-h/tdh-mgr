@@ -83,9 +83,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e "    Zookeeper           | \e[32m\e[1m OK \e[0m | [${HBASE_MASTER}:${PID}]"
+        echo -e "       Zookeeper        | \e[32m\e[1m OK \e[0m | [${HBASE_MASTER}:${PID}]"
     else
-        echo -e "    Zookeeper           | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
+        echo -e "       Zookeeper        | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
     if [ $islo -eq 0 ]; then
@@ -96,12 +96,12 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e "    ThriftServer        | \e[32m\e[1m OK \e[0m | [${HBASE_MASTER}:${PID}]"
+        echo -e "       ThriftServer     | \e[32m\e[1m OK \e[0m | [${HBASE_MASTER}:${PID}]"
     else
-        echo -e "    ThriftServer        | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
+        echo -e "       ThriftServer     | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
-    echo -e "    ------------        |------|"
+    echo -e "       ------------     |------|"
 
     set -f
     IFS=$'\n'
@@ -112,9 +112,9 @@ show_status()
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e "    RegionServer        | \e[32m\e[1m OK \e[0m | [${rs}:${PID}]"
+            echo -e "       RegionServer     | \e[32m\e[1m OK \e[0m | [${rs}:${PID}]"
         else
-            echo -e "    RegionServer        | \e[31m\e[1mDEAD\e[0m | [$rs]"
+            echo -e "       RegionServer     | \e[31m\e[1mDEAD\e[0m | [$rs]"
         fi
     done
 
@@ -183,7 +183,7 @@ case "$ACTION" in
     'status'|'info')
         show_status
         ;;
-        
+
     --version|-V)
         version
         ;;

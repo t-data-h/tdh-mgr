@@ -57,9 +57,9 @@ show_status()
         rt=$?
 
         if [ $rt -eq 0 ]; then
-            echo -e "  Kafka Broker          | \e[32m\e[1m OK \e[0m | [${broker}:${PID}]"
+            echo -e " Kafka Broker           | \e[32m\e[1m OK \e[0m | [${broker}:${PID}]"
         else
-            echo -e "  Kafka Broker          | \e[31m\e[1mDEAD\e[0m | [${broker}]"
+            echo -e " Kafka Broker           | \e[31m\e[1mDEAD\e[0m | [${broker}]"
         fi
     done
 

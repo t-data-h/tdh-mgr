@@ -2,10 +2,10 @@ TDH Manager ( tdh-mgr )
 =======================
 
   TDH is a custom hadoop distribution based on Apache Hadoop and related 
-Apache components such as Hive, HBase, and Spark. This was initially created 
-to serve as a local development environment running natively on a linux 
+Apache components such as Hive, HBase, and Spark. It was created to 
+serve as a local development environment running natively on a linux 
 host, rather than virtualized, as a pseudo-distributed cluster (1 node as 
-master and worker).  This evolved into creating a cloud based multi-node 
+master and worker).  It evolved into creating a cloud based multi-node 
 cluster using Ansible.
 
   The *tdh-mgr* project provides a set of management scripts for starting and 
@@ -29,7 +29,7 @@ versions:
 - Hadoop 2.7.7 
 - HBase  1.3.3
 - Hive   1.2.1
-- Spark  2.4.3
+- Spark  2.4.4
 - Kafka  2.2.0
 
 Refer to the setup document in *docs/tdh-hadoop-setup.md* for setting
