@@ -13,7 +13,7 @@ if [ -r "./etc/$HADOOP_ENV" ]; then
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
     HADOOP_ENV_PATH="/etc/hadoop"
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
+elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
     . $HADOOP_ENV_PATH/$HADOOP_ENV
 fi
 
@@ -131,24 +131,24 @@ show_status()
     fi
 
     for dn in $( cat ${nodes} ); do
-        echo -e "   -----------------    |------|"
+        echo -e "      -------------     |------|"
 
         check_remote_process $dn $DN_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " HDFS  Datanode         | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
+            echo -e " HDFS Datanode          | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
         else
-            echo -e " HDFS  Datanode         | \e[31m\e[1mDEAD\e[0m | [${dn}]"
+            echo -e " HDFS Datanode          | \e[31m\e[1mDEAD\e[0m | [${dn}]"
         fi
 
         check_remote_process $dn $NM_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " YARN  NodeManager      | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
+            echo -e " YARN NodeManager       | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
         else
-            echo -e " YARN  NodeManager      | \e[31m\e[1mDEAD\e[0m | [$dn]"
+            echo -e " YARN NodeManager       | \e[31m\e[1mDEAD\e[0m | [$dn]"
         fi
     done
 

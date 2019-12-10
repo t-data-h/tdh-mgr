@@ -13,7 +13,7 @@ if [ -r "./etc/$HADOOP_ENV" ]; then
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
     HADOOP_ENV_PATH="/etc/hadoop"
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
+elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
     . $HADOOP_ENV_PATH/$HADOOP_ENV
 fi
 

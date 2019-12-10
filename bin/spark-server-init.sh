@@ -2,7 +2,6 @@
 #
 #  Init script for Spark Standalone
 #
-SPARK_PID="org.apache.spark.deploy.master.Master"
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -29,6 +28,8 @@ if [ -z "$SPARK_USER" ]; then
 fi
 
 SPARK_VER=$(readlink $SPARK_HOME)
+SPARK_PID="org.apache.spark.deploy.master.Master"
+
 # -----------
 
 

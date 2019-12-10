@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Wrapper script for using EasyRSA3 to generate host certificates.
+# Wrapper script for using EasyRSA3 to generate and optionally
+# sign host certificates.
 # This utilizes an existing EasyRSA installation, which should be
 # provided by the -e or --easyrsa parameter.
 #
@@ -23,6 +24,8 @@ usage()
     echo ""
 }
 
+#
+# MAIN
 
 while [ $# -gt 0 ]; do
     case "$1" in
