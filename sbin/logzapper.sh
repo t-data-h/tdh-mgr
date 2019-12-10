@@ -1,19 +1,20 @@
 #!/bin/bash
 #
+#  logzapper.sh  -  Clears up the Hadoop log directories
+#
 HADOOP_LOGDIR=
 dryrun=0
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
+HADOOP_ENV_PATH="/opt/TDH/etc"
 
 if [ -r "./etc/$HADOOP_ENV" ]; then
     . ./etc/$HADOOP_ENV
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then        # /opt/TDH is default
+elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
     . /opt/TDH/etc/$HADOOP_ENV
-elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then    # $HOME is last
-    . $HOME/hadoop/etc/$HADOOP_ENV
 fi
 
 if [ -z "$TDH_VERSION" ]; then

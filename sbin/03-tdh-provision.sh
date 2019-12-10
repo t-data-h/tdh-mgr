@@ -14,6 +14,13 @@ if [ -z "$hadooproot" ]; then
     hadooproot="/opt/TDH"
 fi
 
+if ! [ -d "$hadooproot" ]; then
+    echo "Error locating TDH root"
+    echo ""
+    echo "Usage: $PNAME <TDH_ROOT>"
+    exit 1
+fi
+
 if [ -e "$etchadoop" ]; then
     if [ -L "$etchadoop" ]; then
         ( sudo rm $etchadoop )

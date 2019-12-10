@@ -15,7 +15,7 @@ if [ -r "./etc/$HADOOP_ENV" ]; then
 elif [ -r "/etc/hadoop/$HADOOP_ENV" ]; then
     . /etc/hadoop/$HADOOP_ENV
     HADOOP_ENV_PATH="/etc/hadoop"
-elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
+elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
     . $HADOOP_ENV_PATH/$HADOOP_ENV
 fi
 
@@ -101,7 +101,7 @@ show_status()
         echo -e " HBase ThriftServer     | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
-    echo -e "   -----------------    |------|"
+    echo -e "      -------------     |------|"
 
     set -f
     IFS=$'\n'
