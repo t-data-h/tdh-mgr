@@ -25,24 +25,25 @@ Mysqld Configuration: https://gist.github.com/tcarland/64e300606d83782e4150ce2db
 
 
 #### Prerequisites
-- **Oracle JDK 1.8**
+**Java JDK 1.8**
 
  Note that this **must** be a JDK distribution, not JRE. Oracle is only needed
- by vendor distributions for the Strong Encryption security module.
+by vendor distributions for the Strong Encryption security module though more
+recent versions of OpenJDK 1.8 (>171?) now support strong encryption by default.
 
-- **Disable IPv6**
+**Disable IPv6**
 
-  There are known issues with Hadoop and IPv6 (especially with Ubuntu) and it is
-  recommended to disable the IPv6 stack in the Linux Kernel.
+There are known issues with Hadoop and IPv6 (especially with Ubuntu) and it is
+recommended to disable the IPv6 stack in the Linux Kernel.
 
-  **sysctl.conf**
+**sysctl.conf**
 ```
 net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1
 ```
 
-- **Hadoop User and Group**
+**Hadoop User and Group**
 
  The environment generally runs well as a single user, but for an actual
  distributed cluster create a hadoop user and group with a consistent UID and GID
@@ -53,22 +54,23 @@ net.ipv6.conf.lo.disable_ipv6 = 1
  $ useradd -g -m -u $UID hadoop
  ```
 
-- **Verify Networking**
+**Verify Networking**
 
-  While it is functional to get services to run on localhost only (loopback), there
+  While it is possible to run services on localhost only (loopback), there
 are some hacks involved for some services like Spark that traditionally have not
-supported loopback. However, for development work, running on a laptop is nice,
-but can suffer from not having a fixed available network interface and IP. The
-easiest solution in such cases is to use a virtual interface.
+supported loopback. Using a proper interface and IP is highly recommended.
+However, for development work, running on a laptop can suffer from not having
+a fixed available network interface and IP. The best solution in such cases is
+to use a virtual interface such as ones already provided by VMWare or VirtualBox.
 
-  Additionally do NOT have the loopback entry in /etc/hosts set to the hostname.
-Among the provided scripts, the 'hadoop-init.sh' script validates the configuration
-prior to starting HDFS. Running either 'status' or 'start' will verify the detected
-hostname configuration.
+  Additionally, NEVER have the loopback entry in /etc/hosts set to the hostname.
+Among the provided scripts, the 'hadoop-init.sh' script validates the
+configuration prior to starting HDFS. Running either 'status' or 'start' will
+verify the detected `hostname` configuration.
 
-- **Configure SSH**
+**Configure SSH**
 
-  SSH keyes are required for starting services (such as the secondary namenode).
+SSH keys are required for starting services (such as the secondary namenode).
 ```
     # su - hadoop
     $ ssh-keygen
@@ -79,50 +81,47 @@ hostname configuration.
     $ chmod 600 !$
 ```
 
-####  Installing Hadoop
+###  Installing Hadoop
 
   Choose a base path for the hadoop ecosystem. eg. /opt/tdh.  
 From here, install the various ecosystem components complete with versions.
-
 ```
-    # mkdir -p /opt/tdh && cd /opt/tdh
-    # wget http://url/to/hadoop-2.7.1-bin.tar.gz
-    # tar -zxvf hadoop-2.7.1.tar.gz
-    # mv hadoop-2.7.1-bin hadoop-2.7.1
-    # chown -R hadoop:hadoop hadoop-2.7.1
-    # ln -s hadoop-2.7.1 hadoop
+  # mkdir -p /opt/tdh && cd /opt/tdh
+  # wget http://url/to/hadoop-2.7.1-bin.tar.gz
+  # tar -zxvf hadoop-2.7.1.tar.gz
+  # mv hadoop-2.7.1-bin hadoop-2.7.1
+  # chown -R hadoop:hadoop hadoop-2.7.1
+  # ln -s hadoop-2.7.1 hadoop
 ```
 
 Use this pattern for other ecosystem components as well:
 ```
-    $ ls -l /opt/tdh/
-    lrwxrwxrwx 1 hadoop hadoop 12 Dec 29 12:44 hadoop -> hadoop-2.7.1
-    drwxrwxr-x 10 hadoop hadoop 4096 Dec 29 13:07 hadoop-2.7.1
-    lrwxrwxrwx 1 hadoop hadoop 11 Nov 7 20:38 hbase -> hbase-1.1.5
-    drwxr-xr-x 8 hadoop hadoop 4096 Nov 6 11:38 hbase-1.1.5
-    drwxr-xr-x 4 hadoop hadoop 4096 Nov 4 07:43 hdfs
-    lrwxrwxrwx  1 hadoop hadoop   10 Feb 24 15:25 hive -> hive-1.2.1
-    drwxr-xr-x  9 hadoop hadoop 4096 May  4 16:58 hive-1.2.1
-    lrwxrwxrwx  1 hadoop hadoop    9 May  4 10:48 hue -> hue-4.1.0
-    drwxr-xr-x 12 hadoop hadoop 4096 May  4 23:12 hue-4.1.0
-    lrwxrwxrwx 1 hadoop hadoop 18 Nov 16 19:59 kafka -> kafka_2.11-0.10.2.0
-    drwxr-xr-x 6 hadoop hadoop 4096 Nov 17 10:51 kafka_2.11-0.10.2.0
-    lrwxrwxrwx 1 hadoop hadoop 11 Nov 19 11:05 spark -> spark-2.3.1
-    drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 spark-1.6.1
-    lrwxrwxrwx 12 hadoop hadoop 4096 Dec 2 10:23 sqoop -> sqoop-1.99.6
-    drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 sqoop-1.99.6
-    lrwxrwxrwx 12 hadoop hadoop 4096 Dec 2 10:23 zeppelin -> zeppelin-0.8.0
-    drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 zeppelin-0.8.0
-
+ $ ls -l /opt/tdh/
+ lrwxrwxrwx 1 hadoop hadoop 12 Dec 29 12:44 hadoop -> hadoop-2.7.1
+ drwxrwxr-x 10 hadoop hadoop 4096 Dec 29 13:07 hadoop-2.7.1
+ lrwxrwxrwx 1 hadoop hadoop 11 Nov 7 20:38 hbase -> hbase-1.1.5
+ drwxr-xr-x 8 hadoop hadoop 4096 Nov 6 11:38 hbase-1.1.5
+ drwxr-xr-x 4 hadoop hadoop 4096 Nov 4 07:43 hdfs
+ lrwxrwxrwx  1 hadoop hadoop   10 Feb 24 15:25 hive -> hive-1.2.1
+ drwxr-xr-x  9 hadoop hadoop 4096 May  4 16:58 hive-1.2.1
+ lrwxrwxrwx  1 hadoop hadoop    9 May  4 10:48 hue -> hue-4.1.0
+ drwxr-xr-x 12 hadoop hadoop 4096 May  4 23:12 hue-4.1.0
+ lrwxrwxrwx 1 hadoop hadoop 18 Nov 16 19:59 kafka -> kafka_2.11-0.10.2.0
+ drwxr-xr-x 6 hadoop hadoop 4096 Nov 17 10:51 kafka_2.11-0.10.2.0
+ lrwxrwxrwx 1 hadoop hadoop 11 Nov 19 11:05 spark -> spark-2.3.1
+ drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 spark-1.6.1
+ lrwxrwxrwx 12 hadoop hadoop 4096 Dec 2 10:23 sqoop -> sqoop-1.99.6
+ drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 sqoop-1.99.6
+ lrwxrwxrwx 12 hadoop hadoop 4096 Dec 2 10:23 zeppelin -> zeppelin-0.8.0
+ drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 zeppelin-0.8.0
 ```
 
-#### Configuring Hadoop
+### Configuring Hadoop
  
- Update the configs in '/opt/tdh/hadoop/etc/hadoop'. Set JAVA_HOME  in the
-***hadoop-env.sh*** file. This should be set to the Oracle JDK previously installed.
+ Update the configs in '/opt/tdh/hadoop/etc/hadoop'. Set `JAVA_HOME` in the
+***hadoop-env.sh*** file. This should be set to the JDK previously installed.
 
 **core-site.xml:**
-
 ```
     <configuration>
         <property>
@@ -142,53 +141,50 @@ Choose a path for the Namenode and Datanode directories. Note that
 the replication parameter must be set properly. Even though we are running
 in distributed mode, this is still a single node so we do not want any
 replication.
-
 ```
-    <configuration>
-        <property>
-            <name>dfs.replication</name>
-            <value>1</value>
-        </property>
-        <property>
-            <name>dfs.name.dir</name>
-            <value>file:///opt/tdh/hdfs/namenode</value>
-        </property>
-        <property>
-            <name>dfs.data.dir</name>
-            <value>file:///opt/tdh/hdfs/datanode</value>
-        </property>
-    </configuration>
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>dfs.name.dir</name>
+        <value>file:///opt/tdh/hdfs/namenode</value>
+    </property>
+    <property>
+        <name>dfs.data.dir</name>
+        <value>file:///opt/tdh/hdfs/datanode</value>
+    </property>
+</configuration>
 ```
 
 **yarn-site.xml:**
-
 ```
-    <configuration>
-        <property>
-            <name>yarn.resourcemanager.address</name>
-            <value>hostname:8050</value>
-        </property>
-        <property>
-            <name>yarn.resourcemanager.resource-tracker.address</name>
-            <value>hostname:8025</value>
-        </property>
-        <property>
-            <name>yarn.resourcemanager.scheduler.address</name>
-            <value>hostname:8030</value>
-        </property>
-        <property>
-            <name>yarn.nodemanager.aux-services</name>
-            <value>mapreduce_shuffle</value>
-        </property>
-        <property>
-            <name>yarn.nodemanager.aux-services.shuffle.class</name>
-            <value>org.apache.hadoop.mapred.ShuffleHandler</value>
-        </property>
-    </configuration>
+<configuration>
+    <property>
+        <name>yarn.resourcemanager.address</name>
+        <value>hostname:8050</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.resource-tracker.address</name>
+        <value>hostname:8025</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.scheduler.address</name>
+        <value>hostname:8030</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services.shuffle.class</name>
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+    </property>
+</configuration>
 ```
 
 If intending to use Spark2.x and Dynamic Execution, then the external Spark Shuffle service should be configured:
-
 ```
 <property>
   <name>yarn.nodemanager.aux-services</name>
@@ -200,7 +196,7 @@ If intending to use Spark2.x and Dynamic Execution, then the external Spark Shuf
 </property>
 ```
 
-#### Configuring the User Environment
+### Configuring the User Environment
 
 This environment serves as example and can be added to a user's **.bashrc** file,
 though I prefer to keep these in a separate env file like hadoop-env-user.sh which
@@ -208,7 +204,6 @@ can then be sourced from the .bashrc file. This also makes it easier to
 share/use these settings with other users/accounts.
 
 **.bashrc:**
-
 ```
 if [ -f ~/hadoop-env-user.sh ]; then
     . ~/hadoop-env-user.sh
@@ -248,8 +243,7 @@ $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
 ```
 
-
-#### Format the Namenode/Datanode
+### Format the Namenode/Datanode
 
   Once the environment is setup, the **hadoop** and **hdfs* binary should
 be in the path. The following will format the namenode as specified in **hdfs-site.xml**.
@@ -259,7 +253,7 @@ be in the path. The following will format the namenode as specified in **hdfs-si
 # sudo -u $USER hadoop namenode -format
 ```
 
-#### Start HDFS and Yarn
+### Start HDFS and Yarn
 
  Ensure various start scripts are run as the correct user if applicable
 (eg. *sudo -i -u hadoop*).
@@ -274,10 +268,9 @@ $ hdfs dfs -mkdir /user
 $ hdfs dfs -ls /
 ```
 
-#### Installing and Configuring HBase
+### Installing and Configuring HBase
 
 This installation is fairly straightforward and follows the same pattern as earlier.
-
 ```
  $ cd /opt/tdh
  $ wget http://url/to/download/hbase-1.0.2-bin.tar.gz
@@ -340,7 +333,7 @@ zookeeper, such as Spark and Kafka, it is important that HBase is started after
 YARN and before other components. The hadoop-eco.sh script handles this properly.
 Alternatively, Zookeeper can be installed and configured separately from HBase.
 
-#### Installing and Configuring Spark (on YARN and Standalone)
+### Installing and Configuring Spark (on YARN and Standalone)
 ```
 $ cd /opt/tdh
 $ wget http://url/to/spark-1.6.2-bin-hadoop2.6.tgz
@@ -412,7 +405,8 @@ $SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi \
 
 Check the YARN UI *http://host:8088/*
 
-Jobs can be submitted directy to the spark master as well and viewed via the Spark UI at ***http://host:8080/***
+Jobs can be submitted directly to the spark master as well and viewed via
+the Spark UI at *http://host:8080/*
 ```
   $SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi \
     --master spark://$host:7077 \
@@ -532,7 +526,7 @@ echo "SPARK_DIST_CLASSPATH=\"$SPARK_DIST_CLASSPATH\""
 This is a nice feature, especially with constrained resources and notebook users.
 To enable dynamic allocation, the external spark shuffle service must be added to YARN.
 
-yarn-site.xml:
+**yarn-site.xml**:
 ```
   <property>
     <name>yarn.nodemanager.aux-services</name>
@@ -544,7 +538,7 @@ yarn-site.xml:
   </property>
 ```
 
-spark-defaults.conf
+**spark-defaults.conf**:
 ```
 spark.authenticate=false
 spark.dynamicAllocation.enabled=true
@@ -555,7 +549,7 @@ spark.shuffle.service.enabled=true
 spark.shuffle.service.port=7337
 ```
 
-#### Installing and Configuring Kafka
+### Installing and Configuring Kafka
 ```
 $ cd /opt/tdh
 $ wget https://www.apache.org/dyn/closer.cgi?path=/kafka/0.8.2.2/kafka_2.11-0.8.2.2.tgz
@@ -580,7 +574,7 @@ sudo -u hadoop $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.p
 ```
 
 
-#### Installing and Configuring Hive
+### Installing and Configuring Hive
 
 * Install Mysql
 
@@ -591,7 +585,7 @@ sudo -u hadoop $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.p
 
 * source schema
 
-* configure hive-site.xml
+* Configure hive-site.xml
 
 ```
 <configuration>
@@ -673,7 +667,7 @@ test with:
 ./bin/hive -hiveconf hive.root.logger=DEBUG,console
 ```
 
-* Start the MetaStore via
+Start the MetaStore via
 
 ```
 $HIVE_HOME/bin/hive --service metastore
