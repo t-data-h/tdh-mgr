@@ -131,7 +131,7 @@ show_status()
     fi
 
     for dn in $( cat ${nodes} ); do
-        echo -e "       ------------     |------|"
+        echo -e "   -----------------    |------|"
 
         check_remote_process $dn $DN_ID
 

@@ -101,7 +101,7 @@ show_status()
         echo -e " HBase ThriftServer     | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
-    echo -e "       ------------     |------|"
+    echo -e "   -----------------    |------|"
 
     set -f
     IFS=$'\n'
