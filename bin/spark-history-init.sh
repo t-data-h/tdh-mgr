@@ -50,11 +50,11 @@ show_status()
 
     check_remote_process $SHS_HOST $SPARK_ID
     rt=$?
-    
+
     if [ $rt -eq 0 ]; then
-        echo -e "  Spark2 HistoryServer  | \e[32m\e[1m OK \e[0m | [${SHS_HOST}:${PID}]"
+        echo -e " Spark2 HistoryServer   | \e[32m\e[1m OK \e[0m | [${SHS_HOST}:${PID}]"
     else
-        echo -e "  Spark2 HistoryServer  | \e[31m\e[1mDEAD\e[0m | [${SHS_HOST}]"
+        echo -e " Spark2 HistoryServer   | \e[31m\e[1mDEAD\e[0m | [${SHS_HOST}]"
     fi
 
     return $rt
@@ -82,13 +82,13 @@ case "$ACTION" in
 
         echo "Starting Spark2 HistoryServer"
         ( ssh $SHS_HOST "$SPARK_HOME/sbin/start-history-server.sh 2>&1 > /dev/null" )
-        
+
         rt=$?
         ;;
 
     'stop')
         check_remote_process $SHS_HOST $SPARK_ID
-        
+
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping Spark2 HistoryServer [$PID]"

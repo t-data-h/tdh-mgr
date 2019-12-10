@@ -51,21 +51,21 @@ usage()
 show_status()
 {
     check_remote_process $HIVE_SERVER $HIVEMETASTORE
-    
+
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e "  Hive Metastore        | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
+        echo -e " Hive Metastore         | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
     else
-        echo -e "  Hive Metastore        | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
+        echo -e " Hive Metastore         | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
     fi
 
     check_remote_process $HIVE_SERVER $HIVESERVER2
-    
+
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e "  Hive Server           | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
+        echo -e " Hive Server            | \e[32m\e[1m OK \e[0m | [${HIVE_SERVER}:${PID}]"
     else
-        echo -e "  Hive Server           | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
+        echo -e " Hive Server            | \e[31m\e[1mDEAD\e[0m | [${HIVE_SERVER}]"
     fi
 
     return $rt
@@ -112,7 +112,7 @@ case "$ACTION" in
 
     'stop')
         check_remote_process $HIVE_SERVER $HIVEMETASTORE
-        
+
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping Hive MetaStore [${HIVE_SERVER}:${PID}]..."
@@ -122,7 +122,7 @@ case "$ACTION" in
         fi
 
         check_remote_process $HIVE_SERVER $HIVESERVER2
-        
+
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping HiveServer2 [${HIVE_SERVER}:${PID}]..."
