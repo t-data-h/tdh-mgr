@@ -137,18 +137,18 @@ show_status()
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e "       Datanode         | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
+            echo -e " HDFS  Datanode         | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
         else
-            echo -e "       Datanode         | \e[31m\e[1mDEAD\e[0m | [${dn}]"
+            echo -e " HDFS  Datanode         | \e[31m\e[1mDEAD\e[0m | [${dn}]"
         fi
 
         check_remote_process $dn $NM_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e "       NodeManager      | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
+            echo -e " YARN  NodeManager      | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
         else
-            echo -e "       NodeManager      | \e[31m\e[1mDEAD\e[0m | [$dn]"
+            echo -e " YARN  NodeManager      | \e[31m\e[1mDEAD\e[0m | [$dn]"
         fi
     done
 

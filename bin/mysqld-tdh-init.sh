@@ -78,9 +78,9 @@ case "$ACTION" in
         check_process "$TDHMYSQL"
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " MySQL Daemon           | \e[32m\e[1m OK \e[0m | [$TDH_DOCKER_MYSQL:$PID]"
+            echo -e " MySQL Server           | \e[32m\e[1m OK \e[0m | [$TDH_DOCKER_MYSQL:$PID]"
         else
-            echo -e " MySQL Daemon           | \e[31m\e[1mDEAD\e[0m | [$TDH_DOCKER_MYSQL]"
+            echo -e " MySQL Server           | \e[31m\e[1mDEAD\e[0m | [$TDH_DOCKER_MYSQL]"
         fi
         ;;
     *)
