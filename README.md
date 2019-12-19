@@ -1,24 +1,27 @@
 TDH Manager ( tdh-mgr )
 =======================
 
+## Overview
   TDH is a custom Hadoop distribution based on Apache Hadoop and related
 Apache components such as Hive, HBase, Kafka, and Spark. It was created to
 serve as a local development environment running natively on a linux
-host, rather than virtualized, as a pseudo-distributed cluster (1 node as
-master and worker).  It evolved into creating a cloud based multi-node
-cluster using Ansible.
+host as a pseudo-distributed cluster (a single node acting as both master
+and worker).  It evolved into creating a multi-node cluster with a set of
+bash scripts for management, ansible for deployment and updates, and
+a git repo for managing cluster configs.
 
-  The *tdh-mgr* project provides a set of management scripts for various
+  The *tdh-mgr* project provides the set of management scripts for various
 components and obtaining their status across multiple nodes. The scripts
-require no agents, relying on SSH host keys for running remote commands.
+rely on SSH host keys for running remote commands.
 
   *TDH* has been adapted as a multi-node distribution that can run
 on RHEL/CentOS instances.  A separate project, *tdh-gcp*, provides a framework
 for installing and distributing TDH via Ansible for multi-node clusters
-mostly around GCP, but adaptable to other environments.
+(there is some specific support for running on GCP, but the Ansible can be
+used with any infrastructure).
 
 
-### Configuring the Hadoop Distribution
+## Configuring the Hadoop Distribution
 
   The ecosystem is built using packages from the various Apache projects,
 either as binaries or built from source. The supporting scripts and
@@ -31,21 +34,22 @@ versions:
 - Spark  2.4.4
 - Kafka  2.2.0
 
-Refer to the setup document in *docs/tdh-hadoop-setup.md* for setting
-up a TDH distribution from scratch.
+Refer to the setup document in *docs/tdh-hadoop-setup.md* for creating a
+TDH distribution from scratch.
 
-### Management scripts
 
-  The main entry-point to cluster mgmt. is the script *tdh-init.sh*. This
-works much like a standard init script with *start|stop|status* options.
+## Running the Distribution
+
+  The main entry-point to the cluster is the script *tdh-init.sh*. This
+works much like a standard init script with *start|stop|status* parameters.
 This in turn calls various ecosystem *init* functions to perform actions
-on various components.  Which components to run can be set via the
-environment using *HADOOP_ECOSYSTEM_INITS*. Each component has its own
-init script with the same options (Note, a 'restart' option is generally  
+on various components.  The specific stack of  components to run can be set
+via the environment using *TDH_ECOSYSTEM_INITS*. Each component has its own
+Init script with the same options (Note, a 'restart' option is generally  
 not provided intentionally).
 
   The *conf* directory provides a sample cluster configuration in a manner
 that allows for a given environment config to be 'overlaid' onto the cluster
-directory (eg. /opt/TDH). It provides a template example of a single,
-pseudo-distributed node. A separate *tdh-config* project is used to
+directory (eg. /opt/TDH). It provides a templated example of a single,
+pseudo-distributed node. A separate project called *tdh-config* is used to
 track and maintain configurations for multiple live environments.
