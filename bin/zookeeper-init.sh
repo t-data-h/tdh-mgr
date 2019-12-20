@@ -33,7 +33,7 @@ fi
 HOST=$(hostname -s)
 ZK_VER=$(readlink $ZOOKEEPER_HOME)
 ZK_CONFIG="${ZOOKEEPER_HOME}/conf/masters"
-ZK_ID="Zookeeper"
+ZK_ID="server.quorum"
 
 # -----------
 
@@ -92,7 +92,7 @@ case "$ACTION" in
             fi
 
             echo "Starting Zookeeper  [${zk}]"
-            ( ssh $zk "${ZOOKEEPER_HOME}/bin/zkserver.sh start 2>&1 > /dev/null" )
+            ( ssh $zk "${ZOOKEEPER_HOME}/bin/zkServer.sh start 2>&1 > /dev/null" )
 
             rt=$?
         done
@@ -105,7 +105,7 @@ case "$ACTION" in
             rt=$?
             if [ $rt -eq 0 ]; then
                 echo "Stopping Zookeeper [${zk}:${PID}]"
-                ( ssh $zk "$ZOOKEEPER_HOME/bin/zk-server.sh stop 2>&1 > /dev/null" )
+                ( ssh $zk "$ZOOKEEPER_HOME/bin/zkServer.sh stop 2>&1 > /dev/null" )
                 rt=$?
             else
                 echo "Zookeeper not found."
