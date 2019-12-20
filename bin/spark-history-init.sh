@@ -1,6 +1,8 @@
 #!/bin/bash
 #
-#   Spark History Server init
+#  Spark History Server init
+#
+#  Timothy C. Arland <tcarland@gmail.com>
 #
 
 # ----------- preamble

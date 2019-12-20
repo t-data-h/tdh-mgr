@@ -14,11 +14,12 @@ a git repo for managing cluster configs.
 components and obtaining their status across multiple nodes. The scripts
 rely on SSH host keys for running remote commands.
 
-  *TDH* has been adapted as a multi-node distribution that can run
-on RHEL/CentOS instances.  A separate project, *tdh-gcp*, provides a framework
-for installing and distributing TDH via Ansible for multi-node clusters
-(there is some specific support for running on GCP, but the Ansible can be
-used with any infrastructure).
+  *TDH* has been adapted as a multi-node distribution that can run on
+RHEL/CentOS instances.  A separate project, **tdh-gcp**, provides a framework
+for installing and distributing TDH via Ansible for multi-node clusters.
+There is some specific support for running on GCP, but the playbooks can be
+used with any infrastructure. The project **tdh-docker** provides a set
+of container specifications for supported monitoring services.
 
 
 ## Configuring the Hadoop Distribution
@@ -40,16 +41,16 @@ TDH distribution from scratch.
 
 ## Running the Distribution
 
-  The main entry-point to the cluster is the script *tdh-init.sh*. This
-works much like a standard init script with *start|stop|status* parameters.
+  The main entry point to running the cluster is the script `tdh-init.sh`.
+This works much like a standard init script with *start|stop|status* parameters.
 This in turn calls various ecosystem *init* functions to perform actions
-on various components.  The specific stack of  components to run can be set
-via the environment using *TDH_ECOSYSTEM_INITS*. Each component has its own
-Init script with the same options (Note, a 'restart' option is generally  
-not provided intentionally).
+on various components.  The specific stack of components to run can be set
+via the environment using `TDH_ECOSYSTEM_INITS`. Each component has its own
+script with the same options (Note, a 'restart' option is generally not
+provided intentionally).
 
   The *conf* directory provides a sample cluster configuration in a manner
 that allows for a given environment config to be 'overlaid' onto the cluster
-directory (eg. /opt/TDH). It provides a templated example of a single,
-pseudo-distributed node. A separate project called *tdh-config* is used to
-track and maintain configurations for multiple live environments.
+directory (eg. /opt/TDH). It provides a pair of examples for a distributed
+cluster and of a single, pseudo-distributed node. This can be used as the
+template for a separately tracked git repo for managing configurations.

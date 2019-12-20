@@ -2,6 +2,8 @@
 #
 #  Init script for Hive Services
 #
+#  Timothy C. Arland <tcarland@gmail.com>
+#
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"

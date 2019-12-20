@@ -6,7 +6,7 @@
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 export TDH_ENV_USER=1
-export TDH_VERSION="1.0.2"
+export TDH_VERSION="1.1.1"
 
 # JAVA_HOME should already be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
@@ -33,6 +33,7 @@ export HADOOP_COMMON_HOME="$HADOOP_HOME"
 export HADOOP_HDFS_HOME="$HADOOP_COMMON_HOME"
 export HADOOP_MAPRED_HOME="$HADOOP_COMMON_HOME"
 export HADOOP_YARN_HOME="$HADOOP_COMMON_HOME"
+export ZOOKEEPER_HOME="$HADOOP_ROOT/zookeeper"
 export HBASE_HOME="$HADOOP_ROOT/hbase"
 export HBASE_CONF_DIR="$HBASE_HOME/conf"
 export HIVE_HOME="$HADOOP_ROOT/hive"

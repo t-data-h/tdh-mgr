@@ -3,7 +3,7 @@ TDH-HADOOP
 
   TDH is a custom hadoop distribution with an initial configuration as a
 pseudo-distributed cluster with 1 worker node. The distribution is based
-entirely on direct apache versions. This project provides a set of scripts
+entirely on Apache versions. This project provides a set of scripts
 for managing the environment.
 
 
@@ -19,12 +19,20 @@ versions:
 - Hive   1.2.x
 - Spark  1.6.x - 2.4.x
 - Kafka  0.10.x or 2.2.x
+- Zookeeper 5.x
 
 System Prerequisites: https://gist.github.com/tcarland/3d10c22885ec655a0c2435676c1ae7b1
 Mysqld Configuration: https://gist.github.com/tcarland/64e300606d83782e4150ce2db053b733
 
+Of note, mysqld can be handled via a container instance (from tdh-docker) or
+installed via ansible (from tdh-gcp).
+
 
 #### Prerequisites
+
+Prerequisites are described in detail by the above gist and is also automated
+via ansible in the **tdh-gcp** project.
+
 **Java JDK 1.8**
 
  Note that this **must** be a JDK distribution, not JRE. Oracle is only needed
@@ -45,9 +53,9 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 **Hadoop User and Group**
 
- The environment generally runs well as a single user, but for an actual
- distributed cluster create a hadoop user and group with a consistent UID and GID
- across systems.
+  The environment generally runs well as a single user, but for an actual
+distributed cluster create a hadoop user and group with a consistent UID and GID
+across systems.
  ```
  $ UID=xxx; GID=yyy
  $ groupadd -g $GID hadoop
