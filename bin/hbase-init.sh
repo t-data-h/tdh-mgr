@@ -32,7 +32,6 @@ HB_MASTERS="${HBASE_HOME}/conf/masters"
 HB_MASTER_ID=".hbase.master.HMaster start"
 HB_REGION_ID=".hbase.regionserver.HRegionServer"
 HB_THRIFT_ID=".hbase.thrift.ThriftServer"
-HB_ZK_ID=".hbase.zookeeper.HQuorumPeer"
 
 HBASE_LOGDIR="${HADOOP_LOGDIR}/hbase"
 HBASE_THRIFTLOG="${HBASE_LOGDIR}/hbase-thriftserver.log"
@@ -73,19 +72,6 @@ show_status()
         echo -e " HBase Master           | \e[32m\e[1m OK \e[0m | [${HBASE_MASTER}:${PID}]"
     else
         echo -e " HBase Master           | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
-    fi
-
-    if [ $islo -eq 0 ]; then
-        check_process $HB_ZK_ID
-    else
-        check_remote_process $HBASE_MASTER $HB_ZK_ID
-    fi
-
-    rt=$?
-    if [ $rt -eq 0 ]; then
-        echo -e " HBase Zookeeper        | \e[32m\e[1m OK \e[0m | [${HBASE_MASTER}:${PID}]"
-    else
-        echo -e " HBase Zookeeper        | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
     fi
 
     if [ $islo -eq 0 ]; then

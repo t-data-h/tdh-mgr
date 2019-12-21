@@ -2,7 +2,7 @@
 Building Hadoop and Various Ecosystem Components
 ================================================
 
- A guide for building hadoop and other ecosystem components from source.
+A guide for building Hadoop and various ecosystem components from source.
 
 ## Building Hadoop (v2.7.7)
 

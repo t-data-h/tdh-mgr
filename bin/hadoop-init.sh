@@ -2,6 +2,8 @@
 #
 #  Init script for the core hadoop services HDFS and YARN.
 #
+#  Timothy C. Arland <tcarland@gmail.com>
+#
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"

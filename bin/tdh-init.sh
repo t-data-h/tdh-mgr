@@ -4,6 +4,8 @@
 #  The list of services can be provided via HADOOP_ECOSYSTEM_INITS
 #  environment variable.
 #
+#  Timothy C. Arland <tcarland@gmail.com>
+#
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -26,12 +28,13 @@ fi
 # -----------
 
 # default init script list
-INITS="hadoop-init.sh mysqld-tdh-init.sh hbase-init.sh hive-init.sh \
-kafka-init.sh spark-history-init.sh hue-init.sh zeppelin-init.sh"
+# add mysqld-tdh-init.sh  for a local docker instance of mysql
+INITS="hadoop-init.sh zookeeper-init.sh hbase-init.sh hive-init.sh \
+kafka-init.sh spark-history-init.sh"
 force=0
 
-if [ -n "$HADOOP_ECOSYSTEM_INITS" ]; then
-    INITS="$HADOOP_ECOSYSTEM_INITS"
+if [ -n "$TDH_ECOSYSTEM_INITS" ]; then
+    INITS="$TDH_ECOSYSTEM_INITS"
 fi
 
 # -----------
@@ -44,8 +47,8 @@ usage()
     echo "     -f|--force   : Run all start/stop scripts ignoring any errors"
     echo "     -V|--version : Show TDH version and exit"
     echo ""
-    echo "  HADOOP_ECOSYSTEM_INITS=\"${HADOOP_ECOSYSTEM_INITS}\""
-    if [ -z "$HADOOP_ECOSYSTEM_INITS" ]; then
+    echo "  HADOOP_ECOSYSTEM_INITS=\"${TDH_ECOSYSTEM_INITS}\""
+    if [ -z "$TDH_ECOSYSTEM_INITS" ]; then
         echo ""
         echo "  Using default list:"
         echo "  '$INITS'"
@@ -116,7 +119,7 @@ show_status()
     version
     run_action "status"
     rt=$?
-    
+
     echo " ------------------------------- "
 
     return $rt

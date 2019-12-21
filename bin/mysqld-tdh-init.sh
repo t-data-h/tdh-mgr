@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 #  Init script for the core hadoop services HDFS and YARN.
+#
 #  Timothy C. Arland <tcarland@gmail.com>
 #
 

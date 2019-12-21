@@ -1,6 +1,5 @@
 #!/bin/bash
 #  Custom init script for starting Hue
-#   (in a pseudo-distributed environment)
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 #
