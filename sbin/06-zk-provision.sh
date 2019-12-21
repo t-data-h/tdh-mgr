@@ -53,7 +53,7 @@ if [ -z "$zkid" ]; then
 fi
 
 if [[ $zkid =~ ^[0-9]+$ ]]; then
-    echo "Setting ZooKeeper Id for '$zk' to '$zkid'"
+    echo "Setting ZooKeeper Id for '$host' to '$zkid'"
 else
     echo "ZooKeeper ID is invalid"
     exit 1
