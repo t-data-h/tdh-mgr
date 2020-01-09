@@ -1,8 +1,11 @@
 tdh-config
 ==========
 
-Git Repository for tracking various TDH (HADOOP) Environment configurations
-for a given TDH deployment. This works in conjunction with the **tdh-mgr**
+A template version of TDH Configs that can be used as the root of a 
+Git Repository for tracking various TDH (HADOOP) Environment configurations 
+for a given TDH deployment.
+
+The tdh-config repository then works in conjunction with the **tdh-mgr**
 project for defining a Hadoop-based compute stack, and the project **tdh-gcp**
 provides deployment automation via Ansible and associated scripts.
 
