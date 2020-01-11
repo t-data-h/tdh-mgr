@@ -7,7 +7,7 @@ entirely on Apache versions. This project provides a set of scripts
 for managing the environment.
 
 
-### Building the Hadoop Distribution
+## Building the Hadoop Distribution
 
   The ecosystem can be built using binary packages from the various
 Apache projects or built from source. The supporting scripts and
@@ -28,42 +28,38 @@ Of note, mysqld can be handled via a container instance (from tdh-docker) or
 installed via ansible (from tdh-gcp).
 
 
-#### Prerequisites
+## Prerequisites
 
 Prerequisites are described in detail by the above gist and is also automated
 via ansible in the **tdh-gcp** project.
 
-**Java JDK 1.8**
-
- Note that this **must** be a JDK distribution, not JRE. Oracle is only needed
+- Java JDK 1.8  
+Note that this **must** be a JDK distribution, not JRE. Oracle is only needed
 by vendor distributions for the Strong Encryption security module though more
 recent versions of OpenJDK 1.8 (>171?) now support strong encryption by default.
 
-**Disable IPv6**
-
+* Disable IPv6  
 There are known issues with Hadoop and IPv6 (especially with Ubuntu) and it is
 recommended to disable the IPv6 stack in the Linux Kernel.
 
-**sysctl.conf**
-```
-net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1
-net.ipv6.conf.lo.disable_ipv6 = 1
-```
+* sysctl.conf
+  ```
+  net.ipv6.conf.all.disable_ipv6 = 1
+  net.ipv6.conf.default.disable_ipv6 = 1
+  net.ipv6.conf.lo.disable_ipv6 = 1
+  ```
 
-**Hadoop User and Group**
-
-  The environment generally runs well as a single user, but for an actual
+* Hadoop User and Group  
+The environment generally runs well as a single user, but for an actual
 distributed cluster create a hadoop user and group with a consistent UID and GID
 across systems.
- ```
- $ UID=xxx; GID=yyy
- $ groupadd -g $GID hadoop
- $ useradd -g -m -u $UID hadoop
- ```
+   ```
+   $ UID=xxx; GID=yyy
+   $ groupadd -g $GID hadoop
+   $ useradd -g -m -u $UID hadoop
+   ```
 
-**Verify Networking**
-
+* Verify Networking  
   While it is possible to run services on localhost only (loopback), there
 are some hacks involved for some services like Spark that traditionally have not
 supported loopback. Using a proper interface and IP is highly recommended.
@@ -76,30 +72,29 @@ Among the provided scripts, the 'hadoop-init.sh' script validates the
 configuration prior to starting HDFS. Running either 'status' or 'start' will
 verify the detected `hostname` configuration.
 
-**Configure SSH**
-
+* Configure SSH  
 SSH keys are required for starting services (such as the secondary namenode).
-```
-    # su - hadoop
-    $ ssh-keygen
-    $ ssh-copy-id hadoop@myhost
-# or
-    $ mkdir -p .ssh; chmod 700 .ssh
-    $ cat .ssh/id_rsa.pub >> .ssh/authorized_keys
-    $ chmod 600 !$
-```
+  ```
+  # su - hadoop
+  $ ssh-keygen
+  $ ssh-copy-id hadoop@myhost
+  # or
+  $ mkdir -p .ssh; chmod 700 .ssh
+  $ cat .ssh/id_rsa.pub >> .ssh/authorized_keys
+  $ chmod 600 !$
+  ```
 
-###  Installing Hadoop
+##  Installing Hadoop
 
   Choose a base path for the hadoop ecosystem. eg. /opt/tdh.  
 From here, install the various ecosystem components complete with versions.
 ```
-  # mkdir -p /opt/tdh && cd /opt/tdh
-  # wget http://url/to/hadoop-2.7.1-bin.tar.gz
-  # tar -zxvf hadoop-2.7.1.tar.gz
-  # mv hadoop-2.7.1-bin hadoop-2.7.1
-  # chown -R hadoop:hadoop hadoop-2.7.1
-  # ln -s hadoop-2.7.1 hadoop
+# mkdir -p /opt/tdh && cd /opt/tdh
+# wget http://url/to/hadoop-2.7.1-bin.tar.gz
+# tar -zxvf hadoop-2.7.1.tar.gz
+# mv hadoop-2.7.1-bin hadoop-2.7.1
+# chown -R hadoop:hadoop hadoop-2.7.1
+# ln -s hadoop-2.7.1 hadoop
 ```
 
 Use this pattern for other ecosystem components as well:
@@ -124,23 +119,23 @@ Use this pattern for other ecosystem components as well:
  drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 zeppelin-0.8.0
 ```
 
-### Configuring Hadoop
+## Configuring Hadoop
  
  Update the configs in '/opt/tdh/hadoop/etc/hadoop'. Set `JAVA_HOME` in the
 ***hadoop-env.sh*** file. This should be set to the JDK previously installed.
 
 **core-site.xml:**
 ```
-    <configuration>
-        <property>
-            <name>fs.default.name</name>
-            <value>hdfs://hostname:8020</value>
-        </property>
-        <property>
-            <name>hadoop.tmp.dir</name>
-            <value>/var/tmp/hadoop/data</value>
-        </property>
-    </configuration>
+<configuration>
+    <property>
+        <name>fs.default.name</name>
+        <value>hdfs://hostname:8020</value>
+    </property>
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>/var/tmp/hadoop/data</value>
+    </property>
+</configuration>
 ```
 
 **hdfs-site.xml:**
@@ -276,7 +271,7 @@ $ hdfs dfs -mkdir /user
 $ hdfs dfs -ls /
 ```
 
-### Installing and Configuring HBase
+## Installing and Configuring HBase
 
 This installation is fairly straightforward and follows the same pattern as earlier.
 ```
@@ -341,7 +336,7 @@ zookeeper, such as Spark and Kafka, it is important that HBase is started after
 YARN and before other components. The hadoop-eco.sh script handles this properly.
 Alternatively, Zookeeper can be installed and configured separately from HBase.
 
-### Installing and Configuring Spark (on YARN and Standalone)
+## Installing and Configuring Spark (on YARN and Standalone)
 ```
 $ cd /opt/tdh
 $ wget http://url/to/spark-1.6.2-bin-hadoop2.6.tgz
@@ -398,7 +393,7 @@ spark.executor.memory                           1g
 ```
 
 
-#### Testing the Spark Installation
+### Testing the Spark Installation
 
 To test running a spark job on YARN, try the following spark example:
 ```
@@ -430,7 +425,7 @@ For running *spark-shell* or *pyspark* use the '*--master*' switch with either
 pyspark --master spark://$host:7077
 ```
 
-#### Spark 2.x.x
+### Spark 2.x.x
 
 The following is a sample configuration for *spark-defaults.conf* and
 *spark-env.sh* intended for Spark2.
@@ -529,7 +524,7 @@ SPARK_DIST_CLASSPATH="$SPARK_DIST_CLASSPATH:$KAFKA_HOME/libs/*"
 echo "SPARK_DIST_CLASSPATH=\"$SPARK_DIST_CLASSPATH\""
 ```
 
-#### Spark2 Dynamic Allocation
+### Spark2 Dynamic Allocation
 
 This is a nice feature, especially with constrained resources and notebook users.
 To enable dynamic allocation, the external spark shuffle service must be added to YARN.
@@ -557,7 +552,7 @@ spark.shuffle.service.enabled=true
 spark.shuffle.service.port=7337
 ```
 
-### Installing and Configuring Kafka
+## Installing and Configuring Kafka
 ```
 $ cd /opt/tdh
 $ wget https://www.apache.org/dyn/closer.cgi?path=/kafka/0.8.2.2/kafka_2.11-0.8.2.2.tgz
@@ -581,8 +576,7 @@ Once complete, the Kafka service can be started by running the following command
 sudo -u hadoop $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &
 ```
 
-
-### Installing and Configuring Hive
+## Installing and Configuring Hive
 
 * Install Mysql
 
