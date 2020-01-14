@@ -15,9 +15,9 @@ script from *tdh-gcp* which packages and deploys to the ansible target.
 
 ### Deploying:
 
-  For complete usage, see the '--help' output of the script, but briefly the
-script takes the path, a name for the archive, and a destination host.  It
-also supports GCP using the --use-gcp switch.
+  For complete usage, see the '--help' output of the `tdh-push.sh` script, but
+briefly the script takes the path, a name for the target archive, and the
+destination host.  It also supports GCP using the --use-gcp switch.
 
 ```
 tdh-push.sh [options] [path] <archive_name> <host>

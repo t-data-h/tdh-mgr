@@ -82,7 +82,7 @@ case "$ACTION" in
             exit $rt
         fi
 
-        echo "Starting Spark2 HistoryServer"
+        echo "Starting Spark2 HistoryServer on $SHS_HOST"
         ( ssh $SHS_HOST "$SPARK_HOME/sbin/start-history-server.sh 2>&1 > /dev/null" )
 
         rt=$?

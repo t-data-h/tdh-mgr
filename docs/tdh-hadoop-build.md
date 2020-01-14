@@ -7,13 +7,20 @@ A guide for building Hadoop and various ecosystem components from source.
 ## Building Hadoop (v2.7.7)
 
 **Prerequisites:**
- * Oracle JDK 1.8
+ * OpenJDK 1.8
  * Maven 3.x
- * protobuf 2.5.0
+ * protobuf=2.5.0
  * cmake
  * openssl
 
-Both Hadoop 2.7.x and Hadoop 3.x require protobuf 2.5.0 specifically.
+Both Hadoop 2.7.x and Hadoop 3.x require protobuf version 2.5.0 specifically.
+Being an older version, this may need to be acquired and built this separately
+by first acquiring the repository:
+```
+git clone https://github.com/protocolbuffers/protobuf.git
+git checkout v1.5.0
+```
+and then building accordingly
 ```
 $ ./configure --prefix=/usr/local
 $ make
@@ -39,11 +46,11 @@ mvn clean site install assembly:assembly -Dsnappy -DskipTests -Prelease
 
 ## Building Spark
 
- If building for Spark on YARN, and/or Hadoop dependencies will be available, then
-the `-Phadoop-provided` flag will keep the Hadoop dependent jars from being included
-in the resulting distribution. For spark standalone on hosts that do not have a hadoop
-distribution installed the flag should not be used.  Note the `--name` parameter used
-to label the specific build.
+ If building for Spark on YARN, and/or Hadoop dependencies will be available,
+then the `-Phadoop-provided` flag will keep the Hadoop dependent jars from
+being included in the resulting distribution. For spark standalone on hosts
+that do not have a hadoop distribution installed the flag should not be used.  
+Note the `--name` parameter used to label the specific build.
 
 ### Spark v1.6.x
 ```

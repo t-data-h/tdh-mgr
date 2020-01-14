@@ -108,7 +108,7 @@ case "$ACTION" in
 
         rt=$?
 
-        echo "Starting HiveServer2 on $HIVE_SERVER..."
+        echo "Starting Hive Server2 on $HIVE_SERVER..."
         ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 >$HIVE_SERVER2_LOG 2>&1 &" )
         ;;
 

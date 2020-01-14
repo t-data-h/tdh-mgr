@@ -101,7 +101,7 @@ case "$ACTION" in
                 exit $rt
             fi
 
-            echo "Starting Kafka Broker  [${broker}]"
+            echo "Starting Kafka Broker on ${broker}"
             ( ssh $broker "${KAFKA_HOME}/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG 2>&1 > /dev/null" )
 
             rt=$?
