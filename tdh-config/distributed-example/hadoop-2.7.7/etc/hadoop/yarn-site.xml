@@ -42,6 +42,11 @@
     </property>
     -->
     <property>
+        <name>yarn.nodemanager.local-dirs</name>
+        <value>/data/hdfs/nm/nm-local-dir</value>
+    </property>
+
+    <property>
         <name>yarn.scheduler.minimum-allocation-mb</name>
         <value>512</value>
     </property>
@@ -55,8 +60,9 @@
     </property>
     <property>
         <name>yarn.scheduler.maximum-allocation-vcores</name>
-        <value>2</value>
+        <value>4</value>
     </property>
+
     <property>
         <name>yarn.nodemanager.vmem-pmem-ratio</name>
         <value>3</value>
@@ -71,6 +77,7 @@
         <value>false</value>
 	<description>Whether virtual memory limits will be enforced for containers.</description>
     </property>
+
     <!-- Container memory -->
     <property>
         <name>yarn.nodemanager.resource.memory-mb</name>
@@ -81,6 +88,7 @@
         <name>yarn.nodemanager.resource.cpu-vcores</name>
         <value>24</value>
     </property>
+
     <!-- Spark External Shuffle -->
     <property>
         <name>yarn.nodemanager.aux-services</name>
@@ -94,10 +102,7 @@
         <name>yarn.nodemanager.aux-services.spark_shuffle.class</name>
         <value>org.apache.spark.network.yarn.YarnShuffleService</value>
     </property>
-    <property>
-        <name>yarn.nodemanager.local-dirs</name>
-        <value>/data/hdfs/nm/nm-local-dir</value>
-    </property>
+
     <!--
     <property>
         <name>yarn.log-aggregation-enable</name>
