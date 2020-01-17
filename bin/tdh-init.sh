@@ -133,6 +133,7 @@ show_status()
 
 if [ $# -eq 0 ]; then
     usage
+    exit 1
 fi
 
 while [ $# -gt 0 ]; do
