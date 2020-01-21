@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 #  tdh-mysql-init.sh
-#   Initialize MySQL Server via a Docker Container
+#   Creates MySQL Server Docker Container
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 
@@ -47,6 +47,8 @@ usage()
     echo "                           Default uses 'host' networking."
     echo "   -p|--port <port>      = Local bind port for the container."
     echo "   -V|--version          = Show version info and exit"
+    echo ""
+    echo " Creates and initializes a mysqld docker container."
     echo ""
     echo " Any other action than 'run' results in a dry run."
     echo " The container will only start with the run or start action."
