@@ -1,8 +1,7 @@
 
-## Hadoop
+## HDFS and YARN (Hadoop-2.7.7)
 
-Ensure filesystem is responding properly and the read/write path through DataNodes
-is working correctly.
+Validate simple filesystem operations.
 ```
 hdfs dfs -ls
 touch foo
@@ -27,6 +26,7 @@ Estimated value of Pi is 3.14160000000000000000
 
 Additional YARN information can be viewed on the YARN ResourceManager UI at
 http://host:8088/
+
 
 ## HBase Testing
 

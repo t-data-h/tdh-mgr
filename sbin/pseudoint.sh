@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 #  Sets up an internal IP or pseudo-ip on a given interface. By default
-#  vmnet8 (vmware) is used, but vbox works as well.  Primarily for 
+#  vmnet8 (vmware) is used, but vbox works as well.  Primarily for
 #  running TDH as pseudo-distributed in a closed environment (no network).
 #  (eg. laptop)
 #
@@ -97,6 +97,7 @@ hostip_is_valid()
 # Main
 ACTION=
 BINDIP="$(hostname -i)/24"
+IFACE="vmnet8"
 
 # parse options
 while [ $# -gt 0 ]; do
@@ -130,11 +131,6 @@ while [ $# -gt 0 ]; do
             ;;
     esac
 done
-
-
-if [ -z "$IFACE" ]; then
-    IFACE="vmnet8"
-fi
 
 rt=0
 

@@ -1,0 +1,50 @@
+#
+# The MySQL database server configuration file.
+#
+
+[mysqld]
+key_buffer_size         = 32M
+max_allowed_packet      = 16M
+thread_stack            = 256K
+thread_cache_size       = 64
+query_cache_limit       = 8M
+query_cache_size        = 64M
+query_cache_type        = 1
+max_connections         = 150
+read_buffer_size        = 2M
+read_rnd_buffer_size    = 16M
+sort_buffer_size        = 8M
+join_buffer_size        = 8M
+
+transaction-isolation=READ-COMMITTED
+binlog-format=mixed
+
+basedir=/usr
+tmpdir=/tmp
+datadir=/var/lib/mysql
+user=mysql
+
+# INNODB settings
+innodb_file_per_table           = 1
+innodb_file_format              = Barracuda
+innodb_file_per_table           = 1
+innodb_flush_log_at_trx_commit  = 1
+innodb_log_buffer_size          = 64M
+innodb_buffer_pool_size         = 2G
+innodb_thread_concurrency       = 8
+innodb_flush_method             = O_DIRECT
+innodb_log_file_size            = 512M
+innodb_large_prefix
+log_bin_trust_function_creators = 1
+
+symbolic-links=0
+
+log-bin=mysql-bin
+max_binlog_size = 300M
+expire_logs_days=7
+server-id=1
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+socket=/var/run/mysqld/mysqld.sock
