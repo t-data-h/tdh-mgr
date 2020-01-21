@@ -40,7 +40,7 @@ ACTION=
 usage()
 {
     echo ""
-    echo "Usage: $PNAME [options] run|pull"
+    echo "Usage: $TDH_PNAME [options] run|pull"
     echo "   -h|--help             = Display usage and exit."
     echo "   -n|--name <name>      = Name of the Docker Container instance."
     echo "   -N|--network <name>   = Attach container to Docker network"
