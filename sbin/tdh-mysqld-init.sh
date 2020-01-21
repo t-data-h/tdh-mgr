@@ -40,7 +40,7 @@ ACTION=
 usage()
 {
     echo ""
-    echo "Usage: $TDH_PNAME [options] run|pull"
+    echo "Usage: $TDH_PNAME [options] run|pull|pw"
     echo "   -h|--help             = Display usage and exit."
     echo "   -n|--name <name>      = Name of the Docker Container instance."
     echo "   -N|--network <name>   = Attach container to Docker network"
@@ -48,9 +48,11 @@ usage()
     echo "   -p|--port <port>      = Local bind port for the container."
     echo "   -V|--version          = Show version info and exit"
     echo ""
-    echo "  Any other action than 'run' results in a dry run."
-    echo "  The container will only start with the run or start action"
-    echo "  The 'pull' command fetches the docker image:version"
+    echo " Any other action than 'run' results in a dry run."
+    echo " The container will only start with the run or start action."
+    echo " The 'pull' command fetches the docker image:version."
+    echo " The 'pw' command will attempt to detect the temporary password"
+    echo " created at startup from the container logs."
     echo ""
 }
 
@@ -105,6 +107,12 @@ done
 
 if [ -z "$ACTION" ]; then
     usage
+fi
+
+if [[ $ACTION == "pw" ]]; then
+    passwd=$( docker logs tdh-mysql1 2>&1 | grep GENERATED | awk -F': ' '{ print $2 }' )
+    echo "Mysqld root password: '$passwd'"
+    exit 0
 fi
 
 volname="${name}-data1"
