@@ -21,10 +21,10 @@ versions:
 - Kafka  0.10.x or 2.2.x
 - Zookeeper 5.x
 
-System Prerequisites: https://gist.github.com/tcarland/3d10c22885ec655a0c2435676c1ae7b1
+System Prerequisites: https://gist.github.com/tcarland/3d10c22885ec655a0c2435676c1ae7b1  
 Mysqld Configuration: https://gist.github.com/tcarland/64e300606d83782e4150ce2db053b733
 
-Of note, mysqld can be handled via a container instance (from tdh-docker) or
+Of note, Mysql can be handled via a container instance (from tdh-docker) or
 installed via ansible (from tdh-gcp).
 
 
@@ -50,27 +50,45 @@ recommended to disable the IPv6 stack in the Linux Kernel.
   ```
 
 * Hadoop User and Group  
-The environment generally runs well as a single user, but for an actual
-distributed cluster create a hadoop user and group with a consistent UID and GID
-across systems.
+  The environment generally runs well as a single user, but for an actual
+  distributed cluster create a hadoop user and group with a consistent UID and GID
+  across systems.
    ```
    $ UID=xxx; GID=yyy
    $ groupadd -g $GID hadoop
    $ useradd -g -m -u $UID hadoop
    ```
 
-* Verify Networking  
-  While it is possible to run services on localhost only (loopback), there
-are some hacks involved for some services like Spark that traditionally have not
-supported loopback. Using a proper interface and IP is highly recommended.
-However, for development work, running on a laptop can suffer from not having
-a fixed available network interface and IP. The best solution in such cases is
-to use a virtual interface such as ones already provided by VMWare or VirtualBox.
-
-  Additionally, NEVER have the loopback entry in /etc/hosts set to the hostname.
-Among the provided scripts, the 'hadoop-init.sh' script validates the
-configuration prior to starting HDFS. Running either 'status' or 'start' will
-verify the detected `hostname` configuration.
+* Networking and DNS  
+  While it is possible to run services on localhost only (loopback) for a single
+  node setup, the use of loopback does not work with distributed systems. Spark
+  especially, even in single node form, relies on `hostname -f` resolving to the
+  correct interface of the host. Essentially, all nodes should have properly
+  defined hosts file where hostname is defined to a reachable IPv4 address.
+   ```
+   127.0.0.1    localhost
+   10.10.10.65  callisto.trace3.com callisto
+   ```
+   It's worth mentioning that no connected Unix system should set the loopback
+   address to the hostname unless intended to be completely sequestered. All
+   nodes in a distributed system should map hostname to a valid, reachable
+   interface, that matches the IP of the Fully Qualified DomainName of the host
+   with matching forward and reverse DNS Records on resolution. The following
+   example compares the system configured hostname with DNS using the `host` tool
+   from the `bind-tools` system package.
+    ```
+    $ hostname -i
+    10.10.10.65
+    $ hostname -f
+    callisto.trace3.com
+    $ hostname -s
+    callisto
+    $ host callisto.trace3.com
+    ```
+    In the case of laptop development work which can result in unstable interfaces
+    and addresses, one could use a virtual interface for the hostname under which
+    the cluster is running. The script `./sbin/pseudoint.sh` will set this
+    accordingly.
 
 * Configure SSH  
 SSH keys are required for starting services (such as the secondary namenode).
@@ -84,7 +102,22 @@ SSH keys are required for starting services (such as the secondary namenode).
   $ chmod 600 !$
   ```
 
-##  Installing Hadoop
+* Configure MySQL  
+Mysql is the preferred db type for use with the Hive Metastore. For distributed
+clusters, Mysql can be configured to run in a master-slave setup by the `tdh-gcp`
+project via Ansible.  Alternatively, for Dev setups or single host
+'pseudo-distributed' mode, a docker instance can be used effectively and is
+described in further detail below in the Hive section.
+
+* Cluster configuration  
+While these instructions go into some detail about configurations, a base
+template version can be used to initiate the configs found in the `tdh-config`
+directory.  Generally, this directory should be copied away to its own separate
+repository for tracking the cluster configurations. Additionally, much of these
+instructions are for seeding a TDH installation from scratch but most of these
+steps are automated via the `tdh-gcp` project and corresponding Ansible.
+
+##  Hadoop
 
   Choose a base path for the hadoop ecosystem. eg. /opt/tdh.  
 From here, install the various ecosystem components complete with versions.
@@ -119,7 +152,7 @@ Use this pattern for other ecosystem components as well:
  drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 zeppelin-0.8.0
 ```
 
-## Configuring Hadoop
+### Configuring Hadoop
  
  Update the configs in '/opt/tdh/hadoop/etc/hadoop'. Set `JAVA_HOME` in the
 ***hadoop-env.sh*** file. This should be set to the JDK previously installed.
@@ -208,20 +241,20 @@ share/use these settings with other users/accounts.
 
 **.bashrc:**
 ```
-if [ -f ~/hadoop-env-user.sh ]; then
-    . ~/hadoop-env-user.sh
+if [ -f ~/tdh-env-user.sh ]; then
+    . ~/tdh-env-user.sh
 fi
 ```
 
-**hadoop-env-user.sh:**
+**tdh-env-user.sh:**
 
-An example of this file is provided as *./etc/hadoop-env-user.sh*, and
+An example of this file is provided as *./etc/tdh-env-user.sh*, and
 would look something similar to the following:
 ```
 # User oriented environment variables (for use with bash)
 
 # The java implementation to use.
-export JAVA_HOME=/usr/lib/jvm/oracle-jdk-bin-1.8
+export JAVA_HOME=/usr/lib/jvm/default
 
 export HADOOP_ROOT="/opt/tdh"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
@@ -249,7 +282,7 @@ $SPARK_HOME/bin"
 ### Format the Namenode/Datanode
 
   Once the environment is setup, the **hadoop** and **hdfs* binary should
-be in the path. The following will format the namenode as specified in **hdfs-site.xml**.
+be in the path. The following will format the NameNode as specified in **hdfs-site.xml**.
 ```
 # mkdir -p /data/hdfs/namenode
 # mkdir -p /data/hdfs/datanode
@@ -331,10 +364,155 @@ values are defaults and as such are not necessary, but are included for referenc
 
 Use the script *$HBASE_HOME/bin/start-hbase.sh* and *$HBASE_HOME/bin/stop-hbase.sh*
 to start and stop HBase respectively.  Note that HBase needs a running zookeeper,
-which is done automatically. Since many other ecosystem components make use of
+which can be provided by HBase. Since many other ecosystem components make use of
 zookeeper, such as Spark and Kafka, it is important that HBase is started after
-YARN and before other components. The hadoop-eco.sh script handles this properly.
+YARN but before other components. The `tdh-init.sh` script handles this properly.
 Alternatively, Zookeeper can be installed and configured separately from HBase.
+
+## Installing and Configuring Hive
+
+* Install Mysql.
+
+* Create the metastore database. Some options are discussed in the prerequisites
+  section. See the section below for using a Docker Container of MySQL.
+
+* Locate schema $HIVE_HOME/scripts/metastore/upgrade/mysql/hive-schema-x.x.x.mysql.sql
+  This script must be sourced from the above target directory or it will fail.
+  Alternatively, edit and search for the txn-schema file and update to a
+  fully-qualified path.
+
+* Source the hive schema from `$HIVE_HOME/scripts/metastore/upgrade/mysql/`.
+  Again covered by ansible and in more detail in the docker section below.
+
+* Configure hive-site.xml
+```
+<configuration>
+  <property>
+     <name>mapred.reduce.tasks</name>
+     <value>-1</value>
+     <description>The default number of reduce tasks per job.</description>
+  </property>
+
+  <property>
+     <name>hive.exec.scratchdir</name>
+     <value>/tmp/hive</value>
+     <description>Scratch space for Hive jobs</description>
+  </property>
+
+  <property>
+     <name>hive.metastore.warehouse.dir</name>
+     <value>/user/hive/warehouse</value>
+     <description>location of default database for the warehouse</description>
+  </property>
+
+  <property>
+     <name>hive.enforce.bucketing</name>
+     <value>true</value>
+     <description>Whether bucketing is enforced. If true, while inserting into the table, bucketing is enforced. </description>
+  </property>
+
+  <property>
+     <name>hive.hwi.war.file</name>
+     <value>lib/hive-hwi-1.2.1.jar</value>
+     <description>This sets the path to the HWI  file, relative to${HIVE_HOME}</description>
+  </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionURL</name>
+    <value>jdbc:mysql://dbhost/metastore?createDatabaseIfNotExist=true</value>
+    <description>JDBC connect string for a JDBC metastore</description>
+  </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionDriverName</name>
+    <value>com.mysql.jdbc.Driver</value>
+    <description>Driver class name for a JDBC metastore</description>
+  </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>hive</value>
+  </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>hivesql</value>
+  </property>
+
+  <property>
+    <name>hive.metastore.uris</name>
+    <value>thrift://hostname:9083</value>
+    <description>IP address (or fqdn) and port of the metastore host</description>
+  </property>
+
+  <property>
+    <name>datanucleus.fixedDatastore</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>datanucleus.autoCreateSchema</name>
+    <value>false</value>
+  </property>
+</configuration>
+```
+
+Testing hive:
+
+```
+./bin/hive -hiveconf hive.root.logger=DEBUG,console
+```
+
+Start the MetaStore via
+
+```
+$HIVE_HOME/bin/hive --service metastore
+```
+
+Note that this does not daemonize properly, so a better way might be to use nohup
+```
+nohup $HIVE_HOME/bin/hive --service metastore > /var/tmp/hivemetastore.log
+```
+
+The `hive-init.sh' script performs this init start|stop service.
+
+
+### Using a Docker container for the Mysql Metastore
+
+  Assuming the TDH host in question already has Docker configured and working,
+the script `tdh-mgr/sbin/tdh-mysqld-create.sh` will instantiate a Mysql 5.7 Docker
+Container with a temporary password.
+```
+./sbin/tdh-mysqld-create.sh run
+```
+
+  The temp password is provided once the script completes successfully. The
+instance can then be fully configured via a mysql client from within the container
+by using the `./sbin/tdh-mysql-client.sh` script.
+
+   Steps for configuring the container:
+```
+$ ./sbin/tdh-mysql-client.sh
+# prompts for temp password, which should be changed first
+# replace the following password accordingly
+mysql> ALTER USER 'root'@'localhost' IDENTFIED BY 'myrootsqlpw';
+
+# add root login grant from the host system using fqdn.
+# replace the hostname below
+mysql> GRANT ALL PRIVILEGES TO 'root'@'my.host.fqdn' IDENTFIED BY 'myrootsqlpw';
+
+# Create Metastore DB and Hive user privileges.
+mysql> CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+mysql> GRANT ALL PRIVILEGES ON metastore.* TO 'hive'@'my.host.fqdn' IDENTIFIED BY 'myhivepw';
+```
+
+This should now allow us to connect and further provision the instance from the
+host OS.
+```
+$ cd /opt/TDH/hive/scripts/metastore/upgrade
+$ mysql -h myhost -u hive -p metastore < hive-schema-1.2.0.mysql.sql
+```
+
 
 ## Installing and Configuring Spark (on YARN and Standalone)
 ```
@@ -574,108 +752,4 @@ Additionally, verify the settings in *server.properties* are sane for your syste
 Once complete, the Kafka service can be started by running the following command.
 ```
 sudo -u hadoop $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &
-```
-
-## Installing and Configuring Hive
-
-* Install Mysql
-
-* Create metastore database
-
-* Locate schema $HIVE_HOME/scripts/metastore/upgrade/mysql/hive-schema-x.x.x.mysql.sql
-   edit and search for the txn-schema file to update fully-qualified path.
-
-* source schema
-
-* Configure hive-site.xml
-
-```
-<configuration>
-  <property>
-     <name>mapred.reduce.tasks</name>
-     <value>-1</value>
-     <description>The default number of reduce tasks per job.</description>
-  </property>
-
-  <property>
-     <name>hive.exec.scratchdir</name>
-     <value>/tmp/hive</value>
-     <description>Scratch space for Hive jobs</description>
-  </property>
-
-  <property>
-     <name>hive.metastore.warehouse.dir</name>
-     <value>/user/hive/warehouse</value>
-     <description>location of default database for the warehouse</description>
-  </property>
-
-  <property>
-     <name>hive.enforce.bucketing</name>
-     <value>true</value>
-     <description>Whether bucketing is enforced. If true, while inserting into the table, bu
-cketing is enforced. </description>
-  </property>
-
-  <property>
-     <name>hive.hwi.war.file</name>
-     <value>lib/hive-hwi-1.2.1.jar</value>
-     <description>This sets the path to the HWI  file, relative to${HIVE_HOME}</description>
-  </property>
-
-  <property>
-    <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://dbhost/metastore?createDatabaseIfNotExist=true</value>
-    <description>JDBC connect string for a JDBC metastore</description>
-  </property>
-
-  <property>
-    <name>javax.jdo.option.ConnectionDriverName</name>
-    <value>com.mysql.jdbc.Driver</value>
-    <description>Driver class name for a JDBC metastore</description>
-  </property>
-
-  <property>
-    <name>javax.jdo.option.ConnectionUserName</name>
-    <value>hive</value>
-  </property>
-
-  <property>
-    <name>javax.jdo.option.ConnectionPassword</name>
-    <value>hivesql</value>
-  </property>
-
-  <property>
-    <name>hive.metastore.uris</name>
-    <value>thrift://hostname:9083</value>
-    <description>IP address (or fqdn) and port of the metastore host</description>
-  </property>
-
-  <property>
-    <name>datanucleus.fixedDatastore</name>
-    <value>true</value>
-  </property>
-
-  <property>
-    <name>datanucleus.autoCreateSchema</name>
-    <value>false</value>
-  </property>
-
-</configuration>
-```
-
-test with:
-
-```
-./bin/hive -hiveconf hive.root.logger=DEBUG,console
-```
-
-Start the MetaStore via
-
-```
-$HIVE_HOME/bin/hive --service metastore
-```
-
-Note that this does not daemonize properly, so a better way might be to use nohup
-```
-nohup $HIVE_HOME/bin/hive --service metastore > /var/tmp/hivemetastore.log
 ```
