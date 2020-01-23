@@ -2,12 +2,13 @@ TDH Manager ( tdh-mgr )
 =======================
 
 ## Overview
+
   TDH is a custom Hadoop distribution based on Apache Hadoop and related
 Apache components such as Hive, HBase, Kafka, and Spark. It was created to
 serve as a local development environment running natively on a linux
 host as a pseudo-distributed cluster (a single node acting as both master
 and worker).  It evolved into creating a multi-node cluster with a set of
-bash scripts for management, ansible for deployment and updates, and
+bash scripts for management, Ansible for deployment and updates, and
 a git repo for managing cluster configs.
 
   The *tdh-mgr* project provides the set of management scripts for various
@@ -49,8 +50,16 @@ via the environment using `TDH_ECOSYSTEM_INITS`. Each component has its own
 script with the same options (Note, a 'restart' option is generally not
 provided intentionally).
 
-  The *conf* directory provides a sample cluster configuration in a manner
+  The *tdh-config* directory provides sample cluster configurations in a manner
 that allows for a given environment config to be 'overlaid' onto the cluster
 directory (eg. /opt/TDH). It provides a pair of examples for a distributed
 cluster and of a single, pseudo-distributed node. This can be used as the
 template for a separately tracked git repo for managing configurations.
+```
+cd ..
+mkdir myconfigdir
+rsync -av ./tdh-mgr/tdh-config/ ./myconfigdir/
+cd ./myconfigdir
+mv distributed-example myclusterenv
+git init
+```
