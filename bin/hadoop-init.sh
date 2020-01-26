@@ -80,7 +80,7 @@ show_status()
         return 3
     fi
 
-    echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
+    echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
 
     # HDFS Primary Namenode
     #
@@ -91,9 +91,9 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " HDFS Namenode (pri)    | \e[32m\e[1m OK \e[0m | [${NN_HOST}:${PID}]"
+        echo -e " HDFS Namenode (pri)    | $C_GRN OK $C_NC | [${NN_HOST}:${PID}]"
     else
-        echo -e " HDFS Namenode (pri)    | \e[31m\e[1mDEAD\e[0m | [$NN_HOST]"
+        echo -e " HDFS Namenode (pri)    | ${C_RED}DEAD$C_NC | [$NN_HOST]"
     fi
 
     # HDFS Secondary Namenode
@@ -105,9 +105,9 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " HDFS NameNode (sec)    | \e[32m\e[1m OK \e[0m | [${SN_HOST}:${PID}]"
+        echo -e " HDFS NameNode (sec)    | $C_GRN OK $C_NC | [${SN_HOST}:${PID}]"
     else
-        echo -e " HDFS Namenode (sec)    | \e[31m\e[1mDEAD\e[0m | [${SN_HOST}]"
+        echo -e " HDFS Namenode (sec)    | ${C_RED}DEAD$C_NC | [${SN_HOST}]"
     fi
 
     # YARN ResourceManager
@@ -119,9 +119,9 @@ show_status()
     fi
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " YARN ResourceManager   | \e[32m\e[1m OK \e[0m | [${RM_HOST}:${PID}]"
+        echo -e " YARN ResourceManager   | $C_GRN OK $C_NC | [${RM_HOST}:${PID}]"
     else
-        echo -e " YARN ResourceManager   | \e[31m\e[1mDEAD\e[0m | [${RM_HOST}]"
+        echo -e " YARN ResourceManager   | ${C_RED}DEAD$C_NC | [${RM_HOST}]"
     fi
 
     set -f
@@ -139,18 +139,18 @@ show_status()
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " HDFS Datanode          | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
+            echo -e " HDFS Datanode          | $C_GRN OK $C_NC | [${dn}:${PID}]"
         else
-            echo -e " HDFS Datanode          | \e[31m\e[1mDEAD\e[0m | [${dn}]"
+            echo -e " HDFS Datanode          | ${C_RED}DEAD$C_NC | [${dn}]"
         fi
 
         check_remote_process $dn $NM_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " YARN NodeManager       | \e[32m\e[1m OK \e[0m | [${dn}:${PID}]"
+            echo -e " YARN NodeManager       | $C_GRN OK $C_NC | [${dn}:${PID}]"
         else
-            echo -e " YARN NodeManager       | \e[31m\e[1mDEAD\e[0m | [$dn]"
+            echo -e " YARN NodeManager       | ${C_RED}DEAD$C_NC | [$dn]"
         fi
     done
 
@@ -193,7 +193,7 @@ case "$ACTION" in
             exit $rt
         fi
 
-        echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
+        echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
 
         echo "Starting HDFS..."
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh 2>&1 > /dev/null )
@@ -203,7 +203,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
+        echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
 
         echo "Stopping YARN [${RM_HOST}:${PID}]..."
         ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
@@ -219,7 +219,7 @@ case "$ACTION" in
         ;;
 
     --version|-V)
-        echo -e " -------- \e[96m$HADOOP_VER\e[0m --------- "
+        echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
         version
         ;;
     *)

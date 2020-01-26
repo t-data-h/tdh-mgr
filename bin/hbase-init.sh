@@ -69,9 +69,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " HBase Master           | \e[32m\e[1m OK \e[0m | [${HBASE_MASTER}:${PID}]"
+        echo -e " HBase Master           | $C_GRN OK $C_NC | [${HBASE_MASTER}:${PID}]"
     else
-        echo -e " HBase Master           | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
+        echo -e " HBase Master           | ${C_RED}DEAD$C_NC | [$HBASE_MASTER]"
     fi
 
     if [ $islo -eq 0 ]; then
@@ -82,9 +82,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " HBase ThriftServer     | \e[32m\e[1m OK \e[0m | [${HBASE_MASTER}:${PID}]"
+        echo -e " HBase ThriftServer     | $C_GRN OK $C_NC | [${HBASE_MASTER}:${PID}]"
     else
-        echo -e " HBase ThriftServer     | \e[31m\e[1mDEAD\e[0m | [$HBASE_MASTER]"
+        echo -e " HBase ThriftServer     | ${C_RED}DEAD$C_NC | [$HBASE_MASTER]"
     fi
 
     echo -e "      -------------     |------|"
@@ -98,9 +98,9 @@ show_status()
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " HBase RegionServer     | \e[32m\e[1m OK \e[0m | [${rs}:${PID}]"
+            echo -e " HBase RegionServer     | $C_GRN OK $C_NC | [${rs}:${PID}]"
         else
-            echo -e " HBase RegionServer     | \e[31m\e[1mDEAD\e[0m | [$rs]"
+            echo -e " HBase RegionServer     | ${C_RED}DEAD$C_NC | [$rs]"
         fi
     done
 
@@ -115,7 +115,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo -e " -------- \e[96m$HBASE_VER\e[0m ---------- "
+echo -e " -------- ${C_CYN}${HBASE_VER}${C_NC} ---------- "
 
 if [ -z "$HBASE_MASTER" ]; then
     echo "Error determining HBase Master host! Aborting.."
