@@ -50,9 +50,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Spark Standalone        [$PID]"
+        echo -e " Spark Standalone       | $C_GRN OK $C_NC | [$PID]"
     else
-        echo -e " Spark Standalone Server not running"
+        echo -e " Spark Standalone       | ${C_RED}DEAD${C_NC} |"
     fi
 
     return $rt
@@ -62,7 +62,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo -e " ------ \e[96m$SPARK_VER\e[0m ------- "
+echo -e " ------ ${C_CYN}${SPARK_VER}${C_NC} ------- "
 
 case "$ACTION" in
     'start')
