@@ -6,7 +6,7 @@
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 export TDH_ENV_USER=1
-export TDH_VERSION="1.3.1"
+export TDH_VERSION="1.3.2"
 
 # JAVA_HOME should already be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
@@ -63,9 +63,13 @@ if [ -f "/etc/kafka/conf/kafka-client.conf" ]; then
 fi
 
 # Highlighting
-C_GRN='\e[32m\e[1m'
 C_RED='\e[31m\e[1m'
+C_GRN='\e[32m\e[1m'
+C_YEL='\e[93m'  # 33 dim, 93 bright
+C_BLU='\e[34m\e[1m'
+C_MAG='\e[95m'
 C_CYN='\e[96m'
+C_WHT='\e[97m'
 C_NC='\e[0m'
 
 # -----------------------------------------------
