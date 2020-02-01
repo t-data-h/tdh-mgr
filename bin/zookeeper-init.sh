@@ -92,7 +92,7 @@ case "$ACTION" in
             fi
 
             echo "Starting Zookeeper  [${zk}]"
-            ( ssh $zk "${ZOOKEEPER_HOME}/bin/zkServer.sh start 2>&1 > /dev/null" )
+            ( ssh $zk "${ZOOKEEPER_HOME}/bin/zkServer.sh start 2>&1 >/dev/null" > /dev/null )
 
             rt=$?
         done
@@ -105,7 +105,7 @@ case "$ACTION" in
             rt=$?
             if [ $rt -eq 0 ]; then
                 echo "Stopping Zookeeper [${zk}:${PID}]"
-                ( ssh $zk "$ZOOKEEPER_HOME/bin/zkServer.sh stop 2>&1 > /dev/null" )
+                ( ssh $zk "$ZOOKEEPER_HOME/bin/zkServer.sh stop 2>&1 >/dev/null" > /dev/null )
                 rt=$?
             else
                 echo "Zookeeper not found."
