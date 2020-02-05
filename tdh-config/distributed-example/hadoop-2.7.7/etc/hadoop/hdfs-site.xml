@@ -46,6 +46,10 @@
         <value>1</value>
     </property>
     <property>
+        <name>dfs.blocksize</name>
+        <value>268435456</value>
+    </property>
+    <property>
         <name>dfs.name.dir</name>
         <value>file:///data/hdfs/nn</value>
     </property>
