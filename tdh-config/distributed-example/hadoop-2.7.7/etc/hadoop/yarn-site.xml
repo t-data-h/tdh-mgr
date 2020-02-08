@@ -35,15 +35,31 @@
         <name>yarn.resourcemanager.admin.address</name>
         <value>tdh-m01:8033</value>
     </property>
-    <!--
     <property>
         <name>yarn.nodemanager.bind-host</name>
         <value>0.0.0.0</value>
     </property>
-    -->
+
     <property>
         <name>yarn.nodemanager.local-dirs</name>
         <value>/data/hdfs/nm/nm-local-dir</value>
+    </property>
+
+    <property>
+        <name>yarn.resourcemanager.proxy-user-privileges.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.client.thread-count</name>
+        <value>50</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.scheduler.client.thread-count</name>
+        <value>50</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.admin.client.thread-count</name>
+        <value>1</value>
     </property>
 
     <property>
@@ -61,6 +77,10 @@
     <property>
         <name>yarn.scheduler.maximum-allocation-vcores</name>
         <value>4</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.increment-allocation-vcores</name>
+        <value>1</value>
     </property>
 
     <property>
