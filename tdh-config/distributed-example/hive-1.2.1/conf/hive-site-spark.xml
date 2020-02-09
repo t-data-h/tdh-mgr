@@ -73,7 +73,7 @@
 
   <property>
     <name>hive.metastore.uris</name>
-    <value>thrift://tdh-m02:9083</value>
+    <value>thrift://tdh-m03:9083</value>
     <description>IP address (or hostname) and port of the metastore host</description>
   </property>
 
