@@ -53,6 +53,8 @@ that do not have a hadoop distribution installed the flag should not be used.
 Note the `--name` parameter used to label the specific build.
 
 ### Spark v1.6.x
+Note that Spark 1.6 uses -Phadoop2.6 and has no profile for 2.7. Additionally,
+1.6 uses Scala 2.11 only.
 ```
 export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
 ./make-distribution.sh --name custom-spark --tgz --skip-java-test -Phadoop-2.6 \

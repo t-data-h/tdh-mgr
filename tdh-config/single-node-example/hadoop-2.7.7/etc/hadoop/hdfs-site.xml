@@ -41,14 +41,7 @@
         <name>dfs.datanode.ipc.address</name>
         <value>0.0.0.0:50020</value>
     </property>
-    <property>
-        <name>dfs.replication</name>
-        <value>1</value>
-    </property>
-    <property>
-        <name>dfs.blocksize</name>
-        <value>268435456</value>
-    </property>
+
     <property>
         <name>dfs.name.dir</name>
         <value>file:///data/hdfs/namenode</value>
@@ -57,8 +50,34 @@
         <name>dfs.data.dir</name>
         <value>file:///data/hdfs/datanode</value>
     </property>
+
+    <property>
+        <name>dfs.datanode.failed.volumes.tolerated</name>
+        <value>0</value>
+    </property>
+    <property>
+        <name>dfs.client.read.shortcircuit</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>dfs.blocksize</name>
+        <value>268435456</value>
+    </property>
+
     <property>
         <name>dfs.webhdfs.enable</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>dfs.permissions.supergroup</name>
+        <value>wheel</value>
+    </property>
+    <property>
+        <name>dfs.namenodes.acls.enabled</name>
         <value>true</value>
     </property>
 </configuration>

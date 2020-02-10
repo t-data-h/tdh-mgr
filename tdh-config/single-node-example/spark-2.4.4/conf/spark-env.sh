@@ -64,7 +64,7 @@
 # - SPARK_IDENT_STRING  A string representing this instance of spark. (Default: $USER)
 # - SPARK_NICENESS      The scheduling priority for daemons. (Default: 0)
 
-SPARK_MASTER_HOST="10.10.10.60"
+SPARK_MASTER_HOST="10.10.10.65"
 SPARK_WORKER_CORES="4"
 
 export STANDALONE_SPARK_MASTER_HOST=`hostname`
@@ -118,7 +118,7 @@ export HADOOP_CONF_DIR=${HADOOP_CONF_DIR:-/etc/hadoop/conf}
 
 if [[ -d $SPARK_HOME/python ]]
 then
-    for i in
+    for i in $SPARK_HOME/python/lib
     do
         SPARK_DIST_CLASSPATH=${SPARK_DIST_CLASSPATH}:$i
     done

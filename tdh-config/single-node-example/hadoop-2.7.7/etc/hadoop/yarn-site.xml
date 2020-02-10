@@ -14,7 +14,6 @@
 -->
 <configuration>
     <!-- Site specific YARN configuration properties -->
-
     <property>
         <name>yarn.resourcemanager.address</name>
         <value>callisto:8050</value>
@@ -35,16 +34,38 @@
         <name>yarn.resourcemanager.admin.address</name>
         <value>callisto:8033</value>
     </property>
-    <!--
     <property>
         <name>yarn.nodemanager.bind-host</name>
         <value>0.0.0.0</value>
     </property>
+
+    <!--
+    <property>
+        <name>yarn.nodemanager.local-dirs</name>
+        <value>/data/hdfs/nm/nm-local-dir</value>
+    </property>
     -->
 
     <property>
+        <name>yarn.resourcemanager.proxy-user-privileges.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.client.thread-count</name>
+        <value>10</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.scheduler.client.thread-count</name>
+        <value>10</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.admin.client.thread-count</name>
+        <value>1</value>
+    </property>
+
+    <property>
         <name>yarn.scheduler.minimum-allocation-mb</name>
-        <value>512</value>
+        <value>1024</value>
     </property>
     <property>
         <name>yarn.scheduler.maximum-allocation-mb</name>
@@ -57,6 +78,10 @@
     <property>
         <name>yarn.scheduler.maximum-allocation-vcores</name>
         <value>4</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.increment-allocation-vcores</name>
+        <value>1</value>
     </property>
 
     <property>

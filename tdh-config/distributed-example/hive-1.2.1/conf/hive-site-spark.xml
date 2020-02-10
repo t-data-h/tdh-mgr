@@ -87,4 +87,111 @@
     <value>false</value>
   </property>
 
+  <property>
+    <name>hive.groupby.skewindata</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>hive.exec.parallel</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>hive.auto.convert.join</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>hive.querylog.location</name>
+    <value>/var/log/hadoop/hive</value>
+  </property>
+
+  <property>
+    <name>hive.warehouse.subdir.inherit.perms</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>hive.support.concurrency</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>hive.server2.enable.doAs</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>hive.metastore.metrics.enabled</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>hive.server2.metrics.enabled</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>hive.service.metrics.file.location</name>
+    <value>/var/log/hadoop/hive/metrics-hive/hive.json</value>
+  </property>
+
+  <property>
+    <name>hive.service.metrics.file.frequency</name>
+    <value>10s</value>
+  </property>
+
+  <property>
+    <name>hive.exec.compress.output</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>mapred.output.compression.codec</name>
+    <value>org.apache.hadoop.io.compress.SnappyCodec</value>
+  </property>
+
+  <property>
+    <name>mapred.output.compression.type</name>
+    <value>BLOCK</value>
+  </property>
+
+  <property>
+    <name>hive.exec.compress.intermediate</name>
+    <value>true</value>
+  </property>
+
+  <!-- For Hive on Spark -->
+
+  <property>
+    <name>spark.yarn.jar</name>
+    <value>hdfs://tdh-m01/user/spark/lib/spark-assembly-1.6.3-hadoop2.7.4.jar</value>
+  </property>
+
+  <property>
+    <name>spark.master</name>
+    <value>yarn-cluster</value>
+  </property>
+
+  <property>
+    <name>spark.eventLog.enabled</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>spark.eventLog.dir</name>
+    <value>hdfs://tdh-m01/tmp/spark/applicationHistory</value>
+  </property>
+
+  <property>
+    <name>spark.executor.memory</name>
+    <value>2g</value>
+  </property>
+
+  <property>
+    <name>spark.serializer</name>
+    <value>org.apache.spark.serializer.KryoSerializer</value>
+  </property>
+
 </configuration>
