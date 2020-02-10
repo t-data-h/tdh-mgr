@@ -2,11 +2,11 @@
 #
 #  tdh-env-user.sh  -  Sets up the environment for TDH components.
 #
-#  Timothy C. Arland <tcarland@gmail.com>
+# 
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 export TDH_ENV_USER=1
-export TDH_VERSION="1.3.9"
+export TDH_VERSION="1.4.1"
 
 # JAVA_HOME should already be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
