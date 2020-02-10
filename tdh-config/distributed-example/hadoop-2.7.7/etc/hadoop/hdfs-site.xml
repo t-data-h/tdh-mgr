@@ -53,7 +53,7 @@
 
     <property>
         <name>dfs.datanode.failed.volumes.tolerated</name>
-        <value>0</value>
+        <value>1</value>
     </property>
     <property>
         <name>dfs.client.read.shortcircuit</name>
@@ -74,7 +74,7 @@
     </property>
     <property>
         <name>dfs.permissions.supergroup</name>
-        <value>wheel</value>
+        <value>adm</value>
     </property>
     <property>
         <name>dfs.namenodes.acls.enabled</name>
