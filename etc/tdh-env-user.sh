@@ -2,16 +2,15 @@
 #
 #  tdh-env-user.sh  -  Sets up the environment for TDH components.
 #
-# 
+#
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 export TDH_ENV_USER=1
-export TDH_VERSION="1.4.2"
+export TDH_VERSION="1.4.3"
 
 # JAVA_HOME should already be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
-    echo "Error JAVA_HOME is not set"
-    exit 1
+    echo "WARNING! JAVA_HOME is not set"
 fi
 
 export HADOOP_USER="${USER}"
