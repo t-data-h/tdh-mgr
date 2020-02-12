@@ -11,11 +11,15 @@ etchadoop="/etc/hadoop"
 
 
 if [ -z "$hadooproot" ]; then
-    hadooproot="/opt/TDH"
+    if [ -n "$HADOOP_ROOT" ]; then
+        hadooproot="$HADOOP_ROOT"
+    else
+        hadooproot="/opt/TDH"
+    fi
 fi
 
 if ! [ -d "$hadooproot" ]; then
-    echo "Error locating TDH root"
+    echo "Error locating TDH root directory"
     echo ""
     echo "Usage: $PNAME <TDH_ROOT>"
     exit 1
@@ -30,8 +34,8 @@ if [ -e "$etchadoop" ]; then
     fi
 fi
 
+echo "   ( ln -s ${hadooproot}/etc $etchadoop )"
 ( sudo ln -s ${hadooproot}/etc $etchadoop )
-echo "HADOOP_ROOT/etc linked to $etchadoop"
 
 if [ "$hadooproot" == "/opt/hadoop" ]; then
     echo "HADOOP_ROOT set to $hadooproot"
