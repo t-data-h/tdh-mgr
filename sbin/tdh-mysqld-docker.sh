@@ -30,7 +30,7 @@ fi
 docker_image="mysql/mysql-server:5.7"
 
 name="tdh-mysql1"
-mycnf="${tdh_path}/../etc/mysqld-tdh.cnf"
+mycnf="${HADOOP_ENV_PATH}/etc/mysqld-tdh.cnf"
 port="3306"
 network=
 volname=
