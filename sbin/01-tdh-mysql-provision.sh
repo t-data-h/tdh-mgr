@@ -8,7 +8,7 @@ AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 hivedb="metastore"
 hive_schema_path="/opt/TDH/hive/scripts/metastore/upgrade/mysql"
-hive_schema="${hive_schema_path}/hive-schema-1.2.0.mysql.sql"
+hive_schema="${hive_schema_path}/hive-schema-2.3.0.mysql.sql"
 rt=
 
 
