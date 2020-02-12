@@ -101,8 +101,8 @@ case "$ACTION" in
                 exit $rt
             fi
 
-            echo "Starting Kafka Broker on ${broker}"
-            ( ssh $broker "${KAFKA_HOME}/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG 2>&1 > /dev/null" )
+            echo "Starting Kafka Broker.. [${broker}]"
+            ( ssh $broker "${KAFKA_HOME}/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG > /dev/null 2>&1" )
 
             rt=$?
         done
@@ -116,7 +116,7 @@ case "$ACTION" in
             rt=$?
             if [ $rt -eq 0 ]; then
                 echo "Stopping Kafka Broker [${broker}:${PID}]"
-                ( ssh $broker "$KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null" )
+                ( ssh $broker "$KAFKA_HOME/bin/kafka-server-stop.sh > /dev/null 2>&1" )
                 rt=$?
             else
                 echo "Kafka Broker not found."

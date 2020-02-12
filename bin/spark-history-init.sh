@@ -82,8 +82,8 @@ case "$ACTION" in
             exit $rt
         fi
 
-        echo "Starting Spark2 HistoryServer on $SHS_HOST"
-        ( ssh $SHS_HOST "$SPARK_HOME/sbin/start-history-server.sh 2>&1 > /dev/null" )
+        echo "Starting Spark2 HistoryServer [$SHS_HOST]"
+        ( ssh $SHS_HOST "$SPARK_HOME/sbin/start-history-server.sh > /dev/null 2>&1" )
 
         rt=$?
         ;;
@@ -94,7 +94,7 @@ case "$ACTION" in
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping Spark2 HistoryServer [$PID]"
-            ( ssh $SHS_HOST "$SPARK_HOME/sbin/stop-history-server.sh 2>&1 > /dev/null" )
+            ( ssh $SHS_HOST "$SPARK_HOME/sbin/stop-history-server.sh > /dev/null 2>&1" )
         else
             echo "Spark2 HistoryServer not found.."
         fi

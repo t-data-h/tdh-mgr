@@ -56,7 +56,7 @@ case "$ACTION" in
         if [ $rt -eq 0 ]; then
             echo "Mysql Daemon already running [$PID]"
         else
-            echo "Starting mysqld container..."
+            echo "Starting mysqld container.. [${TDH_DOCKER_MYSQL}]"
             ( docker start $TDH_DOCKER_MYSQL > /dev/null )
         fi
         rt=0
@@ -66,10 +66,10 @@ case "$ACTION" in
         check_process "$TDHMYSQL"
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping Mysql Container $TDH_DOCKER_MYSQL [$PID]..."
+            echo "Stopping Mysql Container.. [${TDH_DOCKER_MYSQL}:$PID]"
             ( docker stop $TDH_DOCKER_MYSQL > /dev/null )
         else
-            echo " Mysqld not running or not found."
+            echo " mysqld not running or not found."
         fi
         rt=0
         ;;

@@ -6,7 +6,7 @@
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
 export TDH_ENV_USER=1
-export TDH_VERSION="1.4.4"
+export TDH_VERSION="1.4.5"
 
 # JAVA_HOME should already be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
@@ -24,7 +24,7 @@ export HADOOP_PID_DIR="/tmp"
 if [ -z "$HADOOP_CONF_DIR" ]; then
     echo "=> Warning! HADOOP_CONF_DIR is not set!"
     export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
-    echo "=> Setting default HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
+    echo "=> Setting default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
 fi
 
 # Set components home
@@ -36,8 +36,10 @@ export ZOOKEEPER_HOME="$HADOOP_ROOT/zookeeper"
 export HBASE_HOME="$HADOOP_ROOT/hbase"
 export HBASE_CONF_DIR="$HBASE_HOME/conf"
 export HIVE_HOME="$HADOOP_ROOT/hive"
+export HIVE_CONF_DIR="$HIVE_HOME/conf"
 export KAFKA_HOME="$HADOOP_ROOT/kafka"
 export SPARK_HOME="$HADOOP_ROOT/spark"
+export SPARK_CONF_DIR="$SPARK_HOME/conf"
 
 # bin path
 export HADOOP_PATH="\
@@ -50,7 +52,8 @@ $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
 
 # set a mysqld docker container by name
-export TDH_DOCKER_MYSQL="tdh-mysql1"
+# this alone has no effect, but with TDH_ECOSYSTEM_INITS+='mysqld-tdh-init.sh'
+export TDH_DOCKER_MYSQL="tdh-mysql01"
 
 # Kafka
 if [ -f "/etc/kafka/jaas.conf" ]; then

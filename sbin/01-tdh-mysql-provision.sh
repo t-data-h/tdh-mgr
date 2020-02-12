@@ -93,4 +93,5 @@ if [ $rt -ne 0 ]; then
     echo "Error in import of hive metastore schema"
 fi
 
+echo "$PNAME finished."
 exit $rt

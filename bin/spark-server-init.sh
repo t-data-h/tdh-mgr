@@ -75,7 +75,7 @@ case "$ACTION" in
         fi
 
         echo "Starting Spark Standalone..."
-        ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/start-all.sh )
+        ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/start-all.sh > /dev/null 2>&1 )
         ;;
 
     'stop')
@@ -84,7 +84,7 @@ case "$ACTION" in
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping Spark Standalone..."
-            ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/stop-all.sh )
+            ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/stop-all.sh > /dev/null 2>&1 )
         else
             echo " Spark Master not running.."
         fi
