@@ -51,7 +51,6 @@ show_status()
 {
     local rt=0
 
-    IFS=$','
     for broker in ${BROKERS}; do
         broker=$( echo $broker | awk -F: '{ print $1 }' )
         #broker=${broker%% *}
@@ -74,7 +73,6 @@ show_status()
 #  MAIN
 # =================
 
-
 ACTION="$1"
 CONFIG="$2"
 rt=0
@@ -90,11 +88,12 @@ if [ -z "${BROKERS}" ]; then
     exit 1
 fi
 
+IFS=$','
+
 echo -e " ------ ${C_CYN}${KAFKA_VER}${C_NC} ------- "
 
 case "$ACTION" in
     'start')
-        IFS=$','
         for broker in ${BROKERS}; do
             broker=$( echo $broker | awk -F: '{ print $1 }' )
             check_remote_process $broker $KAFKA_ID
@@ -114,7 +113,6 @@ case "$ACTION" in
         ;;
 
     'stop')
-        IFS=$','
         for broker in ${BROKERS}; do
             broker=$( echo $broker | awk -F: '{ print $1 }' )
             check_remote_process $broker $KAFKA_ID
