@@ -20,7 +20,7 @@ export HADOOP_YARN_USER=${HADOOP_YARN_USER:-yarn}
 export YARN_CONF_DIR="${YARN_CONF_DIR:-$HADOOP_YARN_HOME/etc/hadoop}"
 
 # some Java parameters
-# export JAVA_HOME=/usr/lib/jvm/java
+# export JAVA_HOME=/home/y/libexec/jdk1.6.0/
 if [ "$JAVA_HOME" = "" ]; then
   echo "Error: JAVA_HOME is not set."
   exit 1

@@ -42,7 +42,6 @@ def main():
       max_elements = max(max_elements, rack.count("/"))
       map[node.getAttribute("name")] = node.getAttribute("rack")
   except:
-    print("EXCEPT")
     default_rack = "".join([ DEFAULT_RACK for _ in xrange(max_elements)])
     print(default_rack)
     return -1

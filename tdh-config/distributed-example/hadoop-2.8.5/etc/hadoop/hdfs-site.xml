@@ -44,20 +44,24 @@
 
     <property>
         <name>dfs.name.dir</name>
-        <value>file:///data/hdfs/nn</value>
+        <value>file:///data01/hdfs/nn</value>
     </property>
     <property>
         <name>dfs.data.dir</name>
-        <value>file:///data/hdfs/dn</value>
+        <value>file:///data01/hdfs/dn,file:///data02/hdfs/dn</value>
     </property>
 
     <property>
         <name>dfs.datanode.failed.volumes.tolerated</name>
-        <value>1</value>
+        <value>0</value>
     </property>
     <property>
         <name>dfs.client.read.shortcircuit</name>
         <value>true</value>
+    </property>
+    <property>
+      <name>dfs.domain.socket.path</name>
+      <value>/var/run/hadoop-hdfs/dn._PORT</value>
     </property>
     <property>
         <name>dfs.replication</name>
@@ -74,7 +78,7 @@
     </property>
     <property>
         <name>dfs.permissions.supergroup</name>
-        <value>adm</value>
+        <value>wheel</value>
     </property>
     <property>
         <name>dfs.namenodes.acls.enabled</name>

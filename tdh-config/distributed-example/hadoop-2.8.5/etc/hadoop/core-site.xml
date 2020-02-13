@@ -40,33 +40,33 @@
         <value>*</value>
     </property>
     <property>
-        <name>hadoop.proxyuser.hdfs.groups</name>
-        <value>*</value>
-    </property>
-    <property>
-        <name>hadoop.proxyuser.hdfs.hosts</name>
-        <value>*</value>
-    </property>
-    <property>
-        <name>hadoop.proxyuser.yarn.hosts</name>
-        <value>*</value>
-    </property>
-    <property>
-        <name>hadoop.proxyuser.yarn.groups</name>
-        <value>*</value>
-    </property>
-
-    <property>
-        <name>hadoop.security.group.mapping</name>
-        <value>org.apache.hadoop.security.ShellBasedUnixGroupsMapping</value>
-    </property>
-    <property>
-        <name>hadoop.http.logs.enabled</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>net.topology.script.file.name</name>
-        <value>/etc/hadoop/conf/topology.py</value>
-    </property>
-
+         <name>hadoop.proxyuser.hdfs.groups</name>
+         <value>*</value>
+     </property>
+     <property>
+         <name>hadoop.proxyuser.hdfs.hosts</name>
+         <value>*</value>
+     </property>
+     <property>
+         <name>hadoop.proxyuser.yarn.hosts</name>
+         <value>*</value>
+     </property>
+     <property>
+         <name>hadoop.proxyuser.yarn.groups</name>
+         <value>*</value>
+     </property>
+     <property>
+     <name>hadoop.security.group.mapping</name>
+         <value>org.apache.hadoop.security.ShellBasedUnixGroupsMapping</value>
+     </property>
+     <property>
+         <name>hadoop.http.logs.enabled</name>
+         <value>true</value>
+     </property>
+<!--
+     <property>
+         <name>net.topology.script.file.name</name>
+         <value>/etc/hadoop/conf/topology.py</value>
+     </property>
+-->
 </configuration>

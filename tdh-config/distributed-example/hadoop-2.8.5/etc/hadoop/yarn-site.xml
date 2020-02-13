@@ -14,7 +14,6 @@
 -->
 <configuration>
     <!-- Site specific YARN configuration properties -->
-
     <property>
         <name>yarn.resourcemanager.address</name>
         <value>tdh-m01:8050</value>
@@ -42,7 +41,7 @@
 
     <property>
         <name>yarn.nodemanager.local-dirs</name>
-        <value>/data/hdfs/nm/nm-local-dir</value>
+        <value>/data01/hdfs/nm/nm-local-dir,/data02/hdfs/nm/nm-local-dir</value>
     </property>
 
     <property>
@@ -51,11 +50,11 @@
     </property>
     <property>
         <name>yarn.resourcemanager.client.thread-count</name>
-        <value>50</value>
+        <value>25</value>
     </property>
     <property>
         <name>yarn.resourcemanager.scheduler.client.thread-count</name>
-        <value>50</value>
+        <value>25</value>
     </property>
     <property>
         <name>yarn.resourcemanager.admin.client.thread-count</name>
@@ -64,11 +63,11 @@
 
     <property>
         <name>yarn.scheduler.minimum-allocation-mb</name>
-        <value>512</value>
+        <value>1024</value>
     </property>
     <property>
         <name>yarn.scheduler.maximum-allocation-mb</name>
-        <value>16384</value>
+        <value>8192</value>
     </property>
     <property>
         <name>yarn.scheduler.minimum-allocation-vcores</name>
@@ -76,7 +75,7 @@
     </property>
     <property>
         <name>yarn.scheduler.maximum-allocation-vcores</name>
-        <value>4</value>
+        <value>2</value>
     </property>
     <property>
         <name>yarn.scheduler.increment-allocation-vcores</name>
@@ -101,12 +100,12 @@
     <!-- Container memory -->
     <property>
         <name>yarn.nodemanager.resource.memory-mb</name>
-        <value>97136</value>
+        <value>12288</value>
     </property>
     <!-- Container cores -->
     <property>
         <name>yarn.nodemanager.resource.cpu-vcores</name>
-        <value>24</value>
+        <value>8</value>
     </property>
 
     <!-- Spark External Shuffle -->
