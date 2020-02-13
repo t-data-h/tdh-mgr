@@ -48,7 +48,9 @@ show_status()
 {
     local rt=0
 
-    for zk in $(cat ${ZK_CONFIG}); do
+    for zk in ${ZKS}; do
+        zk=$( echo $zk | awk -F: '{ print $1 }' )
+
         check_remote_process $zk $ZK_ID
         rt=$?
 
@@ -70,20 +72,23 @@ show_status()
 
 ACTION="$1"
 rt=0
-IFS=$'\n'
 
-if ! [ -e ${ZK_CONFIG} ]; then
+ZKS=$(getZookeepers $ZK_CONFIG)
+
+if [ -z "$ZKS" ]; then
     echo "Error locating Zookeeper host config: '${ZK_CONFIG}'"
     exit 1
 fi
+
 
 echo -e " ------ ${C_CYN}${ZK_VER}${C_NC} ------- "
 
 case "$ACTION" in
     'start')
-        for zk in $(cat ${ZK_CONFIG}); do
-            check_remote_process $zk $ZK_ID
+        for zk in ${ZKS}; do
+            zk=$( echo $zk | awk -F: '{ print $1 }' )
 
+            check_remote_process $zk $ZK_ID
             rt=$?
 
             if [ $rt -eq 0 ]; then
@@ -99,10 +104,12 @@ case "$ACTION" in
         ;;
 
     'stop')
-        for zk in $(cat ${ZK_CONFIG}); do
-            check_remote_process $zk $ZK_ID
+        for zk in ${ZKS}; do
+            zk=$( echo $zk | awk -F: '{ print $1 }' )
 
+            check_remote_process $zk $ZK_ID
             rt=$?
+
             if [ $rt -eq 0 ]; then
                 echo "Stopping Zookeeper.. [${zk}:${PID}]"
                 ( ssh $zk "$ZOOKEEPER_HOME/bin/zkServer.sh stop > /dev/null 2>&1" )

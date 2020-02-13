@@ -36,7 +36,7 @@ KAFKA_ID="kafka.Kafka"
 KAFKA_CFG="config/server.properties"
 
 HOST=$(hostname -s)
-BROKERS="${KAFKA_HOME}/config/brokers"
+BROKERSFILE="${KAFKA_HOME}/config/brokers"
 
 # -----------
 
@@ -51,8 +51,11 @@ show_status()
 {
     local rt=0
 
-    for broker in $(cat ${BROKERS}); do
-        broker=${broker%% *}
+    IFS=$','
+    for broker in ${BROKERS}; do
+        broker=$( echo $broker | awk -F: '{ print $1 }' )
+        #broker=${broker%% *}
+
         check_remote_process $broker $KAFKA_ID
         rt=$?
 
@@ -75,14 +78,15 @@ show_status()
 ACTION="$1"
 CONFIG="$2"
 rt=0
-IFS=$'\n'
 
 if [ -n "$CONFIG" ]; then
     KAFKA_CFG="$CONFIG"
 fi
 
-if ! [ -e ${BROKERS} ]; then
-    echo "Error locating broker host config: '${BROKERS}'"
+BROKERS=$(getBrokers $brokersfile)
+
+if [ -z "${BROKERS}" ]; then
+    echo "Error getting brokers from host config: '${BROKERSFILE}'"
     exit 1
 fi
 
@@ -90,8 +94,9 @@ echo -e " ------ ${C_CYN}${KAFKA_VER}${C_NC} ------- "
 
 case "$ACTION" in
     'start')
-        for broker in $(cat ${BROKERS}); do
-            broker=${broker%% *}
+        IFS=$','
+        for broker in ${BROKERS}; do
+            broker=$( echo $broker | awk -F: '{ print $1 }' )
             check_remote_process $broker $KAFKA_ID
 
             rt=$?
@@ -109,8 +114,9 @@ case "$ACTION" in
         ;;
 
     'stop')
-        for broker in $(cat ${BROKERS}); do
-            broker=${broker%% *}
+        IFS=$','
+        for broker in ${BROKERS}; do
+            broker=$( echo $broker | awk -F: '{ print $1 }' )
             check_remote_process $broker $KAFKA_ID
 
             rt=$?

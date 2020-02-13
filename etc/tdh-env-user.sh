@@ -53,7 +53,7 @@ $SPARK_HOME/bin"
 
 # set a mysqld docker container by name
 # this alone has no effect, but with TDH_ECOSYSTEM_INITS+='mysqld-tdh-init.sh'
-export TDH_DOCKER_MYSQL="tdh-mysql01"
+export TDH_DOCKER_MYSQL="tdh-mysql1"
 
 # Kafka
 if [ -f "/etc/kafka/jaas.conf" ]; then
@@ -195,4 +195,31 @@ function hconf()
         export HADOOP_CONF_DIR="$1"
     fi
     echo "HADOOP_CONF_DIR=$HADOOP_CONF_DIR"
+}
+
+
+function getBrokers()
+{
+    local brokersfile=${1:-${KAFKA_HOME}/config/brokers}
+    local tmpifs=$IFS
+
+    IFS=$'\n'
+    BROKERS=$( cat ${brokersfile} | awk '{ print $1 }' | paste -s -d, - )
+    export BROKERS
+    IFS=$tmpifs
+
+    echo "$BROKERS"
+}
+
+function getZookeepers()
+{
+    local zoomasters=${1:-${ZOOKEEPER_HOME}/conf/masters}
+    local tmpifs=$IFS
+
+    IFS=$'\n'
+    ZKS=$( cat ${zoomasters} | paste -s -d, - )
+    export ZKS
+    IFS=$tmpifs
+
+    echo "$ZKS"
 }
