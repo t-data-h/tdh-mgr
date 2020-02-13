@@ -79,7 +79,7 @@ case "$ACTION" in
             echo "Stopping Hue [$PID]..."
             ( sudo -u $HADOOP_USER kill $PID )
             sleep 1
-            ( sudo -u $HADOOP_USER killall hue > /dev/null )
+            ( sudo -u $HADOOP_USER killall hue > /dev/null 2>&1 )
         else
             echo "Hue Server not found..."
         fi

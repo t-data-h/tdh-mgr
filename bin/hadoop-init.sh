@@ -195,21 +195,21 @@ case "$ACTION" in
 
         echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
 
-        echo "Starting HDFS..."
-        ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh 2>&1 > /dev/null )
+        echo "Starting HDFS.."
+        ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh > /dev/null 2>&1 )
 
-        echo "Starting YARN..."
-        ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/start-yarn.sh 2>&1 > /dev/null )
+        echo "Starting YARN.."
+        ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/start-yarn.sh > /dev/null 2>&1 )
         ;;
 
     'stop')
         echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
 
-        echo "Stopping YARN [${RM_HOST}:${PID}]..."
-        ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh 2>&1 > /dev/null )
+        echo "Stopping YARN.. [${RM_HOST}]"
+        ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh > /dev/null 2>&1 )
 
-        echo "Stopping HDFS [${NN_HOST}:${PID}]..."
-        ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh 2>&1 > /dev/null )
+        echo "Stopping HDFS.. [${NN_HOST}]"
+        ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh > /dev/null 2>&1 )
         rt=0
         ;;
 

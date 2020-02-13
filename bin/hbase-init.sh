@@ -132,7 +132,7 @@ case "$ACTION" in
         if [ $rt -eq 0 ]; then
             echo " HBase Master is already running  [${HBASE_MASTER}:${PID}]"
         else
-            echo "Starting HBase..."
+            echo "Starting HBase Master.."
             ( $HBASE_HOME/bin/start-hbase.sh 2>&1 > /dev/null )
         fi
 
@@ -142,8 +142,8 @@ case "$ACTION" in
         if [ $rt -eq 0 ]; then
             echo " ThriftServer is already running  [${HBASE_MASTER}:${PID}]"
         else
-            echo "Starting HBase ThriftServer..."
-            ( sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start 2>&1 > $HBASE_THRIFTLOG & )
+            echo "Starting HBase ThriftServer.."
+            ( sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start > $HBASE_THRIFTLOG 2>&1 & )
         fi
         rt=0
         ;;
@@ -151,17 +151,17 @@ case "$ACTION" in
     'stop')
         check_process $HB_MASTER_ID
 
-        echo "Stopping HBase Master [${HBASE_MASTER}:${PID}]..."
-        ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh >/dev/null 2>&1 )
+        echo "Stopping HBase Master.. [${HBASE_MASTER}:${PID}]"
+        ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh > /dev/null 2>&1 )
 
         check_process $HB_THRIFT_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping HBase ThriftServer [${HBASE_MASTER}:${PID}]..."
+            echo "Stopping HBase ThriftServer.. [${HBASE_MASTER}:${PID}]"
             ( sudo -u $HADOOP_USER kill $PID )
         else
-            echo "HBase ThriftServer not found..."
+            echo "HBase ThriftServer not found"
         fi
         rt=0
         ;;

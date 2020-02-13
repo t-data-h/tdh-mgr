@@ -30,6 +30,7 @@ fi
 docker_image="mysql/mysql-server:5.7"
 
 name="tdh-mysql1"
+mycnf="${HADOOP_ENV_PATH}/etc/mysqld-tdh.cnf"
 port="3306"
 network=
 volname=
@@ -129,7 +130,7 @@ else
 fi
 
 cmd="$cmd --network $network"
-cmd="$cmd --mount type=bind,src=${tdh_path}/../etc/tdh-mysql.cnf,dst=/etc/my.cnf \
+cmd="$cmd --mount type=bind,src=${mycnf},dst=/etc/my.cnf \
 --mount type=volume,source=${volname},target=/var/lib/mysql \
 --env MYSQL_RANDOM_ROOT_PASSWORD=true \
 --env MYSQL_LOG_CONSOLE=true \

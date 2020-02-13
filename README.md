@@ -30,9 +30,9 @@ either as binaries or built from source. The supporting scripts and
 instructions are based on building a distribution using the following
 versions:
 
-- Hadoop 2.7.7
+- Hadoop 2.8.5
 - HBase  1.3.3
-- Hive   1.2.1
+- Hive   2.3.6
 - Spark  2.4.4
 - Kafka  2.2.0
 

@@ -103,13 +103,13 @@ case "$ACTION" in
 
         ( ssh $HIVE_SERVER "mkdir -p $HIVE_LOGDIR" )
 
-        echo "Starting Hive MetaStore on $HIVE_SERVER..."
-        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore >$HIVE_METASTORE_LOG 2>&1 &" )
+        echo "Starting HiveMetaStore.. [$HIVE_SERVER]"
+        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore > $HIVE_METASTORE_LOG 2>&1 &" )
 
         rt=$?
 
-        echo "Starting Hive Server2 on $HIVE_SERVER..."
-        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 >$HIVE_SERVER2_LOG 2>&1 &" )
+        echo "Starting HiveServer2..   [$HIVE_SERVER]"
+        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 > $HIVE_SERVER2_LOG 2>&1 &" )
         ;;
 
     'stop')
@@ -117,20 +117,20 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping Hive MetaStore [${HIVE_SERVER}:${PID}]..."
+            echo "Stopping Hive MetaStore.. [${HIVE_SERVER}:${PID}]"
             ( ssh $HIVE_SERVER "kill $PID" )
         else
-            echo "Hive Metastore not found..."
+            echo "Hive Metastore not found."
         fi
 
         check_remote_process $HIVE_SERVER $HIVESERVER2
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping HiveServer2 [${HIVE_SERVER}:${PID}]..."
+            echo "Stopping HiveServer2.. [${HIVE_SERVER}:${PID}]"
             ( ssh $HIVE_SERVER "kill $PID" )
         else
-            echo "Hive Server2 not found..."
+            echo "Hive Server not found."
         fi
         rt=0
         ;;

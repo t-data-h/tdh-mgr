@@ -36,7 +36,6 @@ KAFKA_ID="kafka.Kafka"
 KAFKA_CFG="config/server.properties"
 
 HOST=$(hostname -s)
-BROKERS="${KAFKA_HOME}/config/brokers"
 
 # -----------
 
@@ -51,8 +50,10 @@ show_status()
 {
     local rt=0
 
-    for broker in $(cat ${BROKERS}); do
-        broker=${broker%% *}
+    for broker in ${BROKERS}; do
+        broker=$( echo $broker | awk -F: '{ print $1 }' )
+        #broker=${broker%% *}
+
         check_remote_process $broker $KAFKA_ID
         rt=$?
 
@@ -71,27 +72,29 @@ show_status()
 #  MAIN
 # =================
 
-
 ACTION="$1"
 CONFIG="$2"
 rt=0
-IFS=$'\n'
 
 if [ -n "$CONFIG" ]; then
     KAFKA_CFG="$CONFIG"
 fi
 
-if ! [ -e ${BROKERS} ]; then
-    echo "Error locating broker host config: '${BROKERS}'"
+getBrokers
+
+if [ -z "${BROKERS}" ]; then
+    echo "Error getting brokers from host config: '${BROKERSFILE}'"
     exit 1
 fi
+
+IFS=$','
 
 echo -e " ------ ${C_CYN}${KAFKA_VER}${C_NC} ------- "
 
 case "$ACTION" in
     'start')
-        for broker in $(cat ${BROKERS}); do
-            broker=${broker%% *}
+        for broker in ${BROKERS}; do
+            broker=$( echo $broker | awk -F: '{ print $1 }' )
             check_remote_process $broker $KAFKA_ID
 
             rt=$?
@@ -101,22 +104,22 @@ case "$ACTION" in
                 exit $rt
             fi
 
-            echo "Starting Kafka Broker on ${broker}"
-            ( ssh $broker "${KAFKA_HOME}/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG 2>&1 > /dev/null" )
+            echo "Starting Kafka Broker.. [${broker}]"
+            ( ssh $broker "${KAFKA_HOME}/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG > /dev/null 2>&1" )
 
             rt=$?
         done
         ;;
 
     'stop')
-        for broker in $(cat ${BROKERS}); do
-            broker=${broker%% *}
+        for broker in ${BROKERS}; do
+            broker=$( echo $broker | awk -F: '{ print $1 }' )
             check_remote_process $broker $KAFKA_ID
 
             rt=$?
             if [ $rt -eq 0 ]; then
                 echo "Stopping Kafka Broker [${broker}:${PID}]"
-                ( ssh $broker "$KAFKA_HOME/bin/kafka-server-stop.sh 2>&1 > /dev/null" )
+                ( ssh $broker "$KAFKA_HOME/bin/kafka-server-stop.sh > /dev/null 2>&1" )
                 rt=$?
             else
                 echo "Kafka Broker not found."
