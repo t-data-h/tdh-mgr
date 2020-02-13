@@ -205,10 +205,9 @@ function getBrokers()
 
     IFS=$'\n'
     BROKERS=$( cat ${brokersfile} | awk '{ print $1 }' | paste -s -d, - )
-    export BROKERS
     IFS=$tmpifs
 
-    echo "$BROKERS"
+    export BROKERS
 }
 
 function getZookeepers()
@@ -218,8 +217,7 @@ function getZookeepers()
 
     IFS=$'\n'
     ZKS=$( cat ${zoomasters} | paste -s -d, - )
-    export ZKS
     IFS=$tmpifs
 
-    echo "$ZKS"
+    export ZKS
 }
