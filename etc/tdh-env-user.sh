@@ -53,7 +53,7 @@ $SPARK_HOME/bin"
 
 # set a mysqld docker container by name
 # this alone has no effect, but with TDH_ECOSYSTEM_INITS+='mysqld-tdh-init.sh'
-export TDH_DOCKER_MYSQL="tdh-mysql1"
+export TDH_DOCKER_MYSQL="tdh-mysql01"
 
 # Kafka
 if [ -f "/etc/kafka/jaas.conf" ]; then
