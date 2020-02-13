@@ -32,7 +32,6 @@ fi
 
 HOST=$(hostname -s)
 ZK_VER=$(readlink $ZOOKEEPER_HOME)
-ZK_CONFIG="${ZOOKEEPER_HOME}/conf/masters"
 ZK_ID="server.quorum"
 
 # -----------
@@ -73,14 +72,14 @@ show_status()
 ACTION="$1"
 rt=0
 
-ZKS=$(getZookeepers $ZK_CONFIG)
+getZookeepers
 
 if [ -z "$ZKS" ]; then
     echo "Error locating Zookeeper host config: '${ZK_CONFIG}'"
     exit 1
 fi
 
-IFS=$',' 
+IFS=$','
 
 echo -e " ------ ${C_CYN}${ZK_VER}${C_NC} ------- "
 

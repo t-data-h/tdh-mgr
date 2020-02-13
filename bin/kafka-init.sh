@@ -36,7 +36,6 @@ KAFKA_ID="kafka.Kafka"
 KAFKA_CFG="config/server.properties"
 
 HOST=$(hostname -s)
-BROKERSFILE="${KAFKA_HOME}/config/brokers"
 
 # -----------
 
@@ -81,7 +80,7 @@ if [ -n "$CONFIG" ]; then
     KAFKA_CFG="$CONFIG"
 fi
 
-BROKERS=$(getBrokers $brokersfile)
+getBrokers
 
 if [ -z "${BROKERS}" ]; then
     echo "Error getting brokers from host config: '${BROKERSFILE}'"
