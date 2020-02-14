@@ -14,6 +14,7 @@
 -->
 <configuration>
     <!-- Site specific YARN configuration properties -->
+
     <property>
         <name>yarn.resourcemanager.address</name>
         <value>callisto:8050</value>
@@ -39,12 +40,10 @@
         <value>0.0.0.0</value>
     </property>
 
-    <!--
     <property>
         <name>yarn.nodemanager.local-dirs</name>
         <value>/data/hdfs/nm/nm-local-dir</value>
     </property>
-    -->
 
     <property>
         <name>yarn.resourcemanager.proxy-user-privileges.enabled</name>
@@ -79,10 +78,6 @@
         <name>yarn.scheduler.maximum-allocation-vcores</name>
         <value>4</value>
     </property>
-    <property>
-        <name>yarn.scheduler.increment-allocation-vcores</name>
-        <value>1</value>
-    </property>
 
     <property>
         <name>yarn.nodemanager.vmem-pmem-ratio</name>
@@ -99,18 +94,6 @@
         <value>false</value>
     </property>
 
-    <!-- Container memory -->
-    <property>
-        <name>yarn.nodemanager.resource.memory-mb</name>
-        <value>16384</value>
-    </property>
-    <!-- Container cores -->
-    <property>
-        <name>yarn.nodemanager.resource.cpu-vcores</name>
-        <value>8</value>
-    </property>
-
-    <!-- Spark External Shuffle -->
     <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>spark_shuffle,mapreduce_shuffle</value>
@@ -125,8 +108,77 @@
     </property>
 
     <property>
-        <name>yarn.nodemanager.local-dirs</name>
-        <value>/data/hdfs/nm/nm-local-dir</value>
+        <name>yarn.resourcemanager.scheduler.class</name>
+        <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.allocation.file</name>
+        <value>fair-scheduler.xml</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.user-as-default-queue</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.preemption</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.preemption.cluster-utilization-threshold</name>
+        <value>0.8f</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.sizebasedweight</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.assignmultiple</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.max.assign</name>
+        <value>2</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.locality.threshold.node</name>
+        <value>-1.0</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.locality.threshold.rack</name>
+        <value>-1.0</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.allow-undeclared-pools</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.update-interval-ms</name>
+        <value>500</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.nodes.include-path</name>
+        <value>/etc/hadoop/conf/nodes_include.txt</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.nodes.exclude-path</name>
+        <value>/etc/hadoop/conf/hosts_exclude.txt</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.assignmultiple</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.dynamic.max.assign</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.max.assign</name>
+        <value>2</value>
+    </property>
+
+    <property>
+        <name>yarn.application.classpath</name>
+        <value>$HADOOP_CLIENT_CONF_DIR,$HADOOP_CONF_DIR,$HADOOP_COMMON_HOME/*,$HADOOP_COMMON_HOME/lib/*,$HADOOP_HDFS_HOME/*,$HADOOP_HDFS_HOME/lib/*,$HADOOP_YARN_HOME/*,$HADOOP_YARN_HOME/lib/*</value>
     </property>
 
     <!--
