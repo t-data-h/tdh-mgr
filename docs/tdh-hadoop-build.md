@@ -77,7 +77,7 @@ export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
  -Pyarn -Phive -Phive-thriftserver -Phadoop-provided -Pscala-2.12
 ```
 
-* By default, Spark builds with Scala 2.11, use the mvn profile
+* By default, Spark2 still builds with Scala 2.11, use the mvn profile
   or optionally update the `scala.version` property in the parent POM.
 * Optionally add `-DskipTests`
 * Kubernetes support with `-Pkubernetes`

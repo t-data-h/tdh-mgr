@@ -1,0 +1,7 @@
+*.sw*
+.vagrant
+*.retry
+*.rpm
+*.tar*
+*.jar
+*.zip

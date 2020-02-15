@@ -27,7 +27,7 @@ if [ -z "$TDH_VERSION" ]; then
 fi
 # -----------
 
-# default init script list
+# default init list
 # add mysqld-tdh-init.sh  for a local docker instance of mysql
 INITS="hadoop-init.sh zookeeper-init.sh hbase-init.sh hive-init.sh \
 kafka-init.sh spark-history-init.sh"

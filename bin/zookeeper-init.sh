@@ -68,8 +68,8 @@ show_status()
 #  MAIN
 # =================
 
-
 ACTION="$1"
+IFS=$','
 rt=0
 
 getZookeepers
@@ -79,13 +79,10 @@ if [ -z "$ZKS" ]; then
     exit 1
 fi
 
-IFS=$','
-
 echo -e " ------ ${C_CYN}${ZK_VER}${C_NC} ------- "
 
 case "$ACTION" in
     'start')
-    IFS=$','
         for zk in ${ZKS}; do
             zk=$( echo $zk | awk -F: '{ print $1 }' )
 

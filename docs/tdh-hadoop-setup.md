@@ -4,7 +4,10 @@ TDH-HADOOP
   TDH is a custom hadoop distribution with an initial configuration as a
 pseudo-distributed cluster with 1 worker node. The distribution is based
 entirely on Apache versions. This project provides a set of scripts
-for managing the environment.
+for managing the environment. Note that much of this document describing
+the TDH setup is automated through a separate project via Ansible
+called *tdh-gcp*, so while somewhat deprecated, it remains for informational
+purposes.
 
 
 ## Building the Hadoop Distribution
@@ -14,9 +17,9 @@ Apache projects or built from source. The supporting scripts and
 instructions are based on building a distribution using the following
 versions:
 
-- Hadoop 2.7.x
+- Hadoop 2.7.x or 2.8.x
 - HBase  1.3.x
-- Hive   1.2.x
+- Hive   1.2.x or 2.3.x
 - Spark  1.6.x - 2.4.x
 - Kafka  0.10.x or 2.2.x
 - Zookeeper 5.x
@@ -25,13 +28,13 @@ System Prerequisites: https://gist.github.com/tcarland/3d10c22885ec655a0c2435676
 Mysqld Configuration: https://gist.github.com/tcarland/64e300606d83782e4150ce2db053b733
 
 Of note, Mysql can be handled via a container instance (from tdh-docker) or
-installed via ansible (from tdh-gcp).
+installed via Ansible (from tdh-gcp).
 
 
 ## Prerequisites
 
 Prerequisites are described in detail by the above gist and is also automated
-via ansible in the **tdh-gcp** project.
+via Ansible in the **tdh-gcp** project.
 
 - Java JDK 1.8  
 Note that this **must** be a JDK distribution, not JRE. Oracle is only needed
@@ -51,8 +54,8 @@ recommended to disable the IPv6 stack in the Linux Kernel.
 
 * Hadoop User and Group  
   The environment generally runs well as a single user, but for an actual
-  distributed cluster create a hadoop user and group with a consistent UID and GID
-  across systems.
+  distributed cluster it may make more sense to create a hadoop user and group
+  with a consistent UID and GID across systems.
    ```
    $ UID=xxx; GID=yyy
    $ groupadd -g $GID hadoop
@@ -61,9 +64,9 @@ recommended to disable the IPv6 stack in the Linux Kernel.
 
 * Networking and DNS  
   While it is possible to run services on localhost only (loopback) for a single
-  node setup, the use of loopback does not work with distributed systems. Spark
-  especially, even in single node form, relies on `hostname -f` resolving to the
-  correct interface of the host. Essentially, all nodes should have properly
+  node setup, the use of loopback does not work well with distributed systems.
+  Spark especially, even in a single node setup, relies on `hostname -f` resolving
+  to the correct interface of the host. Essentially, all nodes should have properly
   defined hosts file where hostname is defined to a reachable IPv4 address.
    ```
    127.0.0.1    localhost
@@ -87,7 +90,7 @@ recommended to disable the IPv6 stack in the Linux Kernel.
     ```
     In the case of laptop development work which can result in unstable interfaces
     and addresses, one could use a virtual interface for the hostname under which
-    the cluster is running. The script `./sbin/pseudoint.sh` will set this
+    the cluster is running. The script `./sbin/pseudoint.sh` can be used to set this
     accordingly.
 
 * Configure SSH  
@@ -122,19 +125,19 @@ steps are automated via the `tdh-gcp` project and corresponding Ansible.
   Choose a base path for the hadoop ecosystem. eg. /opt/tdh.  
 From here, install the various ecosystem components complete with versions.
 ```
-# mkdir -p /opt/tdh && cd /opt/tdh
+# mkdir -p /opt/TDH && cd /opt/TDH
 # wget http://url/to/hadoop-2.7.1-bin.tar.gz
-# tar -zxvf hadoop-2.7.1.tar.gz
-# mv hadoop-2.7.1-bin hadoop-2.7.1
-# chown -R hadoop:hadoop hadoop-2.7.1
-# ln -s hadoop-2.7.1 hadoop
+# tar -zxvf hadoop-2.7.7.tar.gz
+# mv hadoop-2.7.7-bin hadoop-2.7.7
+# chown -R hadoop:hadoop hadoop-2.7.7
+# ln -s hadoop-2.7.7 hadoop
 ```
 
 Use this pattern for other ecosystem components as well:
 ```
- $ ls -l /opt/tdh/
- lrwxrwxrwx 1 hadoop hadoop 12 Dec 29 12:44 hadoop -> hadoop-2.7.1
- drwxrwxr-x 10 hadoop hadoop 4096 Dec 29 13:07 hadoop-2.7.1
+ $ ls -l /opt/TDH/
+ lrwxrwxrwx 1 hadoop hadoop 12 Dec 29 12:44 hadoop -> hadoop-2.7.7
+ drwxrwxr-x 10 hadoop hadoop 4096 Dec 29 13:07 hadoop-2.7.7
  lrwxrwxrwx 1 hadoop hadoop 11 Nov 7 20:38 hbase -> hbase-1.1.5
  drwxr-xr-x 8 hadoop hadoop 4096 Nov 6 11:38 hbase-1.1.5
  drwxr-xr-x 4 hadoop hadoop 4096 Nov 4 07:43 hdfs
@@ -154,8 +157,11 @@ Use this pattern for other ecosystem components as well:
 
 ### Configuring Hadoop
  
- Update the configs in '/opt/tdh/hadoop/etc/hadoop'. Set `JAVA_HOME` in the
+ Update the configs in '/opt/TDH/hadoop/etc/hadoop'. Set `JAVA_HOME` in the
 ***hadoop-env.sh*** file. This should be set to the JDK previously installed.
+Note that base config samples are provided in the `tdh-config` directory.
+Use these as the template to configure an install. Some important settings are
+shown here, but only scratch the surface.
 
 **core-site.xml:**
 ```
@@ -185,11 +191,11 @@ replication.
     </property>
     <property>
         <name>dfs.name.dir</name>
-        <value>file:///opt/tdh/hdfs/namenode</value>
+        <value>file:///data01/hdfs/nn</value>
     </property>
     <property>
         <name>dfs.data.dir</name>
-        <value>file:///opt/tdh/hdfs/datanode</value>
+        <value>file:///data01/hdfs/dn,file:///data02/hdfs/dn</value>
     </property>
 </configuration>
 ```
@@ -217,6 +223,11 @@ replication.
         <name>yarn.nodemanager.aux-services.shuffle.class</name>
         <value>org.apache.hadoop.mapred.ShuffleHandler</value>
     </property>
+
+    <property>
+        <name>yarn.nodemanager.local-dirs</name>
+        <value>/data01/hdfs/nm/nm-local-dir,/data02/hdfs/nm/nm-local-dir</value>
+    </property>
 </configuration>
 ```
 
@@ -234,22 +245,21 @@ If intending to use Spark2.x and Dynamic Execution, then the external Spark Shuf
 
 ### Configuring the User Environment
 
-This environment serves as example and can be added to a user's **.bashrc** file,
-though I prefer to keep these in a separate env file like hadoop-env-user.sh which
-can then be sourced from the .bashrc file. This also makes it easier to
-share/use these settings with other users/accounts.
+This environment serves as example. `tdh-mgr` provides this configuration
+via the file `tdh-env-user.sh`, which can be sourced from a users *.bashrc*.
 
 **.bashrc:**
 ```
-if [ -f ~/tdh-env-user.sh ]; then
-    . ~/tdh-env-user.sh
+if [ -f /opt/TDH/etc/tdh-env-user.sh ]; then
+    . /opt/TDH/etc/tdh-env-user.sh
 fi
 ```
 
 **tdh-env-user.sh:**
 
-An example of this file is provided as *./etc/tdh-env-user.sh*, and
-would look something similar to the following:
+The complete version of this file is provided as *./etc/tdh-env-user.sh*, and
+would look something similar to the following as a minimum to set up the
+hadoop environment properly:
 ```
 # User oriented environment variables (for use with bash)
 
@@ -279,23 +289,22 @@ $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
 ```
 
-### Format the Namenode/Datanode
+### Formatting the Namenode/Datanode
 
   Once the environment is setup, the **hadoop** and **hdfs* binary should
 be in the path. The following will format the NameNode as specified in **hdfs-site.xml**.
 ```
-# mkdir -p /data/hdfs/namenode
-# mkdir -p /data/hdfs/datanode
+# mkdir -p /data/hdfs/nn
+# mkdir -p /data/hdfs/dn
+# mkdir -p /data/hdfs/nm
 # sudo -u $USER hadoop namenode -format
 ```
 
 ### Start HDFS and Yarn
 
- Ensure various start scripts are run as the correct user if applicable
-(eg. *sudo -i -u hadoop*).
+  Init scripts are provided to wrap the various component versions.
 ```
-$ $HADOOP_HOME/sbin/start-dfs.sh
-$ $HADOOP_HOME/sbin/start-yarn.sh
+$ $HADOOP_ROOT/bin/hadoop-init.sh start
 ```
 
 Perform a quick test to verify that HDFS is working.
@@ -308,7 +317,7 @@ $ hdfs dfs -ls /
 
 This installation is fairly straightforward and follows the same pattern as earlier.
 ```
- $ cd /opt/tdh
+ $ cd /opt/TDH
  $ wget http://url/to/download/hbase-1.0.2-bin.tar.gz
  $ tar -zxvf hbase-1.1.5-bin.tar.gz
  $ mv hbase-1.1.5-bin hbase-1.1.5
@@ -362,13 +371,6 @@ values are defaults and as such are not necessary, but are included for referenc
 </configuration>
 ```
 
-Use the script *$HBASE_HOME/bin/start-hbase.sh* and *$HBASE_HOME/bin/stop-hbase.sh*
-to start and stop HBase respectively.  Note that HBase needs a running zookeeper,
-which can be provided by HBase. Since many other ecosystem components make use of
-zookeeper, such as Spark and Kafka, it is important that HBase is started after
-YARN but before other components. The `tdh-init.sh` script handles this properly.
-Alternatively, Zookeeper can be installed and configured separately from HBase.
-
 ## Installing and Configuring Hive
 
 * Install Mysql.
@@ -376,105 +378,10 @@ Alternatively, Zookeeper can be installed and configured separately from HBase.
 * Create the metastore database. Some options are discussed in the prerequisites
   section. See the section below for using a Docker Container of MySQL.
 
-* Locate schema $HIVE_HOME/scripts/metastore/upgrade/mysql/hive-schema-x.x.x.mysql.sql
-  This script must be sourced from the above target directory or it will fail.
-  Alternatively, edit and search for the txn-schema file and update to a
-  fully-qualified path.
+- Provisioning the database can be performed using the helper script *sbin/01-tdh-mysql-provision.sh*. This script
+expects that the users .my.cnf has been setup accordingly.
 
-* Source the hive schema from `$HIVE_HOME/scripts/metastore/upgrade/mysql/`.
-  Again covered by ansible and in more detail in the docker section below.
-
-* Configure hive-site.xml
-```
-<configuration>
-  <property>
-     <name>mapred.reduce.tasks</name>
-     <value>-1</value>
-     <description>The default number of reduce tasks per job.</description>
-  </property>
-
-  <property>
-     <name>hive.exec.scratchdir</name>
-     <value>/tmp/hive</value>
-     <description>Scratch space for Hive jobs</description>
-  </property>
-
-  <property>
-     <name>hive.metastore.warehouse.dir</name>
-     <value>/user/hive/warehouse</value>
-     <description>location of default database for the warehouse</description>
-  </property>
-
-  <property>
-     <name>hive.enforce.bucketing</name>
-     <value>true</value>
-     <description>Whether bucketing is enforced. If true, while inserting into the table, bucketing is enforced. </description>
-  </property>
-
-  <property>
-     <name>hive.hwi.war.file</name>
-     <value>lib/hive-hwi-1.2.1.jar</value>
-     <description>This sets the path to the HWI  file, relative to${HIVE_HOME}</description>
-  </property>
-
-  <property>
-    <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://dbhost/metastore?createDatabaseIfNotExist=true</value>
-    <description>JDBC connect string for a JDBC metastore</description>
-  </property>
-
-  <property>
-    <name>javax.jdo.option.ConnectionDriverName</name>
-    <value>com.mysql.jdbc.Driver</value>
-    <description>Driver class name for a JDBC metastore</description>
-  </property>
-
-  <property>
-    <name>javax.jdo.option.ConnectionUserName</name>
-    <value>hive</value>
-  </property>
-
-  <property>
-    <name>javax.jdo.option.ConnectionPassword</name>
-    <value>hivesql</value>
-  </property>
-
-  <property>
-    <name>hive.metastore.uris</name>
-    <value>thrift://hostname:9083</value>
-    <description>IP address (or fqdn) and port of the metastore host</description>
-  </property>
-
-  <property>
-    <name>datanucleus.fixedDatastore</name>
-    <value>true</value>
-  </property>
-
-  <property>
-    <name>datanucleus.autoCreateSchema</name>
-    <value>false</value>
-  </property>
-</configuration>
-```
-
-Testing hive:
-
-```
-./bin/hive -hiveconf hive.root.logger=DEBUG,console
-```
-
-Start the MetaStore via
-
-```
-$HIVE_HOME/bin/hive --service metastore
-```
-
-Note that this does not daemonize properly, so a better way might be to use nohup
-```
-nohup $HIVE_HOME/bin/hive --service metastore > /var/tmp/hivemetastore.log
-```
-
-The `hive-init.sh' script performs this init start|stop service.
+- The `hive-init.sh' script performs the init start|stop service.
 
 
 ### Using a Docker container for the Mysql Metastore
