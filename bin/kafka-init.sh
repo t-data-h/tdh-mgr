@@ -74,6 +74,7 @@ show_status()
 
 ACTION="$1"
 CONFIG="$2"
+IFS=$','
 rt=0
 
 if [ -n "$CONFIG" ]; then
@@ -86,8 +87,6 @@ if [ -z "${BROKERS}" ]; then
     echo "Error getting brokers from host config: '${BROKERSFILE}'"
     exit 1
 fi
-
-IFS=$','
 
 echo -e " ------ ${C_CYN}${KAFKA_VER}${C_NC} ------- "
 

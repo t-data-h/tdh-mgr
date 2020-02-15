@@ -2,8 +2,8 @@
 #
 #  Sets up an internal IP or pseudo-ip on a given interface. By default
 #  vmnet8 (vmware) is used, but vbox works as well.  Primarily for
-#  running TDH as pseudo-distributed in a closed environment (no network).
-#  (eg. laptop)
+#  running TDH as pseudo-distributed in a closed environment (no or
+#  unstable network) like a laptop.
 #
 
 # ----------- preamble
@@ -152,7 +152,7 @@ if [ "$ACTION" == "start" ]; then
 
 elif [ "$ACTION" == "stop" ]; then
 
-    ( ip addr del $BINDIP dev $IFACE )
+    ( sudo ip addr del $BINDIP dev $IFACE )
     rt=$?
 
     hostip_is_valid

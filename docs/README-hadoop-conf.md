@@ -33,7 +33,7 @@ which in turn uses the hadoop home of `/opt/TDH/hadoop`. The linkage
 above is configured at install by the *tdh-gcp* project.
 
 To configure local clients in /opt/TDH (eg. spark2) to communicate with
-another cluster, provide an alternate *HADOOP_CONF_DIR* set the variable
+another cluster, provide an alternate *HADOOP_CONF_DIR* and set the variable
 to the alternate *conf* path.
 ```
 export HADOOP_CONF_DIR="/opt/TDH/etc/hadoop.myCluster"

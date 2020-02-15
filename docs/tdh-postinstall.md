@@ -1,5 +1,9 @@
+tdh-postinstall
+===============
 
-## HDFS and YARN (Hadoop-2.7.7)
+Some basic validation steps.
+
+## HDFS and YARN 
 
 Validate simple filesystem operations.
 ```
