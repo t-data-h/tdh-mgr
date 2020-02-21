@@ -28,7 +28,7 @@ fi
 ( mysqldump -u $dbuser -p -h $dbhost -P $dbport --opt $dbname > $dbname-$dbhost-backup.sql )
 
 # schema backup
-( mysqldump -u $dbuser -p -h $dbhost -P $dbport --skip-add-drop-table --no-data $dbname > hive-$dbhost-schema-1.2.1.mysql.sql )
+( mysqldump -u $dbuser -p -h $dbhost -P $dbport --skip-add-drop-table --no-data $dbname > hive-$dbhost-schema-2.3.6.mysql.sql )
 
 echo "Finished."
 

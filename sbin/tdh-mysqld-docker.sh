@@ -30,7 +30,7 @@ fi
 docker_image="mysql/mysql-server:5.7"
 
 name="tdh-mysql1"
-mycnf="${HADOOP_ENV_PATH}/etc/mysqld-tdh.cnf"
+mycnf="$(realpath ${HADOOP_ENV_PATH})/mysqld-tdh.cnf"
 port="3306"
 network=
 volname=
@@ -149,10 +149,21 @@ echo "  Local port: ${port}"
 echo ""
 
 if [[ $ACTION == "run" || $ACTION == "start" ]]; then
+
+    if [ ! -f $mycnf ]; then
+        echo "Error locating mysql config: '$mycnf'"
+        exit 1
+    fi
+
     echo "Starting container '$name'"
 
     ( $cmd )
     ( sleep 6 )  # allow mysqld to start and generate password
+
+    if [ $? -ne 0 ]; then
+        echo "Error in docker run"
+        exit 1
+    fi
 
     echo -n "Checking for password. "
     for x in {1..3}; do
