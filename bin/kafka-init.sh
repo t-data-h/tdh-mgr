@@ -58,9 +58,9 @@ show_status()
         rt=$?
 
         if [ $rt -eq 0 ]; then
-            echo -e " Kafka Broker           | $C_GRN OK $C_NC | [${broker}:${PID}]"
+            printf " Kafka Broker           | $C_GRN OK $C_NC | [${broker}:${PID}]\n"
         else
-            echo -e " Kafka Broker           | ${C_RED}DEAD${C_NC} | [${broker}]"
+            printf " Kafka Broker           | ${C_RED}DEAD${C_NC} | [${broker}]\n"
         fi
     done
 
@@ -88,7 +88,7 @@ if [ -z "${BROKERS}" ]; then
     exit 1
 fi
 
-echo -e " ------ ${C_CYN}${KAFKA_VER}${C_NC} ------- "
+printf " ------ ${C_CYN}${KAFKA_VER}${C_NC} ------- \n"
 
 case "$ACTION" in
     'start')

@@ -96,7 +96,7 @@ show_status()
         return 3
     fi
 
-    echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
+    printf " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- \n"
 
     # HDFS Primary Namenode
     #
@@ -104,9 +104,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " HDFS Namenode (pri)    | $C_GRN OK $C_NC | [${NN_HOST}:${PID}]"
+        printf " HDFS Namenode (pri)    | $C_GRN OK $C_NC | [${NN_HOST}:${PID}]\n"
     else
-        echo -e " HDFS Namenode (pri)    | ${C_RED}DEAD$C_NC | [$NN_HOST]"
+        printf " HDFS Namenode (pri)    | ${C_RED}DEAD$C_NC | [$NN_HOST]\n"
         r=1
     fi
 
@@ -116,9 +116,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " HDFS NameNode (sec)    | $C_GRN OK $C_NC | [${SN_HOST}:${PID}]"
+        printf " HDFS NameNode (sec)    | $C_GRN OK $C_NC | [${SN_HOST}:${PID}]\n"
     else
-        echo -e " HDFS Namenode (sec)    | ${C_RED}DEAD$C_NC | [${SN_HOST}]"
+        printf " HDFS Namenode (sec)    | ${C_RED}DEAD$C_NC | [${SN_HOST}]\n"
         r=1
     fi
 
@@ -128,9 +128,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " YARN ResourceManager   | $C_GRN OK $C_NC | [${RM_HOST}:${PID}]"
+        printf " YARN ResourceManager   | $C_GRN OK $C_NC | [${RM_HOST}:${PID}]\n"
     else
-        echo -e " YARN ResourceManager   | ${C_RED}DEAD$C_NC | [${RM_HOST}]"
+        printf " YARN ResourceManager   | ${C_RED}DEAD$C_NC | [${RM_HOST}]\n"
         r=1
     fi
 
@@ -138,15 +138,15 @@ show_status()
     IFS=$'\n'
 
     if [ $IS_HA -eq 0 ] && [ -r $MASTERS ]; then
-        echo -e "      -------------     |------|"
+        printf "      -------------     |------|\n"
         for jn in $( cat $MASTERS ); do
             check_remote_process $jn $JN_ID
 
             rt=$?
             if [ $rt -eq 0 ]; then
-                echo -e " HDFS JournalNode       | $C_GRN OK $C_NC | [${jn}:${PID}]"
+                printf " HDFS JournalNode       | $C_GRN OK $C_NC | [${jn}:${PID}]\n"
             else
-                echo -e " HDFS JournalNode       | ${C_RED}DEAD$C_NC | [${jn}]"
+                printf " HDFS JournalNode       | ${C_RED}DEAD$C_NC | [${jn}]\n"
                 r=1
             fi
         done
@@ -159,15 +159,15 @@ show_status()
 
     r=0
     for dn in $( cat ${nodes} ); do
-        echo -e "      -------------     |------|"
+        printf "      -------------     |------|\n"
 
         check_remote_process $dn $DN_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " HDFS DataNode          | $C_GRN OK $C_NC | [${dn}:${PID}]"
+            printf " HDFS DataNode          | $C_GRN OK $C_NC | [${dn}:${PID}]\n"
         else
-            echo -e " HDFS DataNode          | ${C_RED}DEAD$C_NC | [${dn}]"
+            printf " HDFS DataNode          | ${C_RED}DEAD$C_NC | [${dn}]\n"
             r=1
         fi
 
@@ -175,9 +175,9 @@ show_status()
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " YARN NodeManager       | $C_GRN OK $C_NC | [${dn}:${PID}]"
+            printf " YARN NodeManager       | $C_GRN OK $C_NC | [${dn}:${PID}]\n"
         else
-            echo -e " YARN NodeManager       | ${C_RED}DEAD$C_NC | [$dn]"
+            printf " YARN NodeManager       | ${C_RED}DEAD$C_NC | [$dn]\n"
             r=1
         fi
     done
@@ -240,7 +240,7 @@ case "$ACTION" in
             exit $rt
         fi
 
-        echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
+        printf " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- \n"
 
         # only start journalnodes first on request
         if [[ "${OPT,,}" =~ "journal" ]]; then

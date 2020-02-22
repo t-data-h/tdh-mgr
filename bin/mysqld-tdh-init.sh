@@ -47,7 +47,7 @@ if [ -z "$TDH_DOCKER_MYSQL" ]; then
     exit 0;  # exit silently as no container name is provided or set
 fi
 
-echo -e " -------- ${C_CYN}${MYSQL_VER}${C_NC} --------- "
+printf " -------- ${C_CYN}${MYSQL_VER}${C_NC} --------- \n"
 
 case "$ACTION" in
     'start')
@@ -78,9 +78,9 @@ case "$ACTION" in
         check_process "$TDHMYSQL"
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " MySQL Server           | $C_GRN OK $C_NC | [$TDH_DOCKER_MYSQL:$PID]"
+            printf " MySQL Server           | $C_GRN OK $C_NC | [$TDH_DOCKER_MYSQL:$PID]\n"
         else
-            echo -e " MySQL Server           | ${C_RED}DEAD$C_NC | [$TDH_DOCKER_MYSQL]"
+            printf " MySQL Server           | ${C_RED}DEAD$C_NC | [$TDH_DOCKER_MYSQL]\n"
         fi
         ;;
     *)
