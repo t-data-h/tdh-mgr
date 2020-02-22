@@ -27,12 +27,12 @@ fi
 # -----------
 
 HOST=$( hostname -s )
-MASTERS="${HADOOP_CONF_DIR}/masters"
 NS_NAME=$($HADOOP_HOME/bin/hdfs getconf -confKey 'dfs.nameservices' 2>/dev/null)
+JN_EDITS=$($HADOOP_HOME/bin/hdfs getconf -confKey dfs.namenode.shared.edits.dir 2>&-)
 NNS=$(${HADOOP_HOME}/bin/hdfs getconf -namenodes 2>/dev/null)
+JNS=$(echo "$JN_EDITS" | sed 's,qjournal://\([^/]*\)/.*,\1,g; s/;/ /g; s/:[0-9]*//g')
 NN1=$(echo $NNS | awk '{ print $1 }')
 NN2=$(echo $NNS | awk '{ print $2 }')
-JNS=$(cat $MASTERS 2>/dev/null)
 
 if [ "$NN1" != "$HOST" ]; then
     echo "$TDH_PNAME Error: Host '$HOST' not the Namenode '$NN1'"
