@@ -56,18 +56,18 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Hive Metastore         | $C_GRN OK $C_NC | [${HIVE_SERVER}:${PID}]"
+        printf " Hive Metastore         | $C_GRN OK $C_NC | [${HIVE_SERVER}:${PID}]\n"
     else
-        echo -e " Hive Metastore         | ${C_RED}DEAD$C_NC | [${HIVE_SERVER}]"
+        printf " Hive Metastore         | ${C_RED}DEAD$C_NC | [${HIVE_SERVER}]\n"
     fi
 
     check_remote_process $HIVE_SERVER $HIVESERVER2
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Hive Server            | $C_GRN OK $C_NC | [${HIVE_SERVER}:${PID}]"
+        printf " Hive Server            | $C_GRN OK $C_NC | [${HIVE_SERVER}:${PID}]\n"
     else
-        echo -e " Hive Server            | ${C_RED}DEAD$C_NC | [${HIVE_SERVER}]"
+        printf " Hive Server            | ${C_RED}DEAD$C_NC | [${HIVE_SERVER}]\n"
     fi
 
     return $rt
@@ -81,7 +81,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo -e " -------- ${C_CYN}${HIVE_VER}${C_NC} ----------- "
+printf " -------- ${C_CYN}${HIVE_VER}${C_NC} ----------- \n"
 
 case "$ACTION" in
     'start')

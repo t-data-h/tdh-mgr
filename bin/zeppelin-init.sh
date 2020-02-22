@@ -46,10 +46,10 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Zeppelin Server        | $C_GRN OK  $C_NC | [${HOST}:${PID}]"
+        printf " Zeppelin Server        | $C_GRN OK  $C_NC | [${HOST}:${PID}]\n"
         rt=0
     else
-        echo -e " Zeppelin Server        | ${C_RED}DEAD$C_NC | [${HOST}]"
+        printf " Zeppelin Server        | ${C_RED}DEAD$C_NC | [${HOST}]\n"
         rt=1
     fi
 
@@ -62,7 +62,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo -e " ------- ${C_CYN}${ZEPPELIN_VER}${C_NC} -------- "
+printf " ------- ${C_CYN}${ZEPPELIN_VER}${C_NC} -------- \n"
 
 case "$ACTION" in
     'start')

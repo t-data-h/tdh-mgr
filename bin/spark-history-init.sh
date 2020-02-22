@@ -54,9 +54,9 @@ show_status()
     rt=$?
 
     if [ $rt -eq 0 ]; then
-        echo -e " Spark2 HistoryServer   | $C_GRN OK $C_NC | [${SHS_HOST}:${PID}]"
+        printf " Spark2 HistoryServer   | $C_GRN OK $C_NC | [${SHS_HOST}:${PID}]\n"
     else
-        echo -e " Spark2 HistoryServer   | ${C_RED}DEAD$C_NC | [${SHS_HOST}]"
+        printf " Spark2 HistoryServer   | ${C_RED}DEAD$C_NC | [${SHS_HOST}]\n"
     fi
 
     return $rt
@@ -70,7 +70,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-echo -e " -------- ${C_CYN}${SPARK_VER}${C_NC} ---------- "
+printf " -------- ${C_CYN}${SPARK_VER}${C_NC} ---------- \n"
 
 case "$ACTION" in
     'start')

@@ -44,9 +44,9 @@ show_status()
     get_process_pid "$HUE_KEY"
     rt=$?
     if [ $rt -eq 0 ]; then
-        echo -e " Hue Web Server          [$PID]"
+        printf " Hue Web Server          [$PID]\n"
     else
-        echo -e " Hue Web Server          not running"
+        printf " Hue Web Server          not running\n"
     fi
 
     return $rt

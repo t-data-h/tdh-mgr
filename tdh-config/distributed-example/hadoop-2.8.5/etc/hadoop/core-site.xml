@@ -19,7 +19,7 @@
 <configuration>
     <property>
         <name>fs.default.name</name>
-        <value>hdfs://tdh-m01</value>
+        <value>hdfs://tdhwest1</value>
     </property>
     <property>
         <name>hadoop.tmp.dir</name>

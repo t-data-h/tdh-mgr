@@ -151,7 +151,7 @@
 
   <property>
     <name>spark.yarn.jars</name>
-    <value>hdfs://tdh-m01/user/spark/jars/*</value>
+    <value>hdfs://tdhwest1/user/spark/jars/*</value>
   </property>
 
   <property>
@@ -161,7 +161,7 @@
 
   <property>
     <name>spark.eventLog.dir</name>
-    <value>hdfs://tdh-m01/tmp/spark2/applicationHistory</value>
+    <value>hdfs://tdhwest1/tmp/spark2/applicationHistory</value>
   </property>
 
   <property>

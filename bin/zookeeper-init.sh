@@ -54,9 +54,9 @@ show_status()
         rt=$?
 
         if [ $rt -eq 0 ]; then
-            echo -e " Zookeeper              | $C_GRN OK $C_NC | [${zk}:${PID}]"
+            printf " Zookeeper              | $C_GRN OK $C_NC | [${zk}:${PID}]\n"
         else
-            echo -e " Zookeeper              | ${C_RED}DEAD$C_NC | [${zk}]"
+            printf " Zookeeper              | ${C_RED}DEAD$C_NC | [${zk}]\n"
         fi
     done
 
@@ -79,7 +79,7 @@ if [ -z "$ZKS" ]; then
     exit 1
 fi
 
-echo -e " ------ ${C_CYN}${ZK_VER}${C_NC} ------- "
+printf " ------ ${C_CYN}${ZK_VER}${C_NC} ------- \n"
 
 case "$ACTION" in
     'start')
