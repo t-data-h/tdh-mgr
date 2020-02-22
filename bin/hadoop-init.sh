@@ -59,7 +59,7 @@ else
       grep value | \
       sed -E 's/.*<value>(.*)<\/value>/\1/' | \
       awk -F':' '{ print $1 }' )
-    SN_HOST=$( grep -A1 secondary ${HDFS_CONF} | \
+    SN_HOST=$( grep -A1 'dfs.namenode.secondary' ${HDFS_CONF} | \
       grep value | \
       sed -E 's/.*<value>(.*)<\/value>/\1/' | \
       awk -F':' '{ print $1 }' )
