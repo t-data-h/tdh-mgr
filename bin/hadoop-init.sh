@@ -29,40 +29,55 @@ HADOOP_VER=$(readlink $HADOOP_HOME)
 
 NN_ID="namenode.NameNode"
 SN_ID="namenode.SecondaryNameNode"
+JN_ID="qjournal.server.JournalNode"
 RM_ID="resourcemanager.ResourceManager"
 DN_ID="datanode.DataNode"
 NM_ID="nodemanager.NodeManager"
 
 HOST=$( hostname -s )
+MASTERS="${HADOOP_HOME}/etc/hadoop/masters"
+HDFS_CONF="${HADOOP_HOME}/etc/hadoop/hdfs-site.xml"
+YARN_CONF="${HADOOP_HOME}/etc/hadoop/yarn-site.xml"
 
-NN_HOST=$( grep -A1 'dfs.namenode.http-address' ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | \
+NS_NAME=$( grep -A1 'dfs.nameservices' ${HDFS_CONF} | \
+  grep value | \
+  sed -E 's/.*<value>(.*)<\/valude>/\1/' 2>/dev/null )
+
+if [ -n "$NS_NAME" ]; then 
+    NN_HOST=$( grep -A1 'dfs.namenode.http-address' ${HDFS_CONF} | \
+      grep -A1 'nn1' | grep value | \
+      sed -E 's/.*<value>(.*)<\/value>/\1/' | \
+      awk -F':' '{ print $1 }' )
+    SN_HOST=$( grep -A1 'dfs.namenode.http-address' ${HDFS_CONF} | \
+      grep -A1 'nn2' | grep value | \
+      sed -E 's/.*<value>(.*)<\/value>/\1/' | \
+      awk -F':' '{ print $1 }' )
+    IS_HA=0
+    SN_ID="$NN_ID"
+else
+    NN_HOST=$( grep -A1 'dfs.namenode.http-address' ${HDFS_CONF} | \
+      grep value | \
+      sed -E 's/.*<value>(.*)<\/value>/\1/' | \
+      awk -F':' '{ print $1 }' )
+    SN_HOST=$( grep -A1 secondary ${HDFS_CONF} | \
+      grep value | \
+      sed -E 's/.*<value>(.*)<\/value>/\1/' | \
+      awk -F':' '{ print $1 }' )
+    IS_HA=1
+fi
+
+RM_HOST=$( grep -A1 'yarn.resourcemanager.address' ${YARN_CONF} | \
   grep value | \
   sed -E 's/.*<value>(.*)<\/value>/\1/' | \
   awk -F':' '{ print $1 }' )
 
-SN_HOST=$( grep -A1 secondary ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml | \
-  grep value | \
-  sed -E 's/.*<value>(.*)<\/value>/\1/' | \
-  awk -F':' '{ print $1 }' )
-
-RM_HOST=$( grep -A1 'yarn.resourcemanager.address' ${HADOOP_HOME}/etc/hadoop/yarn-site.xml | \
-  grep value | \
-  sed -E 's/.*<value>(.*)<\/value>/\1/' | \
-  awk -F':' '{ print $1 }' )
-
-( echo $NN_HOST | grep $HOST 2>&1 > /dev/null )
-IS_NN=$?
-( echo $SN_HOST | grep $HOST 2>&1 > /dev/null )
-IS_SN=$?
-( echo $RM_HOST | grep $HOST 2>&1 > /dev/null )
-IS_RM=$?
 
 # -----------
 
 
 usage()
 {
-    echo "$TDH_PNAME {start|stop|status}"
+    echo "$TDH_PNAME {start|stop|status} <journal>"
     echo "  TDH Version: $TDH_VERSION"
 }
 
@@ -84,11 +99,8 @@ show_status()
 
     # HDFS Primary Namenode
     #
-    if [ $IS_NN -eq 0 ]; then
-        check_process $NN_ID
-    else
-        check_remote_process $NN_HOST $NN_ID
-    fi
+    check_remote_process $NN_HOST $NN_ID
+
     rt=$?
     if [ $rt -eq 0 ]; then
         echo -e " HDFS Namenode (pri)    | $C_GRN OK $C_NC | [${NN_HOST}:${PID}]"
@@ -98,11 +110,8 @@ show_status()
 
     # HDFS Secondary Namenode
     #
-    if [ $IS_SN -eq 0 ]; then
-        check_process $SN_ID
-    else
-        check_remote_process $SN_HOST $SN_ID
-    fi
+    check_remote_process $SN_HOST $SN_ID
+    
     rt=$?
     if [ $rt -eq 0 ]; then
         echo -e " HDFS NameNode (sec)    | $C_GRN OK $C_NC | [${SN_HOST}:${PID}]"
@@ -112,11 +121,8 @@ show_status()
 
     # YARN ResourceManager
     #
-    if [ $IS_RM -eq 0 ]; then
-        check_process $RM_ID
-    else
-        check_remote_process $RM_HOST $RM_ID
-    fi
+    check_remote_process $RM_HOST $RM_ID
+    
     rt=$?
     if [ $rt -eq 0 ]; then
         echo -e " YARN ResourceManager   | $C_GRN OK $C_NC | [${RM_HOST}:${PID}]"
@@ -126,6 +132,20 @@ show_status()
 
     set -f
     IFS=$'\n'
+
+    if [ $IS_HA -eq 0 ] && [ -r $MASTERS ]; then
+        echo -e "      -------------     |------|"
+        for jn in $( cat $MASTERS ); do 
+            check_remote_process $jn $JN_ID
+
+            rt=$?
+            if [ $rt -eq 0 ]; then
+                echo -e " HDFS JournalNode       | $C_GRN OK $C_NC | [${jn}:${PID}]"
+            else
+                echo -e " HDFS JournalNode       | ${C_RED}DEAD$C_NC | [${jn}]"
+            fi
+        done
+    fi
 
     nodes="${HADOOP_HOME}/etc/hadoop/workers"
     if ! [ -e $nodes ]; then
@@ -139,9 +159,9 @@ show_status()
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo -e " HDFS Datanode          | $C_GRN OK $C_NC | [${dn}:${PID}]"
+            echo -e " HDFS DataNode          | $C_GRN OK $C_NC | [${dn}:${PID}]"
         else
-            echo -e " HDFS Datanode          | ${C_RED}DEAD$C_NC | [${dn}]"
+            echo -e " HDFS DataNode          | ${C_RED}DEAD$C_NC | [${dn}]"
         fi
 
         check_remote_process $dn $NM_ID
@@ -168,22 +188,19 @@ rt=0
 
 case "$ACTION" in
     'start')
-        if [ $IS_RM -eq 0 ]; then
-            check_process $RM_ID
-            rt=$?
-            if [ $rt -eq 0 ]; then
-                echo " YARN Resource Manager is already running  [$PID]"
-                exit $rt
-            fi
+
+        check_remote_process $RM_HOST $RM_ID
+        rt=$?
+        if [ $rt -eq 0 ]; then
+            echo " YARN Resource Manager is already running  [$PID]"
+            exit $rt
         fi
 
-        if [ $IS_NN -eq 0 ]; then
-            check_process $NN_ID
-            rt=$?
-            if [ $rt -eq 0 ]; then
-                echo " HDFS Namenode is already running  [$PID]"
-                exit $rt
-            fi
+        check_remote_process $NN_HOST $NN_ID
+        rt=$?
+        if [ $rt -eq 0 ]; then
+            echo " HDFS Namenode is already running  [$PID]"
+            exit $rt
         fi
 
         hostip_is_valid
@@ -194,6 +211,26 @@ case "$ACTION" in
         fi
 
         echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
+
+        # only start journalnodes first on request
+        if [[ "${2,,}" =~ "journal" ]]; then
+            jn_edits=$($HADOOP_HDFS_HOME/bin/hdfs getconf -confKey dfs.namenode.shared.edits.dir 2>&-)
+            case "$jn_edits" in
+                qjournal://*)
+                    jn_hosts=$(echo "$jn_edits" | sed 's,qjournal://\([^/]*\)/.*,\1,g; s/;/ /g; s/:[0-9]*//g')
+                    if [ -z "$jn_hosts" ]; then
+                        echo "Error determining Journal Nodes"
+                        exit 1
+                    fi
+                    echo "Starting HDFS Journal Nodes.." 
+                    ( $HADOOP_HDFS_HOME/sbin/hadoop-daemons.sh \
+                      --config "$HADOOP_CONF_DIR" \
+                      --hostnames "$jn_hosts" \
+                      --script "$HADOOP_HDFS_HOME/bin/hdfs" start journalnode >/dev/null 2>&1 )
+                    ;;
+            esac
+            exit 0
+        fi
 
         echo "Starting HDFS.."
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh > /dev/null 2>&1 )

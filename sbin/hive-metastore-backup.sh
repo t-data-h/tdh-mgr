@@ -25,10 +25,13 @@ if [ -z "$dbuser" ]; then
 fi
 
 # full backup
-( mysqldump -u $dbuser -p -h $dbhost -P $dbport --opt $dbname > $dbname-$dbhost-backup.sql )
+( mysqldump -u $dbuser -p -h $dbhost -P $dbport \
+  --opt $dbname > $dbname-$dbhost-backup.sql )
 
 # schema backup
-( mysqldump -u $dbuser -p -h $dbhost -P $dbport --skip-add-drop-table --no-data $dbname > hive-$dbhost-schema-2.3.6.mysql.sql )
+( mysqldump -u $dbuser -p -h $dbhost -P $dbport \
+  --skip-add-drop-table \
+  --no-data $dbname > hive-$dbhost-schema-2.3.6.mysql.sql )
 
 echo "Finished."
 
