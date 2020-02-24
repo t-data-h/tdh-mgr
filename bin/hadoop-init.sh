@@ -116,9 +116,6 @@ show_status()
         r=1
     fi
 
-    set -f
-    IFS=$'\n'
-
     if [ $IS_HA -eq 0 ] && [ -n "$JNS" ]; then
         printf "      -------------     |------|\n"
         for jn in $JNS; do
@@ -139,7 +136,9 @@ show_status()
         nodes="${HADOOP_HOME}/etc/hadoop/slaves"
     fi
 
+    IFS=$'\n'
     r=0
+
     for dn in $( cat ${nodes} ); do
         printf "      -------------     |------|\n"
 
