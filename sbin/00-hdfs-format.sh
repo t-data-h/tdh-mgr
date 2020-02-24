@@ -1,10 +1,10 @@
 #!/bin/bash
 #
-#  Initial Namenode format. Will also detect HA NN 
+#  Initial Namenode format. Will also detect HA NN
 #  Settings and format Zookeeper for the failover controller.
 #
 #  @Author  Timothy C. Arland <tcarland@gmail.com>
-#  
+#
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -45,7 +45,7 @@ if [ -n "$NS_NAME" ]; then
         exit 1
     fi
 
-    if [ -z "$NN2" ]; then 
+    if [ -z "$NN2" ]; then
         echo "$TDH_PNAME Error determining Standby Namenode"
         exit 1
     fi
@@ -54,12 +54,11 @@ if [ -n "$NS_NAME" ]; then
     ( $HADOOP_ROOT/bin/hadoop-init.sh start journal )
     ( $HADOOP_ROOT/bin/zookeeper-init.sh start )
 
-    # Format ZK node
-    ( $HADOOP_HOME/bin/hdfs zkfc -formatZK )
+    sleep 5
 
-    # Start ZKFC service
-    ( $HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR \
-      --script "$HADOOP_HOME/bin/hdfs" start zkfc )
+    # Format ZK node
+    echo " -> Format ZK node for ZKFC"
+    ( $HADOOP_HOME/bin/hdfs zkfc -formatZK )
 fi
 
 # Format the Namenode
@@ -76,7 +75,12 @@ if [ -n "$NS_NAME" ]; then
     # Start the first Namenode
     ( $HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR \
       --script $HADOOP_HOME/bin/hdfs start namenode )
-    ( sleep 5 )
+
+    sleep 5
+
+    # Start 1st ZKFC service
+    ( $HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR \
+      --script "$HADOOP_HOME/bin/hdfs" start zkfc )
 
     # Bootstrap secondary
     ( ssh $NN2 "$HADOOP_HOME/bin/hdfs namenode -bootstrapStandby" )
@@ -86,6 +90,10 @@ if [ -n "$NS_NAME" ]; then
     if [ $rt -eq 0 ]; then
         ( ssh $NN2 "$HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR \
           --script $HADOOP_HOME/bin/hdfs start namenode" )
+        sleep 3
+        # Start 2nd ZKFC service
+        ( ssh $NN2 "$HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR \
+            --script $HADOOP_HOME/bin/hdfs start zkfc" )
     fi
 fi
 
