@@ -58,7 +58,7 @@ if [ -n "$NS_NAME" ]; then
 
     # Format ZK node
     echo " -> Format ZK node for ZKFC"
-    ( $HADOOP_HOME/bin/hdfs zkfc -formatZK )
+    ( $HADOOP_HOME/bin/hdfs zkfc -formatZK -force )
 fi
 
 # Format the Namenode
