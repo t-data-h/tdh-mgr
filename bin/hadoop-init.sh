@@ -26,23 +26,33 @@ fi
 # -----------
 
 HADOOP_VER=$(readlink $HADOOP_HOME)
+HDFS_CONF="${HADOOP_CONF_DIR}/hdfs-site.xml"
+YARN_CONF="${HADOOP_CONF_DIR}/yarn-site.xml"
 
 NN_ID="namenode.NameNode"
 SN_ID="namenode.SecondaryNameNode"
 JN_ID="qjournal.server.JournalNode"
+FC_ID=""
 RM_ID="resourcemanager.ResourceManager"
 DN_ID="datanode.DataNode"
 NM_ID="nodemanager.NodeManager"
 
 HOST=$( hostname -s )
-NS_NAME=$($HADOOP_HOME/bin/hdfs getconf -confKey 'dfs.nameservices' 2>/dev/null)
-JN_EDITS=$($HADOOP_HOME/bin/hdfs getconf -confKey dfs.namenode.shared.edits.dir 2>&-)
+
+NS_NAME=$( grep -A1 'dfs.nameservices' $HDFS_CONF | \
+  grep value | sed -E 's/.*<value>(.*)<\/valude>/\1/' 2>/dev/null )
+
+JN_EDITS=$( grep -A1 'dfs.namenode.shared.edits.dir' $HDFS_CONF | \
+  grep value | sed -E 's/.*<value>(.*)<\/valude>/\1/' 2>/dev/null )
+
+RM1=$( grep -A1 'yarn.resourcemanager.address' ${YARN_CONF} | \
+  grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' |  awk -F':' '{ print $1 }' )
+
 NNS=$($HADOOP_HOME/bin/hdfs getconf -namenodes 2>/dev/null)
 JNS=$(echo "$JN_EDITS" | sed 's,qjournal://\([^/]*\)/.*,\1,g; s/;/ /g; s/:[0-9]*//g')
 NN1=$(echo $NNS | awk '{ print $1 }')
 NN2=$(echo $NNS | awk '{ print $2 }')
-RM1=$($HADOOP_HOME/bin/hdfs getconf -confKey 'yarn.resourcemanager.address' 2>/dev/null |\
-      awk -F':' '{ print $1 }' )
+
 IS_HA=
 
 if [ -n "$NS_NAME" ]; then
