@@ -104,7 +104,7 @@ show_status()
         fi
     done
 
-    return $ret
+    return $rt
 }
 
 
@@ -152,6 +152,7 @@ case "$ACTION" in
         check_process $HB_MASTER_ID
 
         echo "Stopping HBase Master.. [${HBASE_MASTER}:${PID}]"
+        ( sudo -u $HADOOP_USER kill $PID >/dev/null 2>&1 )
         ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh > /dev/null 2>&1 )
 
         check_process $HB_THRIFT_ID
@@ -168,6 +169,7 @@ case "$ACTION" in
 
     'status'|'info')
         show_status
+        rt=$?
         ;;
 
     --version|-V)
