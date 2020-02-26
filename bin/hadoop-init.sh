@@ -40,10 +40,10 @@ NM_ID="nodemanager.NodeManager"
 HOST=$( hostname -s )
 
 NS_NAME=$( grep -A1 'dfs.nameservices' $HDFS_CONF | \
-  grep value | sed -E 's/.*<value>(.*)<\/valude>/\1/' 2>/dev/null )
+  grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
 
 JN_EDITS=$( grep -A1 'dfs.namenode.shared.edits.dir' $HDFS_CONF | \
-  grep value | sed -E 's/.*<value>(.*)<\/valude>/\1/' 2>/dev/null )
+  grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
 
 RM1=$( grep -A1 'yarn.resourcemanager.address' ${YARN_CONF} | \
   grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' |  awk -F':' '{ print $1 }' )
