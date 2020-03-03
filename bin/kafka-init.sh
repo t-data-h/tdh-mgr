@@ -100,7 +100,7 @@ case "$ACTION" in
 
             if [ $rt -eq 0 ]; then
                 echo " Kafka Broker [${broker}:${PID}] is already running"
-                exit $rt
+                continue
             fi
 
             echo "Starting Kafka Broker.. [${broker}]"

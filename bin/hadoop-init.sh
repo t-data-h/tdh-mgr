@@ -23,6 +23,10 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+if [ -z "$HADOOP_CONF_DIR" ]; then
+    echo "Fatal! HADOOP_CONF_DIR not set."
+    exit 2
+fi
 # -----------
 
 HADOOP_VER=$(readlink $HADOOP_HOME)

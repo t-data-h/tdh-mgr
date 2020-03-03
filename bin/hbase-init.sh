@@ -56,16 +56,8 @@ usage()
 show_status()
 {
     local rt=0
-    local islo=1
 
-    ( echo $HBASE_MASTER | grep $HOST >/dev/null 2>&1 )
-    islo=$?
-
-    if [ $islo -eq 0 ]; then
-        check_process $HB_MASTER_ID
-    else
-        check_remote_process $HBASE_MASTER $HB_MASTER_ID
-    fi
+    check_remote_process $HBASE_MASTER $HB_MASTER_ID
 
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -74,11 +66,7 @@ show_status()
         printf " HBase Master           | ${C_RED}DEAD$C_NC | [$HBASE_MASTER]\n"
     fi
 
-    if [ $islo -eq 0 ]; then
-        check_process $HB_THRIFT_ID
-    else
-        check_remote_process $HBASE_MASTER $HB_THRIFT_ID
-    fi
+    check_remote_process $HBASE_MASTER $HB_THRIFT_ID
 
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -126,41 +114,41 @@ case "$ACTION" in
     'start')
         ( mkdir -p $HBASE_LOGDIR )
 
-        check_process $HB_MASTER_ID
+        check_remote_process $HBASE_MASTER $HB_MASTER_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
             echo " HBase Master is already running  [${HBASE_MASTER}:${PID}]"
         else
             echo "Starting HBase Master.."
-            ( $HBASE_HOME/bin/start-hbase.sh 2>&1 > /dev/null )
+            ( ssh $HBASE_MASTER "$HBASE_HOME/bin/start-hbase.sh 2>&1 > /dev/null" )
         fi
 
-        check_process $HB_THRIFT_ID
+        check_remote_process $HBASE_MASTER $HB_THRIFT_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
             echo " ThriftServer is already running  [${HBASE_MASTER}:${PID}]"
         else
             echo "Starting HBase ThriftServer.."
-            ( sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start > $HBASE_THRIFTLOG 2>&1 & )
+            ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start > $HBASE_THRIFTLOG 2>&1 &" )
         fi
         rt=0
         ;;
 
     'stop')
-        check_process $HB_MASTER_ID
+        check_remote_process $HBASE_MASTER $HB_MASTER_ID
 
         echo "Stopping HBase Master.. [${HBASE_MASTER}:${PID}]"
-        ( sudo -u $HADOOP_USER kill $PID >/dev/null 2>&1 )
-        ( sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh > /dev/null 2>&1 )
+        ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER kill $PID >/dev/null 2>&1" )
+        ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh > /dev/null 2>&1" )
 
-        check_process $HB_THRIFT_ID
+        check_remote_process $HBASE_MASTER $HB_THRIFT_ID
 
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping HBase ThriftServer.. [${HBASE_MASTER}:${PID}]"
-            ( sudo -u $HADOOP_USER kill $PID )
+            ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER kill $PID" )
         else
             echo "HBase ThriftServer not found"
         fi
