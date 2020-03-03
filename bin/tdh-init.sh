@@ -116,7 +116,6 @@ show_status()
 {
     local rt=0
 
-    version
     run_action "status"
     rt=$?
 
@@ -135,6 +134,8 @@ if [ $# -eq 0 ]; then
     usage
     exit 1
 fi
+
+version
 
 while [ $# -gt 0 ]; do
     case "$1" in
