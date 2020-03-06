@@ -39,6 +39,7 @@ if [ "$NN1" != "$HOST" ]; then
     exit 1
 fi
 
+# HA Nameservice
 if [ -n "$NS_NAME" ]; then
     if [ -z "$JNS" ]; then
         echo "$TDH_PNAME Error determining Journal Nodes"
@@ -66,7 +67,7 @@ fi
 
 rt=$?
 if [ $rt -ne 0 ]; then
-    echo "$TDH_NAME : Error during namenode format, aborting.."
+    echo "$TDH_NAME ERROR during namenode format, aborting.."
     exit $rt
 fi
 

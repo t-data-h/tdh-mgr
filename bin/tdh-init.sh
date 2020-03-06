@@ -116,7 +116,6 @@ show_status()
 {
     local rt=0
 
-    version
     run_action "status"
     rt=$?
 
@@ -140,7 +139,6 @@ while [ $# -gt 0 ]; do
     case "$1" in
         -f|--force)
             force=1
-            echo "  --force : Ignoring errors.."
             ;;
         -h|--help)
             usage
@@ -156,6 +154,8 @@ while [ $# -gt 0 ]; do
     esac
     shift
 done
+
+version
 
 case "$action" in
     start)
