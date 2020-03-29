@@ -63,7 +63,8 @@ export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
 
 ### Spark 2.x.x
 
-* Spark 2.1.x to 2.4.0
+* Spark 2.1.x to 2.4.0. Note that Spark2 still uses Scala2.12 but adds a profile
+for supporting Scala 2.12.
 ```
 export SPARK_DIST_NAME="custom-spark"
 export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"

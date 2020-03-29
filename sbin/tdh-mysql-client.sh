@@ -1,10 +1,6 @@
 #!/bin/bash
 #  Run a client from within Container
 #
-dockname="tdh-mysql1"
-
-if [ -n "$1" ]; then
-    dockname="$1"
-fi
+dockname="${1:-tdh-mysql01}"
 
 ( docker exec -it $dockname mysql -uroot -p )

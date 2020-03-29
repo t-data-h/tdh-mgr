@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-#  Initiate hive mysql schema. This assumes the MySQL secret
-#  file '~/.my.cnf' is already configured.
+#  Initiate hive mysql schema. This assumes the MySQL itself and the
+#  secret file '~/.my.cnf' is configured to avoid password prompts.
+# 
 #  $ cat ~/.my.cnf
 #   [mysql]
 #   user=root

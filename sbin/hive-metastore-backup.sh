@@ -3,25 +3,15 @@
 #  Do a full Hive Metastore dump including the schema
 
 dbhost="$1"
-dbport="$2"
-dbname="$3"
-dbuser="$4"
+dbport="${2:-3306}"
+dbname="${3:-metastore}"
+dbuser="${4:-hive}"
 
 if [ -z "$dbhost" ]; then
     echo "Usage: $0  [dbhost] <dbport> <dbname> [dbuser]"
     echo "  port will default to 3306, dbname to 'metastore'"
     echo "  and dbuser to 'hive'"
     exit 1
-fi
-
-if [ -z "$dbport" ]; then
-    dbport="3306"
-fi
-if [ -z "$dbname" ]; then 
-    dbname="metastore"
-fi
-if [ -z "$dbuser" ]; then
-    dbuser="hive"
 fi
 
 # full backup

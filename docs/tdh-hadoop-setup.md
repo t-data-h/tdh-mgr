@@ -27,13 +27,13 @@ versions:
 System Prerequisites: https://gist.github.com/tcarland/3d10c22885ec655a0c2435676c1ae7b1  
 Mysqld Configuration: https://gist.github.com/tcarland/64e300606d83782e4150ce2db053b733
 
-Of note, Mysql can be handled via a container instance (from tdh-docker) or
-installed via Ansible (from tdh-gcp).
+TDH supports running Mysql via a container instance or it can be installed and
+configured via Ansible (from tdh-gcp).
 
 
 ## Prerequisites
 
-Prerequisites are described in detail by the above gist and is also automated
+Prerequisites are described in detail by the above gists and is also automated
 via Ansible in the **tdh-gcp** project.
 
 - Java JDK 1.8  
@@ -114,11 +114,12 @@ described in further detail below in the Hive section.
 
 * Cluster configuration  
 While these instructions go into some detail about configurations, a base
-template version can be used to initiate the configs found in the `tdh-config`
+template version can be used to initiate the configs and is found in the `tdh-config`
 directory.  Generally, this directory should be copied away to its own separate
-repository for tracking the cluster configurations. Additionally, much of these
-instructions are for seeding a TDH installation from scratch but most of these
-steps are automated via the `tdh-gcp` project and corresponding Ansible.
+repository for tracking the cluster configurations. Additionally, as previously
+stated, much of these instructions are for seeding a TDH installation from
+scratch but most of these steps are automated via the `tdh-gcp` project and
+corresponding Ansible.
 
 ##  Hadoop
 
