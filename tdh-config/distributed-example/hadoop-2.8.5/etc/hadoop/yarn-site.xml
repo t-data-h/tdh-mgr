@@ -11,24 +11,67 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License. See accompanying LICENSE file.
+
+<property>
+  <name>yarn.resourcemanager.webapp.address.rm1</name>
+  <value>master1:8088</value>
+</property>
+<property>
+  <name>yarn.resourcemanager.webapp.address.rm2</name>
+  <value>master2:8088</value>
+</property>
+
+
 -->
 <configuration>
     <!-- Site specific YARN configuration properties -->
     <property>
-        <name>yarn.resourcemanager.address</name>
-        <value>tdh-m01:8050</value>
+        <name>yarn.resourcemanager.ha.enabled</name>
+        <value>true</value>
     </property>
     <property>
-        <name>yarn.resourcemanager.resource-tracker.address</name>
+        <name>yarn.resourcemanager.cluster-id</name>
+        <value>tdhwest1</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.ha.rm-ids</name>
+        <value>rm1,rm2</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.hostname.rm1</name>
+        <value>tdh-m01</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.hostname.rm2</name>
+        <value>tdh-m02</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.address.rm1</name>
+        <value>tdh-m01:8088</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.address.rm2</name>
+        <value>tdh-m02:8088</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.zk-address</name>
+        <value>tdh-m01:2181,tdh-m02:2181,tdh-m03:2181</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.resource-tracker.address.rm1</name>
         <value>tdh-m01:8025</value>
     </property>
     <property>
-        <name>yarn.resourcemanager.scheduler.address</name>
+        <name>yarn.resourcemanager.resource-tracker.address.rm2</name>
+        <value>tdh-m02:8025</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.scheduler.address.rm1</name>
         <value>tdh-m01:8030</value>
     </property>
     <property>
-        <name>yarn.resourcemanager.webapp.address</name>
-        <value>tdh-m01:8088</value>
+        <name>yarn.resourcemanager.scheduler.address.rm2</name>
+        <value>tdh-m02:8030</value>
     </property>
     <property>
         <name>yarn.resourcemanager.admin.address</name>
