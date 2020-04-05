@@ -46,6 +46,7 @@ echo " -> ( ln -s ${hadooproot}/etc $etchadoop )"
 # -------------------------------------
 
 # Set a legacy /opt/hadoop link to our TDH root
+# Note this is going away in a future version
 if [ "$hadooproot" == "/opt/hadoop" ]; then
     echo "HADOOP_ROOT is already set to $hadooproot"
 else
