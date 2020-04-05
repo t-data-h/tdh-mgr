@@ -241,20 +241,20 @@ case "$ACTION" in
             exit 0
         fi
 
-        echo "Starting HDFS.."
+        echo "Starting HDFS.. [${NN1}]"
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh > /dev/null 2>&1 )
 
-        echo "Starting YARN.."
-        ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/start-yarn.sh > /dev/null 2>&1 )
+        echo "Starting YARN.. [${RM1}]"
+        ( ssh $RM1 "sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/start-yarn.sh" > /dev/null 2>&1 )
         ;;
 
     'stop')
         echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
 
-        echo "Stopping YARN.. [${RM_HOST}]"
-        ( sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh > /dev/null 2>&1 )
+        echo "Stopping YARN.. [${RM1}]"
+        ( ssh $RM1 "sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh" > /dev/null 2>&1 )
 
-        echo "Stopping HDFS.. [${NN_HOST}]"
+        echo "Stopping HDFS.. [${NN1}]"
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh > /dev/null 2>&1 )
         rt=0
         ;;
