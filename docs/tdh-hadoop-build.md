@@ -4,7 +4,7 @@ Building Hadoop and Various Ecosystem Components
 
 A guide for building Hadoop and various ecosystem components from source.
 
-## Building Hadoop (v2.7.7)
+## Building Hadoop (v2.7.x-v2.8.x)
 
 **Prerequisites:**
  * OpenJDK 1.8

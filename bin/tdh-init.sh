@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 #  Wrapper script to operate on all hadoop ecosystem init scripts.
 #  The list of services can be provided via HADOOP_ECOSYSTEM_INITS

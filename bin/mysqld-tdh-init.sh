@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 #  Init script for the core hadoop services HDFS and YARN.
 #

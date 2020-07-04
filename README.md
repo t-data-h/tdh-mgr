@@ -27,8 +27,7 @@ Prometheus and Grafana.
 
   The ecosystem is built using packages from the various Apache projects,
 either as binaries or built from source. The TDH package is distributed
-separately as a tarball given it's size though could be added to this
-repository via Git LFS (LargeFileSupport) The supporting scripts and
+separately as a tarball given it's size.  The supporting scripts and
 instructions are based on building a distribution using the following
 versions:
 
@@ -38,8 +37,8 @@ versions:
 - Spark  2.4.4
 - Kafka  2.2.0
 
-Refer to the setup document in *docs/tdh-hadoop-setup.md* for creating a
-TDH distribution from scratch. The end result is a root path containing
+Refer to the setup document [tdh-hadoop-setup.md](docs/tdh-hadoop-setup.md) for
+creating a TDH distribution from scratch. The end result is a root path containing
 each ecosystem component.  Links are used to make minor upgrades easier, so
 for hadoop-2.8.5 there would also be a 'hadoop' link, and likewise for other
 components which would result in something like this:

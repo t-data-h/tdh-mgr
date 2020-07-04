@@ -1,10 +1,6 @@
 #
 # The MySQL database server configuration file.
 #
-# You can copy this to one of:
-# - "/etc/mysql/my.cnf" to set global options,
-# - "~/.my.cnf" to set user-specific options.
-#
 # One can use all long options that the program supports.
 # Run program with --help to get a list of available options and with
 # --print-defaults to see which it would actually understand and use.
@@ -42,20 +38,7 @@ max_connections         = 1024
 query_cache_limit	    = 1M
 query_cache_size        = 16M
 
-# * Logging and Replication
-# Both location gets rotated by the cronjob.
-# Be aware that this log type is a performance killer.
-# As of 5.1 you can enable the log at runtime!
-#general_log_file       = /var/log/mysql/mysql.log
-#general_log            = 1
-
 log_error = /var/log/mysql/error.log
-
-# Here you can see queries with especially long duration
-#slow_query_log		    = 1
-#slow_query_log_file	= /var/log/mysql/mysql-slow.log
-#long_query_time         = 2
-#log-queries-not-using-indexes
 
 binlog-format		= mixed
 server-id   		= 1
@@ -65,12 +48,6 @@ max_binlog_size		= 100M
 
 #binlog_do_db		= include_database_name
 #binlog_ignore_db	= include_database_name
-
-# * InnoDB
-# InnoDB is enabled by default with a 10MB datafile in /var/lib/mysql/.
-
-# * Security Features
-# chroot = /var/lib/mysql/
 
 # For generating SSL certificates I recommend the OpenSSL GUI "tinyca".
 # ssl-ca=/etc/mysql/cacert.pem

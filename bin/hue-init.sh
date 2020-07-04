@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
 #  Custom init script for starting Hue
 #
 #  Timothy C. Arland <tcarland@gmail.com>
