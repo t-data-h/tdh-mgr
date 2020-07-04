@@ -83,6 +83,11 @@ export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
 * Optionally add `-DskipTests`
 * Kubernetes support with `-Pkubernetes`
 
+* Spark 3.x.x
+```
+/dev/make-distribution.sh --name $SPARK_DIST_NAME --tgz -Dhadoop.version=2.8.5 \
+ -Pyarn -Phive -Phive-thriftserver -Phadoop-provided -Pkubernetes -DskipTests
+```
 
 ## Hive 1.2.x
 
