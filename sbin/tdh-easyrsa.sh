@@ -9,7 +9,7 @@
 #  extendedKeyUsage = serverAuth,clientAuth
 #
 PNAME=${0##*\/}
-VERSION="V0.5.1"
+VERSION="V0.5.2"
 
 easyrsa="./easyrsa3"
 reqorsign=
@@ -20,11 +20,12 @@ x509type="serverclient"  # options are 'server', 'client', or 'serverclient'
 usage()
 {
     echo ""
-    echo "Usage: $PNAME [options] [action] host1 host2 ..."
-    echo "  -e|--easyrsa <path>  : Path to EasyRSA3 distribution"
-    echo "  -h|--help            : Display help info and exit"
-    echo "  -x|--x509type <type> : Name of x509 type (default is 'serverclient')"
-    echo "  -V|--version         : Show version info and exit"
+    echo "Usage: $PNAME [options] [action] host1 host2 [..]"
+    echo "  -h|--help            : Display help info and exit."
+    echo "  -e|--easyrsa <path>  : Path to EasyRSA3 (with existing pki config)."
+    echo "  -x|--x509type <type> : Name of x509 type (default is 'serverclient')."
+    echo "  -V|--version         : Show version info and exit."
+    echo "    <action>           : Action is either 'gen-req' or 'sign-req'."
     echo ""
     echo "  TDH_HOSTS can be set to provide list of hosts and "
     echo "  will override any command provided hosts"
