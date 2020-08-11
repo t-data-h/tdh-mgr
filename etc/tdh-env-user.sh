@@ -4,9 +4,10 @@
 #
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
+VERSION="v1.5.7"
 
+export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1
-export TDH_VERSION="1.5.7"
 
 # JAVA_HOME should already be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
@@ -91,7 +92,7 @@ fi
 
 function version()
 {
-    printf "${TDH_PNAME} v${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
+    printf "${TDH_PNAME} ${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
 }
 
 

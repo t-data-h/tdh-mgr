@@ -38,7 +38,7 @@ SPARK_PID="org.apache.spark.deploy.master.Master"
 usage()
 {
     echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH Version: $TDH_VERSION"
+    echo "  TDH $TDH_VERSION"
 }
 
 

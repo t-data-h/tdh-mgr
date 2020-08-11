@@ -46,7 +46,7 @@ HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | 
 usage()
 {
     echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH Version: $TDH_VERSION"
+    echo "  TDH $TDH_VERSION"
 }
 
 

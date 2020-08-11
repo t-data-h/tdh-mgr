@@ -42,7 +42,7 @@ SHS_HOST=$( grep 'spark.yarn.historyServer.address' ${SPARK_HOME}/conf/spark-def
 usage()
 {
     echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH Version: $TDH_VERSION"
+    echo "  TDH $TDH_VERSION"
 }
 
 

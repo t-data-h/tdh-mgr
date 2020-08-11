@@ -49,7 +49,7 @@ fi
 usage()
 {
     echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH Version: $TDH_VERSION"
+    echo "  TDH $TDH_VERSION"
 }
 
 
