@@ -155,8 +155,6 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-version
-
 case "$action" in
     start)
         start_all
@@ -166,6 +164,9 @@ case "$action" in
         ;;
     status|info)
         show_status
+        ;;
+    version)
+        version
         ;;
     *)
         usage
