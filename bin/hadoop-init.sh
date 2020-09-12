@@ -42,6 +42,7 @@ DN_ID="datanode.DataNode"
 NM_ID="nodemanager.NodeManager"
 
 HOST=$( hostname -s )
+nscache=".ns_cache"
 
 NS_NAME=$( grep -A1 'dfs.nameservices' $HDFS_CONF | \
   grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
@@ -52,18 +53,40 @@ JN_EDITS=$( grep -A1 'dfs.namenode.shared.edits.dir' $HDFS_CONF | \
 RM1=$( grep -A1 'yarn.resourcemanager.address' ${YARN_CONF} | \
   grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' |  awk -F':' '{ print $1 }' )
 
-NNS=$($HADOOP_HOME/bin/hdfs getconf -namenodes 2>/dev/null)
-JNS=$(echo "$JN_EDITS" | sed 's,qjournal://\([^/]*\)/.*,\1,g; s/;/ /g; s/:[0-9]*//g')
-NN1=$(echo $NNS | awk '{ print $1 }')
-NN2=$(echo $NNS | awk '{ print $2 }')
-
+NNS=
+JNS=
+NN1=
+NN2=
 IS_HA=
 
+# cache expired? stat -c is not portable
+if [[ -f ${HADOOP_HOME}/${nscache} && \  
+    $(( $(date +%s) - $(stat -c %Y $nscache) )) > 86400 ]]; then
+    ( rm $nscache )
+fi
+# cache nameservers to avoid very slow 'getconf'
+if [ -f ${HADOOP_HOME}/${nscache} ]; then 
+    NNS=$(cat ${HADOOP_HOME}/${nscache} | head -1)
+    if [ -z "$NS_NAME" ]; then 
+        NN2=$(cat ${HADOOP_HOME}/${nscache} | tail -1)
+    fi
+else
+    NNS=$($HADOOP_HOME/bin/hdfs getconf -namenodes 2>/dev/null)
+    ( echo $NNS > ${HADOOP_HOME}/${nscache} )
+    if [ -z "$NS_NAME" ]; then
+        NN2=$($HADOOP_HOME/bin/hdfs getconf -secondaryNamenodes)
+        ( echo $NN2 >> ${HADOOP_HOME}/${nscache} )
+    fi
+fi
+
+JNS=$(echo "$JN_EDITS" | sed 's,qjournal://\([^/]*\)/.*,\1,g; s/;/ /g; s/:[0-9]*//g')
+NN1=$(echo $NNS | awk '{ print $1 }')
+
 if [ -n "$NS_NAME" ]; then
+    NN2=$(echo $NNS | awk '{ print $2 }')
     SN_ID="$NN_ID"
     IS_HA=0
 else
-    NN2=$($HADOOP_HOME/bin/hdfs getconf -secondaryNamenodes)
     IS_HA=1
 fi
 
@@ -223,7 +246,7 @@ case "$ACTION" in
 
         printf " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- \n"
 
-        # only start journalnodes first on request
+        # only start journalnodes first on request, this is needed for formatting HDFS
         if [[ "${OPT,,}" =~ "journal" ]]; then
             case "$JN_EDITS" in
                 qjournal://*)
