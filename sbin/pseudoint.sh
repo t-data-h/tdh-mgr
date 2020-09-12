@@ -102,13 +102,6 @@ IFACE="vmnet8"
 # parse options
 while [ $# -gt 0 ]; do
     case "$1" in
-        -b|--bandwidth)
-            BW="$2"
-            shift
-            ;;
-        -D|--no-delete)
-            DELETE=0
-            ;;
         -h|--help)
             usage
             exit 0

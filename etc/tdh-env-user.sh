@@ -4,7 +4,7 @@
 #
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v1.5.8"
+VERSION="v20.09"
 
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1
@@ -90,7 +90,7 @@ if [ -n "$HADOOP_PATH" ]; then
 fi
 
 
-function version()
+function tdh_version()
 {
     printf "${TDH_PNAME} ${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
     return 0

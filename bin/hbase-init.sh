@@ -160,9 +160,14 @@ case "$ACTION" in
         rt=$?
         ;;
 
-    --version|-V)
-        version
+    'help'|--help|-h)
+        usage
         ;;
+
+    'version'|--version|-V)
+        tdh_version
+        ;;
+
     *)
         usage
         ;;

@@ -140,14 +140,6 @@ while [ $# -gt 0 ]; do
         -f|--force)
             force=1
             ;;
-        -h|--help)
-            usage
-            exit 0
-            ;;
-        -V|--version)
-            version
-            exit 0
-            ;;
         *)
             action="$1"
             ;;
@@ -165,8 +157,11 @@ case "$action" in
     status|info)
         show_status
         ;;
-    version)
-        version
+    help|--help|-h)
+        usage
+        ;;
+    version|--version|-V)
+        tdh_version
         ;;
     *)
         usage
