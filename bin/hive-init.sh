@@ -139,10 +139,15 @@ case "$ACTION" in
         show_status
         rt=$?
         ;;
+    
+    'help'|--help|-h)
+        usage
+        ;; 
 
-    --version|-V)
-        version
+    'version'|--version|-V)
+        tdh_version
         ;;
+
     *)
         usage
         ;;

@@ -105,9 +105,14 @@ case "$ACTION" in
         show_status
         ;;
 
-    --version|-V)
+    'help'|--help|-h)
+        usage 
+        ;;
+
+    'version'|--version|-V)
         version
         ;;
+
     *)
         usage
         ;;

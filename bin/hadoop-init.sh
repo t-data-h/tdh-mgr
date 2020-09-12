@@ -42,7 +42,7 @@ DN_ID="datanode.DataNode"
 NM_ID="nodemanager.NodeManager"
 
 HOST=$( hostname -s )
-nscache=".ns_cache"
+nscache="${HADOOP_HOME}/.ns_cache"
 
 NS_NAME=$( grep -A1 'dfs.nameservices' $HDFS_CONF | \
   grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
@@ -60,22 +60,21 @@ NN2=
 IS_HA=
 
 # cache expired? stat -c is not portable
-if [[ -f ${HADOOP_HOME}/${nscache} && \  
-    $(( $(date +%s) - $(stat -c %Y $nscache) )) > 86400 ]]; then
+if [[ -f $nscache && $(( $(date +%s) - $(stat -c %Y $nscache) )) > 86400 ]]; then
     ( rm $nscache )
 fi
 # cache nameservers to avoid very slow 'getconf'
-if [ -f ${HADOOP_HOME}/${nscache} ]; then 
-    NNS=$(cat ${HADOOP_HOME}/${nscache} | head -1)
+if [ -f ${nscache} ]; then 
+    NNS=$(cat ${nscache} | head -1)
     if [ -z "$NS_NAME" ]; then 
-        NN2=$(cat ${HADOOP_HOME}/${nscache} | tail -1)
+        NN2=$(cat ${nscache} | tail -1)
     fi
 else
     NNS=$($HADOOP_HOME/bin/hdfs getconf -namenodes 2>/dev/null)
-    ( echo $NNS > ${HADOOP_HOME}/${nscache} )
+    ( echo $NNS > ${nscache} )
     if [ -z "$NS_NAME" ]; then
         NN2=$($HADOOP_HOME/bin/hdfs getconf -secondaryNamenodes)
-        ( echo $NN2 >> ${HADOOP_HOME}/${nscache} )
+        ( echo $NN2 >> ${nscache} )
     fi
 fi
 
@@ -216,14 +215,6 @@ while [ $# -gt 0 ]; do
         -q|--quiet)
             quiet=1
             ;;
-        -h|--help)
-            usage
-            exit 0
-            ;;
-        -V|--version)
-            version
-            exit 0
-            ;;
         *)
             ACTION="$1"
             OPT="$2"
@@ -287,10 +278,15 @@ case "$ACTION" in
         rt=$?
         ;;
 
-    --version|-V)
-        echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
-        version
+    'help'|--help|-h)
+        usage 
         ;;
+
+    'version'|--version|-V)
+        echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
+        tdh_version
+        ;;
+
     *)
         usage
         ;;

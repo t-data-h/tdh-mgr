@@ -83,6 +83,15 @@ case "$ACTION" in
             printf " MySQL Server           | ${C_RED}DEAD$C_NC | [$TDH_DOCKER_MYSQL]\n"
         fi
         ;;
+    
+    'help'|--help|-h)
+        usage 
+        ;;
+
+    'version'|--version|-V)
+        tdh_version
+        ;;
+
     *)
         usage
         ;;

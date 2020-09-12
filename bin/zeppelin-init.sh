@@ -99,6 +99,11 @@ case "$ACTION" in
         show_status
         rt=$?
         ;;
+
+    'version'|--version|-V)
+        tdh_version
+        ;;
+
     *)
         usage
         ;;
