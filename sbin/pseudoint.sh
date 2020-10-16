@@ -102,7 +102,7 @@ IFACE="vmnet8"
 # parse options
 while [ $# -gt 0 ]; do
     case "$1" in
-        -h|--help)
+        'help'|-h|--help)
             usage
             exit 0
             ;;
@@ -114,7 +114,7 @@ while [ $# -gt 0 ]; do
             BINDIP="$2"
             shift;
             ;;
-        -V|--version)
+        'version'|-V|--version)
             version
             exit 0
             ;;

@@ -39,7 +39,7 @@ rt=1
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        -h|--help)
+        'help'|-h|--help)
             usage
             exit 0
             ;;
@@ -51,7 +51,7 @@ while [ $# -gt 0 ]; do
             x509type="$2"
             shift
             ;;
-        -V|--version)
+        'version'|-V|--version)
             echo "$PNAME $VERSION"
             exit 0
             ;;

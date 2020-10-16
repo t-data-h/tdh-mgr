@@ -157,10 +157,10 @@ case "$action" in
     status|info)
         show_status
         ;;
-    help|--help|-h)
+    'help'|--help|-h)
         usage
         ;;
-    version|--version|-V)
+    'version'|--version|-V)
         tdh_version
         ;;
     *)
