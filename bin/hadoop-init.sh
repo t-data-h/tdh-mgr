@@ -212,7 +212,7 @@ rt=0
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        -q|--quiet)
+        -Q|-q|--quiet)
             quiet=1
             ;;
         *)

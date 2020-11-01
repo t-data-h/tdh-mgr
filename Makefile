@@ -1,6 +1,5 @@
 # Makefile for tdh-hadoop installation
 #
-
 ifndef HADOOP_ROOT
 HADOOP_ROOT=/opt/TDH
 endif
@@ -9,6 +8,15 @@ BINPATH="${HADOOP_ROOT}/bin"
 SBINPATH="${HADOOP_ROOT}/sbin"
 ETCPATH="${HADOOP_ROOT}/etc"
 DOCPATH="${HADOOP_ROOT}/docs"
+
+
+all: docs 
+
+pdf: docs
+
+.PHONY: docs 
+docs:
+	( cd docs; make all )
 
 install:
 	( mkdir -p ${BINPATH}; mkdir -p ${SBINPATH} )
