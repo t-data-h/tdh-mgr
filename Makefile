@@ -18,6 +18,11 @@ pdf: docs
 docs:
 	( cd docs; make all )
 
+clean:
+	( cd docs; make clean )
+
+distclean: clean
+
 install:
 	( mkdir -p ${BINPATH}; mkdir -p ${SBINPATH} )
 	( mkdir -p ${ETCPATH}; mkdir -p ${DOCPATH} )
