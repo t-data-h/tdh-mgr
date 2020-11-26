@@ -232,7 +232,8 @@ replication.
 </configuration>
 ```
 
-If intending to use Spark2.x and Dynamic Execution, then the external Spark Shuffle service should be configured:
+If intending to use Spark2.x and Dynamic Execution, then the external Spark Shuffle 
+service should be configured:
 ```
 <property>
   <name>yarn.nodemanager.aux-services</name>
