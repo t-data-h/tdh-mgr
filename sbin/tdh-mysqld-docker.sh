@@ -29,7 +29,7 @@ fi
 
 docker_image="mysql/mysql-server:5.7"
 
-name="tdh-mysql1"
+name="${TDH_DOCKER_MYSQL:-tdh-mysql01}"
 mycnf="$(realpath ${HADOOP_ENV_PATH})/mysqld-tdh.cnf"
 port="3306"
 network=
@@ -42,12 +42,13 @@ usage()
 {
     echo ""
     echo "Usage: $TDH_PNAME [options] run|pull|pw"
-    echo "   -h|--help             = Display usage and exit."
-    echo "   -n|--name <name>      = Name of the Docker Container instance."
-    echo "   -N|--network <name>   = Attach container to Docker network"
+    echo "   -h|--help            :  Display usage and exit."
+    echo "   -n|--name <name>     :  Name of the Docker Container instance."
+    echo "                           Default container name is '${name}'."
+    echo "   -N|--network <name>  :  Attach container to Docker network"
     echo "                           Default uses 'host' networking."
-    echo "   -p|--port <port>      = Local bind port for the container."
-    echo "   -V|--version          = Show version info and exit"
+    echo "   -p|--port <port>     :  Local bind port for the container."
+    echo "   -V|--version         :  Show version info and exit"
     echo ""
     echo " Creates and initializes a mysqld docker container."
     echo ""

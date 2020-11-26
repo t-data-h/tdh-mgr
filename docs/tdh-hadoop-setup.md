@@ -24,8 +24,8 @@ versions:
 - Kafka  0.10.x or 2.2.x
 - Zookeeper 5.x
 
-System Prerequisites: https://gist.github.com/tcarland/3d10c22885ec655a0c2435676c1ae7b1  
-Mysqld Configuration: https://gist.github.com/tcarland/64e300606d83782e4150ce2db053b733
+[System Prerequisites:](tdh-prereq.md) 
+[Mysqld Configuration:](mysql-hive-metastore.md)
 
 TDH supports running Mysql via a container instance or it can be installed and
 configured via Ansible (from tdh-gcp).
@@ -379,8 +379,9 @@ values are defaults and as such are not necessary, but are included for referenc
 * Create the metastore database. Some options are discussed in the prerequisites
   section. See the section below for using a Docker Container of MySQL.
 
-- Provisioning the database can be performed using the helper script *sbin/01-tdh-mysql-provision.sh*. This script
-expects that the users .my.cnf has been setup accordingly.
+- Provisioning the database can be performed using the helper script 
+*sbin/01-tdh-mysql-provision.sh*. This script expects that the config `.my.cnf`
+has been setup accordingly.
 
 - The `hive-init.sh' script performs the init start|stop service.
 
@@ -388,10 +389,10 @@ expects that the users .my.cnf has been setup accordingly.
 ### Using a Docker container for the Mysql Metastore
 
   Assuming the TDH host in question already has Docker configured and working,
-the script `tdh-mgr/sbin/tdh-mysqld-create.sh` will instantiate a Mysql 5.7 Docker
+the script `tdh-mgr/sbin/tdh-mysqld-docker.sh` will instantiate a Mysql 5.7 Docker
 Container with a temporary password.
 ```
-./sbin/tdh-mysqld-create.sh run
+./sbin/tdh-mysqld-docker.sh run
 ```
 
   The temp password is provided once the script completes successfully. The
@@ -449,8 +450,7 @@ $ cp log4j.properties.template log4j.properties
 
 **spark-env.sh:**
 ```
-export SPARK_DAEMON_JAVA_OPTS="-Dlog4j.configuration=file:///opt/tdh/spark/conf/log4j.pro
-perties"
+export SPARK_DAEMON_JAVA_OPTS="-Dlog4j.configuration=file:///opt/tdh/spark/conf/log4j.properties"
 export SPARK_DIST_CLASSPATH=$(/opt/tdh/hadoop/bin/hadoop classpath)
 
 # for standalone mode
