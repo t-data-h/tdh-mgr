@@ -114,7 +114,7 @@ if [ -z "$ACTION" ]; then
 fi
 
 if [[ $ACTION == "pw" ]]; then
-    passwd=$( docker logs tdh-mysql1 2>&1 | grep GENERATED | awk -F': ' '{ print $2 }' )
+    passwd=$( docker logs ${name} 2>&1 | grep GENERATED | awk -F': ' '{ print $2 }' )
     echo "Mysqld root password: '$passwd'"
     exit 0
 fi
@@ -168,7 +168,7 @@ if [[ $ACTION == "run" || $ACTION == "start" ]]; then
 
     echo -n "Checking for password. "
     for x in {1..3}; do
-        passwd=$( docker logs tdh-mysql1 2>&1 | grep GENERATED | awk -F': ' '{ print $2 }' )
+        passwd=$( docker logs ${name} 2>&1 | grep GENERATED | awk -F': ' '{ print $2 }' )
         if [ -n "$passwd" ]; then
             rt=0
             break
