@@ -40,7 +40,9 @@ export JAVA_HOME=/usr/lib/jvm/java
 # Below are what we set by default.  May only work with SUN JVM.
 # For more on why as well as other possible settings,
 # see http://wiki.apache.org/hadoop/PerformanceTuning
-export HBASE_OPTS="-XX:+UseConcMarkSweepGC"
+export HBASE_OPTS="-XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis = 50 \
+-XX:-OmitStackTraceInFastThrow -XX:ParallelGCThreads=8 -XX:+ParallelRefProcEnabled \
+-XX:+PerfDisableSharedMem -XX:-ResizePLAB"
 
 # Configure PermSize. Only needed in JDK7. You can safely remove it for JDK8+
 #export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -XX:PermSize=128m -XX:MaxPermSize=128m"
