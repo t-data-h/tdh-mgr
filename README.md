@@ -54,7 +54,6 @@ lrwxrwxrwx  1 tca tca   16 May 11  2019 kafka -> kafka_2.12-2.2.0
 drwxr-xr-x  6 tca tca 4096 Feb  8 18:07 kafka_2.12-2.2.0
 lrwxrwxrwx  1 tca tca   11 Sep 28 10:43 spark -> spark-2.4.4
 drwxr-xr-x 11 tca tca 4096 Feb  9 13:48 spark-1.6.3
-drwxr-xr-x 12 tca tca 4096 Jun 30  2017 spark-2.2.0
 drwxr-xr-x 12 tca tca 4096 Sep 26 20:05 spark-2.4.4
 lrwxrwxrwx  1 tca tca   15 Dec 19 14:16 zookeeper -> zookeeper-5.5.6
 drwxr-xr-x  7 tca tca 4096 Dec 19 14:45 zookeeper-5.5.6
@@ -91,7 +90,9 @@ git init
   The configuration can be fed to `tdh-gcp` Ansible for distributing to a
 running cluster.
 
+
 ## Running the Distribution
+
    The main entry point to running the cluster is the script `tdh-init.sh`.
 This works much like a standard init script with *start|stop|status* parameters.
 This in turn calls various ecosystem *init* functions to perform actions
