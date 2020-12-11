@@ -54,9 +54,9 @@ show_status()
     rt=$?
 
     if [ $rt -eq 0 ]; then
-        printf " Spark2 HistoryServer   | $C_GRN OK $C_NC | [${SHS_HOST}:${PID}]\n"
+        printf " Spark HistoryServer    | $C_GRN OK $C_NC | [${SHS_HOST}:${PID}]\n"
     else
-        printf " Spark2 HistoryServer   | ${C_RED}DEAD$C_NC | [${SHS_HOST}]\n"
+        printf " Spark HistoryServer    | ${C_RED}DEAD$C_NC | [${SHS_HOST}]\n"
     fi
 
     return $rt
@@ -78,11 +78,11 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Error: Spark2 HistoryServer is already running [${SHS_HOST}:${PID}]"
+            echo "Error: Spark HistoryServer is already running [${SHS_HOST}:${PID}]"
             exit $rt
         fi
 
-        echo "Starting Spark2 HistoryServer [$SHS_HOST]"
+        echo "Starting Spark HistoryServer [$SHS_HOST]"
         ( ssh $SHS_HOST "$SPARK_HOME/sbin/start-history-server.sh > /dev/null 2>&1" )
 
         rt=$?
@@ -93,10 +93,10 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping Spark2 HistoryServer [$PID]"
+            echo "Stopping Spark HistoryServer [$PID]"
             ( ssh $SHS_HOST "$SPARK_HOME/sbin/stop-history-server.sh > /dev/null 2>&1" )
         else
-            echo "Spark2 HistoryServer not found.."
+            echo "Spark HistoryServer not found.."
         fi
         rt=0
         ;;
