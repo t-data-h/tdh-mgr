@@ -33,7 +33,7 @@ ui:
 50470 -> 9871  (secured)
 50070 -> 9870  (unsecured)
 rpc:
-8020 -> 9820
+8020 -> 9820 
 
 Secondary NN ports
 ---------------
@@ -50,3 +50,47 @@ rpc:
 50010 -> 9866
 ```
 
+# Upgrading Hadoop v2 to v3
+
+Hadoop v2 to v3
+=========================
+
+- Stop all Application and Services other than HDFS
+
+- Run Fsck
+```
+hdfs fsck / -files -blocks -locations > dfs-fsck.log
+```
+
+- Create Metadata Checkpoint
+```
+hdfs dfsadmin -safemode enter
+hdfs dfsadmin -saveNamespace
+```
+
+- Backup Checkpoint files
+```
+ ${dfs.namenode.name.dir}/current
+```
+
+- Run DataNode Report
+```
+hdfs dfsadmin -report > dfs-report.log
+```
+
+- Capture Namespace
+```
+hdfs dfs -ls -R / > dfs-lsr.log
+```
+
+- Install new Hadoop Version..
+
+- Start Upgrade process
+```
+hadoop-daemon.sh start namenode -upgrade
+```
+
+- Finalize previous images
+```
+hdfs dfsadmin -finalizeUpgrade
+```

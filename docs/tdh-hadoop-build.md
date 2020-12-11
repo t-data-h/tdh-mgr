@@ -63,7 +63,7 @@ export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
 
 ### Spark 2.x.x
 
-* Spark 2.1.x to 2.4.0. Note that Spark2 still uses Scala2.12 but adds a profile
+Spark 2.1.x to 2.4.0. Note that Spark2 still uses Scala2.12 but adds a profile
 for supporting Scala 2.12.
 ```
 export SPARK_DIST_NAME="custom-spark"
@@ -72,7 +72,7 @@ export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
  -Dhadoop.version=2.7.4 -Pyarn -Phive -Phive-thriftserver -Phadoop-provided
 ```
 
-* Spark 2.4.2 +
+### Spark 2.4.2 +
 ```
 ./dev/make-distribution.sh --name $SPARK_DIST_NAME --tgz -Phadoop-2.7 \
  -Pyarn -Phive -Phive-thriftserver -Phadoop-provided -Pscala-2.12
@@ -83,14 +83,21 @@ export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
 * Optionally add `-DskipTests`
 * Kubernetes support with `-Pkubernetes`
 
-* Spark 3.x.x
+### Spark 3.x.x
+
+For Hadoop v2
 ```
-/dev/make-distribution.sh --name $SPARK_DIST_NAME --tgz -Dhadoop.version=2.8.5 \
+./dev/make-distribution.sh --name $SPARK_DIST_NAME --tgz -Dhadoop.version=2.8.5 \
  -Pyarn -Phive -Phive-thriftserver -Phadoop-provided -Pkubernetes -DskipTests
 ```
 
-## Hive 1.2.x
+For Hadoop v3
+```
+./dev/make-distribution.sh --name $SPARK_DIST_NAME --tgz -Phadoop-3.2 -Pyarn \
+ -Phive -Phive-thriftserver -Phadoop-provided -Pkubernetes -DskipTests
+```
 
+## Hive 1.2.x
 ```
 mvn clean package -Phadoop-2,dist
 ```
