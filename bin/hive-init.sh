@@ -37,7 +37,7 @@ HIVE_SERVER2_LOG="${HIVE_LOGDIR}/hive-server2.log"
 
 HOST=$(hostname -s)
 HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | \
-    grep value | \
+    grep value 2>/dev/null | \
     sed  -E 's/.*<value>thrift:\/\/(.*)<\/value>/\1/' | \
     awk -F':' '{ print $1 }' )
 

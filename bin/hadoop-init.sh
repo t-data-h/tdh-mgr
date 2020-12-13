@@ -45,13 +45,13 @@ HOST=$( hostname -s )
 nscache="${HADOOP_HOME}/.ns_cache"
 
 NS_NAME=$( grep -A1 'dfs.nameservices' $HDFS_CONF | \
-  grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
+  grep value 2>/dev/null | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
 
 JN_EDITS=$( grep -A1 'dfs.namenode.shared.edits.dir' $HDFS_CONF | \
-  grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
+  grep value 2>/dev/null | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
 
 RM1=$( grep -A1 'yarn.resourcemanager.address' ${YARN_CONF} | \
-  grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' |  awk -F':' '{ print $1 }' )
+  grep value 2>/dev/null | sed -E 's/.*<value>(.*)<\/value>/\1/' |  awk -F':' '{ print $1 }' )
 
 NNS=
 JNS=
