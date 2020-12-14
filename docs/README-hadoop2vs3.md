@@ -83,7 +83,7 @@ hdfs dfsadmin -report > dfs-report.log
 hdfs dfs -ls -R / > dfs-lsr.log
 ```
 
-- Install new Hadoop Version..
+- Stop and perform new version upgrade.
 
 - Start Upgrade process
 ```

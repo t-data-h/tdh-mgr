@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<topology>
-  <node name="callisto" rack="/default"/>
-  <node name="10.10.10.65" rack="/default"/>
-</topology>

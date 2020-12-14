@@ -60,7 +60,7 @@ NN2=
 IS_HA=
 
 # cache expired? stat -c is not portable
-if [[ -f $nscache && $(( $(date +%s) - $(stat -c %Y $nscache) )) > 86400 ]]; then
+if [[ -f $nscache && $(( $(date +%s) - $(stat -c %Y $nscache) )) > 800 ]]; then
     ( rm $nscache )
 fi
 # cache nameservers to avoid very slow 'getconf'
@@ -173,7 +173,6 @@ show_status()
     fi
 
     IFS=$'\n'
-    r=0
 
     for dn in $( cat ${nodes} ); do
         printf "      -------------     |------|\n"
@@ -198,6 +197,10 @@ show_status()
             r=1
         fi
     done
+
+    if [ $r -gt 0 ]; then
+        ( rm $nscache )
+    fi
 
     return $r
 }
