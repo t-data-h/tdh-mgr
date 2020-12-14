@@ -24,6 +24,8 @@ if [ -n "$1" ]; then
     hivedb="$1"
 fi
 
+mysql=$(which mysql)
+
 # -------------------------------------
 # Set Hive real path locations
 
@@ -73,6 +75,11 @@ echo ""
 echo "$PNAME initializing Hive Db: '$hivedb'"
 echo "  Schema File: '$hive_schema'"
 echo ""
+
+if [ -z "$mysql" ]; then
+    echo "$PNAME Error, 'mysql' client not found in PATH"
+    exit 2
+fi
 
 # create db
 ( mysql -e "CREATE DATABASE IF NOT EXISTS $hivedb" )
