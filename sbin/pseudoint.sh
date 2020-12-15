@@ -38,18 +38,6 @@ usage()
 }
 
 
-version()
-{
-    if [ -z "$TDH_VERSION" ]; then
-        echo "TDH_ENV_USER not found!"
-    else
-        echo ""
-        echo "$TDH_PNAME (TDH) Version: $TDH_VERSION"
-        echo ""
-    fi
-}
-
-
 hostip_is_valid()
 {
     local hostid=`hostname`
@@ -115,7 +103,7 @@ while [ $# -gt 0 ]; do
             shift;
             ;;
         'version'|-V|--version)
-            version
+            tdh_version
             exit 0
             ;;
         *)

@@ -26,10 +26,11 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+
 # -----------
 
 host=$(hostname -s)
-zk=$(grep $host $ZOOKEEPER_HOME/conf/zoo.cfg)
+zk=$(grep $host $ZOOKEEPER_HOME/conf/zoo.cfg 2>/dev/null)
 dataDir=$(grep 'dataDir' $ZOOKEEPER_HOME/conf/zoo.cfg | awk -F= '{ print $2 }')
 zkid=
 

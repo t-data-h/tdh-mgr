@@ -21,7 +21,16 @@ hive_schema=
 rt=
 
 if [ -n "$1" ]; then
-    hivedb="$1"
+    case "$1" in 
+        'help'|-h|--help)
+            echo "Usage: $PNAME <dbname>"
+            echo "  <dbname> defaults to '$hivedb'"
+            exit 0
+            ;;
+        *)
+            hivedb="$1"
+            ;;
+    esac
 fi
 
 mysql=$(which mysql)

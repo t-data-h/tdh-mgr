@@ -29,7 +29,7 @@ fi
 # -----------
 
 host=$(hostname -s)
-broker=$(cat $KAFKA_HOME/config/brokers | grep $host)
+broker=$(cat $KAFKA_HOME/config/brokers | grep $host 2>/dev/null)
 brokerid=
 
 if [ -z "$broker" ]; then

@@ -18,22 +18,22 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+
 # -----------
 
 SPARK_PATH=$(readlink -f $SPARK_HOME)
 rt=1
-
-# -----------
 
 if ! [ -d $SPARK_PATH ]; then
     echo "Error determining path to SPARK_HOME: $SPARK_HOME"
     exit $rt
 fi
 
+# -----------
 
-SPARK_JAR=$(ls -1 $SPARK_PATH/yarn/*shuffle*.jar)
-YARN_LINK=$(ls -1 $HADOOP_HOME/share/hadoop/yarn/lib/*shuffle*.jar 2> /dev/null)
-YARN_JAR=$(readlink -f $YARN_LINK 2> /dev/null)
+SPARK_JAR=$(ls -1 $SPARK_PATH/yarn/*shuffle*.jar 2>/dev/null)
+YARN_LINK=$(ls -1 $HADOOP_HOME/share/hadoop/yarn/lib/*shuffle*.jar 2>/dev/null)
+YARN_JAR=$(readlink -f $YARN_LINK 2>/dev/null)
 
 
 if [ -z "$SPARK_JAR" ]; then
