@@ -59,8 +59,9 @@ NN1=
 NN2=
 IS_HA=
 
-# cache expired? stat -c is not portable
-if [[ -f $nscache && $(( $(date +%s) - $(stat -c %Y $nscache) )) > 800 ]]; then
+cache_timeout_sec=800
+# cache expired? note 'stat -c' is not portable
+if [[ -f $nscache && $(( $(date +%s) - $(stat -c %Y $nscache) )) > $cache_timeout_sec ]]; then
     ( rm $nscache )
 fi
 # cache nameservers to avoid very slow 'getconf'
