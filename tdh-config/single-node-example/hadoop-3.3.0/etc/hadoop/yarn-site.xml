@@ -108,60 +108,12 @@
     </property>
 
     <property>
-        <name>yarn.resourcemanager.scheduler.class</name>
-        <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.allocation.file</name>
-        <value>fair-scheduler.xml</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.user-as-default-queue</name>
-        <value>false</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.preemption</name>
-        <value>false</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.preemption.cluster-utilization-threshold</name>
-        <value>0.8f</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.sizebasedweight</name>
-        <value>false</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.assignmultiple</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.max.assign</name>
-        <value>2</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.locality.threshold.node</name>
-        <value>-1.0</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.locality.threshold.rack</name>
-        <value>-1.0</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.allow-undeclared-pools</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.fair.update-interval-ms</name>
-        <value>500</value>
-    </property>
-    <property>
         <name>yarn.resourcemanager.nodes.include-path</name>
         <value>/etc/hadoop/conf/nodes_include.txt</value>
     </property>
     <property>
         <name>yarn.resourcemanager.nodes.exclude-path</name>
-        <value>/etc/hadoop/conf/hosts_exclude.txt</value>
+        <value>/etc/hadoop/conf/nodes_exclude.txt</value>
     </property>
     <property>
         <name>yarn.scheduler.fair.assignmultiple</name>

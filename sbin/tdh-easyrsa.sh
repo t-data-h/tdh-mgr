@@ -9,7 +9,6 @@
 #  extendedKeyUsage = serverAuth,clientAuth
 #
 PNAME=${0##*\/}
-VERSION="V0.5.2"
 
 easyrsa="./easyrsa3"
 reqorsign=
@@ -52,7 +51,7 @@ while [ $# -gt 0 ]; do
             shift
             ;;
         'version'|-V|--version)
-            echo "$PNAME $VERSION"
+            tdh_version
             exit 0
             ;;
         *)

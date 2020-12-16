@@ -113,8 +113,12 @@ while [ $# -gt 0 ]; do
             dryrun=1
             echo "  <DRYRUN Enabled>"
             ;;
-        -h|--help)
+        'help'|-h|--help)
             usage
+            exit 0
+            ;;
+        'version'|-V|--version)
+            tdh_version
             exit 0
             ;;
         *)

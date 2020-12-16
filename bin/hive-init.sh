@@ -37,7 +37,7 @@ HIVE_SERVER2_LOG="${HIVE_LOGDIR}/hive-server2.log"
 
 HOST=$(hostname -s)
 HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | \
-    grep value | \
+    grep value 2>/dev/null | \
     sed  -E 's/.*<value>thrift:\/\/(.*)<\/value>/\1/' | \
     awk -F':' '{ print $1 }' )
 
@@ -80,6 +80,7 @@ show_status()
 
 ACTION="$1"
 rt=0
+hs=0
 
 printf " -------- ${C_CYN}${HIVE_VER}${C_NC} ----------- \n"
 
@@ -90,26 +91,27 @@ case "$ACTION" in
         rt=$?
         if [ $rt -eq 0 ]; then
             echo " Hive MetaStore is already running  [${HIVE_SERVER}:${PID}]"
-            exit $rt
         fi
 
         check_remote_process $HIVE_SERVER $HIVESERVER2
 
-        rt=$?
-        if [ $rt -eq 0 ]; then
+        hs=$?
+        if [ $hs -eq 0 ]; then
             echo " HiveServer2 is already running [${HIVE_SERVER}:${PID}]"
-            exit $rt
         fi
 
         ( ssh $HIVE_SERVER "mkdir -p $HIVE_LOGDIR" )
 
-        echo "Starting HiveMetaStore.. [$HIVE_SERVER]"
-        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore > $HIVE_METASTORE_LOG 2>&1 &" )
+        if [ $rt -gt 0 ]; then
+            echo "Starting HiveMetaStore.. [$HIVE_SERVER]"
+            ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore > $HIVE_METASTORE_LOG 2>&1 &" )
+            rt=$?
+        fi
 
-        rt=$?
-
-        echo "Starting HiveServer2..   [$HIVE_SERVER]"
-        ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 > $HIVE_SERVER2_LOG 2>&1 &" )
+        if [ $hs -gt 0 ]; then 
+            echo "Starting HiveServer2..   [$HIVE_SERVER]"
+            ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 > $HIVE_SERVER2_LOG 2>&1 &" )
+        fi
         ;;
 
     'stop')

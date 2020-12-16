@@ -45,13 +45,13 @@ HOST=$( hostname -s )
 nscache="${HADOOP_HOME}/.ns_cache"
 
 NS_NAME=$( grep -A1 'dfs.nameservices' $HDFS_CONF | \
-  grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
+  grep value 2>/dev/null | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
 
 JN_EDITS=$( grep -A1 'dfs.namenode.shared.edits.dir' $HDFS_CONF | \
-  grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
+  grep value 2>/dev/null | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
 
 RM1=$( grep -A1 'yarn.resourcemanager.address' ${YARN_CONF} | \
-  grep value | sed -E 's/.*<value>(.*)<\/value>/\1/' |  awk -F':' '{ print $1 }' )
+  grep value 2>/dev/null | sed -E 's/.*<value>(.*)<\/value>/\1/' |  awk -F':' '{ print $1 }' )
 
 NNS=
 JNS=
@@ -59,8 +59,9 @@ NN1=
 NN2=
 IS_HA=
 
-# cache expired? stat -c is not portable
-if [[ -f $nscache && $(( $(date +%s) - $(stat -c %Y $nscache) )) > 86400 ]]; then
+cache_timeout_sec=800
+# cache expired? note 'stat -c' is not portable
+if [[ -f $nscache && $(( $(date +%s) - $(stat -c %Y $nscache) )) > $cache_timeout_sec ]]; then
     ( rm $nscache )
 fi
 # cache nameservers to avoid very slow 'getconf'
@@ -173,7 +174,6 @@ show_status()
     fi
 
     IFS=$'\n'
-    r=0
 
     for dn in $( cat ${nodes} ); do
         printf "      -------------     |------|\n"
@@ -198,6 +198,10 @@ show_status()
             r=1
         fi
     done
+
+    if [ $r -gt 0 ]; then
+        ( rm $nscache )
+    fi
 
     return $r
 }

@@ -17,11 +17,11 @@ Apache projects or built from source. The supporting scripts and
 instructions are based on building a distribution using the following
 versions:
 
-- Hadoop 2.7.x or 2.8.x
+- Hadoop 2.8.x
 - HBase  1.3.x
-- Hive   1.2.x or 2.3.x
+- Hive   2.3.x
 - Spark  1.6.x - 2.4.x
-- Kafka  0.10.x or 2.2.x
+- Kafka  2.2.x
 - Zookeeper 5.x
 
 [System Prerequisites:](tdh-prereq.md) 
