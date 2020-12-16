@@ -31,10 +31,10 @@ separately as a tarball given it's size.  The supporting scripts and
 instructions are based on building a distribution using the following
 versions:
 
-- Hadoop 2.8.5
+- Hadoop 3.3.0
 - HBase  1.3.3
-- Hive   2.3.6
-- Spark  2.4.4
+- Hive   3.1.2
+- Spark  3.0.1
 - Kafka  2.2.0
 
 Refer to the setup document [tdh-hadoop-setup.md](docs/tdh-hadoop-setup.md) for
@@ -43,20 +43,25 @@ each ecosystem component.  Links are used to make minor upgrades easier, so
 for hadoop-2.8.5 there would also be a 'hadoop' link, and likewise for other
 components which would result in something like this:
 ```
-$ ls -l /opt/TDH
-lrwxrwxrwx  1 tca tca   12 Feb 13 15:38 hadoop -> hadoop-2.8.5
-drwxr-xr-x 10 tca tca 4096 Feb 13 15:44 hadoop-2.8.5
+total 48
+drwxrwxr-x  2 tca tca 4096 Feb 25  2020 bin
+drwxr-xr-x  2 tca tca 4096 Dec 14 11:11 docs
+drwxr-xr-x  2 tca tca 4096 Dec 15 09:35 etc
+lrwxrwxrwx  1 tca tca   12 Dec 14 11:26 hadoop -> hadoop-3.3.0
+drwxrwxr-x 10 tca tca 4096 Dec 15 13:01 hadoop-3.3.0
 lrwxrwxrwx  1 tca tca   11 Jun 29  2019 hbase -> hbase-1.3.3
-drwxrwxr-x  8 tca tca 4096 Jun 29  2019 hbase-1.3.3
-lrwxrwxrwx  1 tca tca   10 Feb  9 15:21 hive -> hive-2.3.6
-drwxr-xr-x 10 tca tca 4096 Feb  9 15:22 hive-2.3.6
-lrwxrwxrwx  1 tca tca   16 May 11  2019 kafka -> kafka_2.12-2.2.0
-drwxr-xr-x  6 tca tca 4096 Feb  8 18:07 kafka_2.12-2.2.0
-lrwxrwxrwx  1 tca tca   11 Sep 28 10:43 spark -> spark-2.4.4
-drwxr-xr-x 11 tca tca 4096 Feb  9 13:48 spark-1.6.3
-drwxr-xr-x 12 tca tca 4096 Sep 26 20:05 spark-2.4.4
-lrwxrwxrwx  1 tca tca   15 Dec 19 14:16 zookeeper -> zookeeper-5.5.6
-drwxr-xr-x  7 tca tca 4096 Dec 19 14:45 zookeeper-5.5.6
+drwxr-xr-x  8 tca tca 4096 Aug 27  2019 hbase-1.3.3
+lrwxrwxrwx  1 tca tca   10 Dec 14 13:51 hive -> hive-3.1.2
+drwxrwxr-x 10 tca tca 4096 Dec 14 15:39 hive-3.1.2
+lrwxrwxrwx  1 tca tca   11 Dec 14 13:24 kafka -> kafka-2.2.0
+drwxr-xr-x  6 tca tca 4096 Jul 27  2019 kafka-2.2.0
+-rw-rw-r--  1 tca tca 1021 Dec 21  2019 README.md
+drwxr-xr-x  2 tca tca 4096 Dec 14 13:57 sbin
+lrwxrwxrwx  1 tca tca   11 Dec 14 13:52 spark -> spark-3.0.1
+drwxrwxr-x 13 tca tca 4096 Dec 15 07:07 spark-3.0.1
+drwxr-xr-x 20 tca tca 4096 Mar  4  2018 sqoop-1.99.6
+lrwxrwxrwx  1 tca tca   15 Dec 20  2019 zookeeper -> zookeeper-5.5.6
+drwxrwxr-x  7 tca tca 4096 Nov 15 15:30 zookeeper-5.5.6
 ```
 
  This is essentially the contents of the TDH binary distribution though there
