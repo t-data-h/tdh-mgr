@@ -250,10 +250,10 @@ case "$ACTION" in
                         exit 1
                     fi
                     echo "Starting HDFS Journal Nodes.."
-                    ( $HADOOP_HOME/sbin/hadoop-daemons.sh \
+                    ( $HADOOP_HOME/bin/hdfs \
                       --config "$HADOOP_CONF_DIR" \
                       --hostnames "$JNS" \
-                      --script "$HADOOP_HDFS_HOME/bin/hdfs" start journalnode >/dev/null 2>&1 )
+                      --daemon start journalnode >/dev/null 2>&1 )
                     ;;
             esac
             exit 0

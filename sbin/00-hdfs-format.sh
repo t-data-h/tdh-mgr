@@ -27,9 +27,10 @@ fi
 # -----------
 
 HOST=$( hostname -s )
-NS_NAME=$($HADOOP_HOME/bin/hdfs getconf -confKey 'dfs.nameservices' 2>/dev/null)
-JN_EDITS=$($HADOOP_HOME/bin/hdfs getconf -confKey dfs.namenode.shared.edits.dir 2>&-)
-NNS=$(${HADOOP_HOME}/bin/hdfs getconf -namenodes 2>/dev/null)
+HDFS="${HADOOP_HOME}/bin/hdfs"
+NS_NAME=$($HDFS getconf -confKey 'dfs.nameservices' 2>/dev/null)
+JN_EDITS=$($HDFS getconf -confKey dfs.namenode.shared.edits.dir 2>&-)
+NNS=$($HDFS getconf -namenodes 2>/dev/null)
 JNS=$(echo "$JN_EDITS" | sed 's,qjournal://\([^/]*\)/.*,\1,g; s/;/ /g; s/:[0-9]*//g')
 NN1=$(echo $NNS | awk '{ print $1 }')
 NN2=$(echo $NNS | awk '{ print $2 }')
@@ -59,11 +60,11 @@ if [ -n "$NS_NAME" ]; then
 
     # Format ZK node
     echo " -> Format ZK node for ZKFC"
-    ( $HADOOP_HOME/bin/hdfs zkfc -formatZK -force )
+    ( $HDFS zkfc -formatZK -force )
 fi
 
 # Format the Namenode
-( $HADOOP_HOME/bin/hdfs namenode -format )
+( $HDFS namenode -format )
 
 rt=$?
 if [ $rt -ne 0 ]; then
@@ -74,27 +75,23 @@ fi
 # Set up HA
 if [ -n "$NS_NAME" ]; then
     # Start the first Namenode
-    ( $HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR \
-      --script $HADOOP_HOME/bin/hdfs start namenode )
+    ( $HDFS --config $HADOOP_CONF_DIR --daemon start namenode )
 
     sleep 5
 
     # Start 1st ZKFC service
-    ( $HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR \
-      --script "$HADOOP_HOME/bin/hdfs" start zkfc )
+    ( $HDFS --config $HADOOP_CONF_DIR --daemon start zkfc )
 
     # Bootstrap secondary
-    ( ssh $NN2 "$HADOOP_HOME/bin/hdfs namenode -bootstrapStandby" )
+    ( ssh $NN2 "$HDFS namenode -bootstrapStandby" )
     rt=$?
 
     # Start the second Namenode
     if [ $rt -eq 0 ]; then
-        ( ssh $NN2 "$HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR \
-          --script $HADOOP_HOME/bin/hdfs start namenode" )
+        ( ssh $NN2 "$HDFS --config $HADOOP_CONF_DIR --daemon start namenode" )
         sleep 3
         # Start 2nd ZKFC service
-        ( ssh $NN2 "$HADOOP_HOME/sbin/hadoop-daemon.sh --config $HADOOP_CONF_DIR \
-            --script $HADOOP_HOME/bin/hdfs start zkfc" )
+        ( ssh $NN2 "$HDFS --config $HADOOP_CONF_DIR --daemon start zkfc" )
     fi
 fi
 
