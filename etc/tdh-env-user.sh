@@ -4,7 +4,7 @@
 #
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v20.12.3"
+VERSION="v21.01"
 
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1

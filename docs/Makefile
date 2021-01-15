@@ -12,7 +12,6 @@ objects:=$(patsubst %.md,%.pdf,$(sources))
 		-f markdown-implicit_figures $< -o $@
 
 all: pdf
-
 docs: pdf 
 pdf: $(objects)
 
