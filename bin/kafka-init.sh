@@ -52,11 +52,10 @@ show_status()
 
     for broker in ${BROKERS}; do
         broker=$( echo $broker | awk -F: '{ print $1 }' )
-        #broker=${broker%% *}
 
         check_remote_process $broker $KAFKA_ID
-        rt=$?
 
+        rt=$?
         if [ $rt -eq 0 ]; then
             printf " Kafka Broker           | $C_GRN OK $C_NC | [${broker}:${PID}]\n"
         else

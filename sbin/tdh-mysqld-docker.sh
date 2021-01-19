@@ -38,27 +38,27 @@ res=
 ACTION=
 
 
-usage()
-{
-    echo ""
-    echo "Usage: $TDH_PNAME [options] run|pull|pw"
-    echo "   -h|--help            :  Display usage and exit."
-    echo "   -n|--name <name>     :  Name of the Docker Container instance."
-    echo "                           Default container name is '${name}'."
-    echo "   -N|--network <name>  :  Attach container to Docker network"
-    echo "                           Default uses 'host' networking."
-    echo "   -p|--port <port>     :  Local bind port for the container."
-    echo "   -V|--version         :  Show version info and exit"
-    echo ""
-    echo " Creates and initializes a mysqld docker container."
-    echo ""
-    echo " Any other action than 'run' results in a dry run."
-    echo " The container will only start with the run or start action."
-    echo " The 'pull' command fetches the docker image:version."
-    echo " The 'pw' command will attempt to detect the temporary password"
-    echo " created at startup from the container logs."
-    echo ""
-}
+usage="
+A script for creating and initializing a docker mysqld instance.
+
+Synopsis:
+  $TDH_PNAME [options] run|pull|pw
+
+Options:
+  -h|--help            :  Display usage and exit.
+  -n|--name <name>     :  Name of the Docker Container instance.
+                          Default container name is '${name}'.
+  -N|--network <name>  :  Attach container to a Docker network.
+                          Default uses 'host' networking.
+  -p|--port <port>     :  Local bind port for the container.
+  -V|--version         :  Show version info and exit
+  
+ Any other action than 'run' results in a dry run.
+ The container will only start with the run or start action.
+ The 'pull' command fetches the docker image:version.
+ The 'pw' command will attempt to detect the temporary password
+  created at startup from the container logs.
+"
 
 
 validate_network()
@@ -82,7 +82,7 @@ validate_network()
 while [ $# -gt 0 ]; do
     case "$1" in
         'help'|-h|--help)
-            usage
+            echo "$usage"
             exit 0
             ;;
         -N|--network)
@@ -110,7 +110,8 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -z "$ACTION" ]; then
-    usage
+    echo "$usage"
+    exit 0
 fi
 
 if [[ $ACTION == "pw" ]]; then
@@ -132,11 +133,11 @@ fi
 
 cmd="$cmd --network $network"
 cmd="$cmd --mount type=bind,src=${mycnf},dst=/etc/my.cnf \
---mount type=volume,source=${volname},target=/var/lib/mysql \
---env MYSQL_RANDOM_ROOT_PASSWORD=true \
---env MYSQL_LOG_CONSOLE=true \
-${docker_image} \
---character-set-server=utf8 --collation-server=utf8_general_ci"
+  --mount type=volume,source=${volname},target=/var/lib/mysql \
+  --env MYSQL_RANDOM_ROOT_PASSWORD=true \
+  --env MYSQL_LOG_CONSOLE=true \
+  ${docker_image} \
+  --character-set-server=utf8 --collation-server=utf8_general_ci"
 
 #  initialization scripts
 # --mount type=bind,src=/path-on-host-machine/scripts/,dst=/docker-entrypoint-initdb.d/ \
