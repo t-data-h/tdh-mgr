@@ -17,6 +17,7 @@ all: docs
 
 pdf: docs
 .PHONY: docs 
+
 docs:
 	( cd docs; make all )
 
@@ -27,7 +28,7 @@ distclean: clean
 
 install:
 	( $(MKDIR) $(BINPATH); $(MKDIR) $(SBINPATH) )
-	( $(MKDIR) $(ETCPATH); $(MKDIR) ${DOCPATH) )
+	( $(MKDIR) $(ETCPATH); $(MKDIR) $(DOCPATH) )
 	( $(CP) etc/* $(ETCPATH)/ )
 	( $(CP) docs/* $(DOCPATH)/ )
 	( $(CP) bin/*.sh $(BINPATH)/ )

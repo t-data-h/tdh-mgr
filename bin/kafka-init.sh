@@ -31,10 +31,8 @@ if [ -z "$KAFKA_HOME" ]; then
 fi
 
 KAFKA_VER=$(readlink $KAFKA_HOME)
-
 KAFKA_ID="kafka.Kafka"
 KAFKA_CFG="config/server.properties"
-
 HOST=$(hostname -s)
 
 # -----------
