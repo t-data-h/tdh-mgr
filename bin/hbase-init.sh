@@ -25,18 +25,14 @@ if [ -z "$TDH_VERSION" ]; then
 fi
 # -----------
 
+HOST=$(hostname -s)
 HBASE_VER=$(readlink $HBASE_HOME)
-
 HB_MASTERS="${HBASE_HOME}/conf/masters"
-
 HB_MASTER_ID=".hbase.master.HMaster start"
 HB_REGION_ID=".hbase.regionserver.HRegionServer"
 HB_THRIFT_ID=".hbase.thrift.ThriftServer"
-
 HBASE_LOGDIR="${HADOOP_LOGDIR}/hbase"
 HBASE_THRIFTLOG="${HBASE_LOGDIR}/hbase-thriftserver.log"
-
-HOST=$(hostname -s)
 HBASE_MASTER=$(cat $HBASE_HOME/conf/masters 2>/dev/null)
 
 if [ -z "$HBASE_MASTER" ]; then
@@ -44,7 +40,7 @@ if [ -z "$HBASE_MASTER" ]; then
     exit 1
 fi
 
-# -----------
+# --------------------------------------------
 
 usage()
 {

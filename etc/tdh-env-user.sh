@@ -4,7 +4,7 @@
 #
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v20.12.3"
+VERSION="v21.01"
 
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1
@@ -62,7 +62,7 @@ if [ -f "/etc/kafka/jaas.conf" ]; then
 fi
 
 if [ -f "/etc/kafka/conf/kafka-client.conf" ]; then
-    export ZKS=$( cat /etc/kafka/conf/kafka-client.conf | awk -F '=' '{ print $2 }' )
+    export ZKS=$( cat /etc/kafka/conf/kafka-client.conf 2>/dev/null | awk -F '=' '{ print $2 }' )
 fi
 
 # Highlighting
@@ -206,7 +206,7 @@ function getBrokers()
     local tmpifs=$IFS
 
     IFS=$'\n'
-    BROKERS=$( cat ${brokersfile} | awk '{ print $1 }' | paste -s -d, - )
+    BROKERS=$( cat ${brokersfile} 2>/dev/null | awk '{ print $1 }' | paste -s -d, - )
     IFS=$tmpifs
 
     export BROKERS
@@ -218,7 +218,7 @@ function getZookeepers()
     local tmpifs=$IFS
 
     IFS=$'\n'
-    ZKS=$( cat ${zoomasters} | paste -s -d, - )
+    ZKS=$( cat ${zoomasters} 2>/dev/null | paste -s -d, - )
     IFS=$tmpifs
 
     export ZKS

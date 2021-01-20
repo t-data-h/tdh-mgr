@@ -29,10 +29,9 @@ if [ -z "$SPARK_USER" ]; then
     SPARK_USER="$HADOOP_USER"
 fi
 
+HOST=$(hostname -s)
 SPARK_VER=$(readlink $SPARK_HOME)
 SPARK_ID="org.apache.spark.deploy.history.HistoryServer"
-
-HOST=$(hostname -s)
 SHS_HOST=$( grep 'spark.yarn.historyServer.address' ${SPARK_HOME}/conf/spark-defaults.conf | \
   awk -F'=' '{ print $2 }' | \
   sed -E 's/http:\/\/(.*):.*/\1/' )

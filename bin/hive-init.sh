@@ -25,23 +25,20 @@ if [ -z "$TDH_VERSION" ]; then
 fi
 # -----------
 
+HOST=$(hostname -s)
 HIVE_VER=$(readlink $HIVE_HOME)
-
 HIVEMETASTORE="MetaStore"
 HIVESERVER2="HiveServer2"
 METADB="mysqld"
-
 HIVE_LOGDIR="${HADOOP_LOGDIR}/hive"
 HIVE_METASTORE_LOG="${HIVE_LOGDIR}/hive-metastore.log"
 HIVE_SERVER2_LOG="${HIVE_LOGDIR}/hive-server2.log"
-
-HOST=$(hostname -s)
 HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | \
     grep value 2>/dev/null | \
     sed  -E 's/.*<value>thrift:\/\/(.*)<\/value>/\1/' | \
     awk -F':' '{ print $1 }' )
 
-# -----------
+# -------------------------------------------
 
 usage()
 {

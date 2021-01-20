@@ -16,20 +16,24 @@ x509type="serverclient"  # options are 'server', 'client', or 'serverclient'
 
 # ------------------------
 
-usage()
-{
-    echo ""
-    echo "Usage: $PNAME [options] [action] host1 host2 [..]"
-    echo "  -h|--help            : Display help info and exit."
-    echo "  -e|--easyrsa <path>  : Path to EasyRSA3 (with existing pki config)."
-    echo "  -x|--x509type <type> : Name of x509 type (default is 'serverclient')."
-    echo "  -V|--version         : Show version info and exit."
-    echo "    <action>           : Action is either 'gen-req' or 'sign-req'."
-    echo ""
-    echo "  TDH_HOSTS can be set to provide list of hosts and "
-    echo "  will override any command provided hosts"
-    echo ""
-}
+usage="
+Script for utilizing EasyRSA3 to generate and sign host certificates. This
+requires an existing EasyRSA installation, provided by the '-e' option.
+
+Snynopsis:
+  $PNAME [options] [action] host1 <host2 ...>
+
+Options:
+  -h|--help            : Display help info and exit.
+  -e|--easyrsa <path>  : Path to EasyRSA3 (with existing pki config).
+  -x|--x509type <type> : Name of x509 type (default is 'serverclient').
+  -V|--version         : Show version info and exit.
+
+  <action>             : Action is either 'gen-req' or 'sign-req'.
+  
+  TDH_HOSTS can be set to provide list of hosts and will override any 
+  runtime provided hosts.
+"
 
 # ------------------------
 # MAIN
@@ -39,7 +43,7 @@ rt=1
 while [ $# -gt 0 ]; do
     case "$1" in
         'help'|-h|--help)
-            usage
+            echo "$usage"
             exit 0
             ;;
         -e|--easyrsa)
@@ -70,7 +74,7 @@ fi
 
 if [ -z "$hosts" ]; then
     echo "Error, No hosts provided!"
-    usage
+    echo "$usage"
     exit $rt
 fi
 

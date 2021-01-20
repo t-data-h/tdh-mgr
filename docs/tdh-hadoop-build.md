@@ -27,7 +27,7 @@ $ make
 $ make install
 ```
 
-Hadoop 2.7.7:
+Hadoop 2.x:
 ```
 export MAVEN_OPTS="-Xms256m -Xmx512m"
 mvn clean package -Pdist,native,docs -DskipTests -Dtar
@@ -78,10 +78,10 @@ export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
  -Pyarn -Phive -Phive-thriftserver -Phadoop-provided -Pscala-2.12
 ```
 
-* By default, Spark2 still builds with Scala 2.11, use the mvn profile
+- By default, Spark2 still builds with Scala 2.11, use the mvn profile
   or optionally update the `scala.version` property in the parent POM.
-* Optionally add `-DskipTests`
-* Kubernetes support with `-Pkubernetes`
+- Optionally add `-DskipTests`
+- Kubernetes support with `-Pkubernetes`
 
 ### Spark 3.x.x
 

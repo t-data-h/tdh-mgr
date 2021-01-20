@@ -1,9 +1,9 @@
 Installing and Configuring MySQL as the Hive Metastore
 =======================================================
 
-Installing MySQL Server 5.7.  For consistency, we use the MySQL Community Edition directly rather than 
-relying on distribution packages that often pull in unwanted dependencies (OpenJDK for one), or for 
-some distributions, may install MariaDB instead.
+Installing MySQL Server 5.7. For consistency, we use the MySQL Community Edition 
+directly rather than relying on distribution packages that often pull in 
+unwanted dependencies (OpenJDK or MariaDB for example).
 
 
 ## Ubuntu:
@@ -71,44 +71,45 @@ some distributions, may install MariaDB instead.
 
 ## Configuring MySQL
 
-This outlines the process for configuring MySQL for use as a Hive Metastore including 
-replication. Even if the mysql server will not be replicated, it is best to ensure 
-bin-logging and any options necessary for replication be applied to simplify a later 
-requirement.
+This outlines the process for configuring MySQL for use as a Hive Metastore 
+including replication. Even if the mysql server will not be replicated, it 
+is best to ensure bin-logging and any options necessary for replication be 
+applied to simplify a later requirement.
 
-For Cloudera clusters, there have been known compatability issues in using bin-logging 
-with certain ecosystem components like Oozie. This may no longer be the case, however 
-current best practice is to use the 'mixed' bin-log format. Note that server-id must 
-be unique per instance.
+For Cloudera clusters, there have been known compatability issues in using 
+*bin-log* options with certain ecosystem components like Oozie. This may no 
+longer be the case, however a good practice is to use the 'mixed' bin-log 
+format. Note that *server-id* must be unique per instance.
 ```
 server-id=1
 log-bin=mysql-bin
 binlog-format=mixed
 ```
 
-Replication generally works fine for an entire mysql instance dedicated to a cluster, 
-however it is worth mentioning that the Hive Metastore can be solely replicated via 
-the following configuration option:
+Replication generally works fine for an entire mysql instance dedicated 
+to a cluster, however it is worth mentioning that the Hive Metastore can 
+be solely replicated via the following configuration option:
 ```
 replicate-do-db=metastore
 ```
 
 A full MySQL sample configuration is provided at the end of this document.
-
-Note that the use of '>' denotes a mysql command and the '$' prefix is a shell command.
+Note that the use of '>' denotes a mysql command and the '$' prefix is a 
+shell command.
 
 
 ## Enabling MySQL Replication
 
-- First create the replication user with grants on the master. This user will be created 
-on the slave automatically in a later step.
+- First create the replication user with grants on the master. This user will 
+  be created on the slave automatically in a later step.
   ```
   > GRANT REPLICATION SLAVE ON *.* TO `repluser`@`%` IDENTIFIED BY 'repluser_pw';
   ```
 
-- Ensure both master and slave databases are running and have unique server ids. We then 
-dump the master database with a full lock that we keep in place until replication is running.
-On the master we dump the database as follows:
+- Ensure both master and slave databases are running and have unique server ids. 
+  We then dump the master database with a full lock that we keep in place until 
+  replication is running. 
+  On the master we dump the database as follows:
   ```
   $ mysql -u root -p
 
@@ -121,8 +122,9 @@ On the master we dump the database as follows:
   mysqldump -p --all-databases --lock-all-tables --master-data > mydump.sql
   ```
 
-- Next, we reset the replication process on the Slave database to align the binlog. We take 
-the two values for the log file and log position from the master status details from above.
+- Next, we reset the replication process on the Slave database to align the 
+  *bin-log*. We take the two values for the log file and log position from the 
+  master status details above.
   ```
   $ mysql -u root -p
   > STOP SLAVE;
@@ -146,15 +148,17 @@ the two values for the log file and log position from the master status details 
    > quit;
   ```
 
-- Replication is now enabled. You can view the current slave status by running the command
+- Replication is now enabled. You can view the current slave status by running 
+  the *show slave status* command.
   ```
   mysql -p -e "SHOW SLAVE STATUS\G"
   ```
 
-Replication timing is rarely an issue with the Hive metastore, since it generally does not 
-grow very large, but in some large CDH clusters, one might wish to have the processes for 
-Cloudera Manager (host monitor, events, etc.) write to a separate database since those 
-processes produce a larger volume of writes. The slave status provides the number of 
+Replication timing is rarely an issue with the Hive metastore, since it 
+generally does not grow unusually large, but in some large clusters, one 
+might wish to have the processes for monitoring events (host monitor, 
+system stats, etc.) to write to a separate database since those processes 
+produce a larger volume of writes. The slave status provides the number of 
 *seconds_behind_master* as an indication of the replication load.
 
 <br>
@@ -214,7 +218,7 @@ pid-file=/var/run/mysqld/mysqld.pid
 ```
 
 ## Mysql JDBC Connector
-Use the 5.1 Version for Mysql 5.7 and CDH. Note all nodes need the connector.
+Use the 5.1 Connector for Mysql 5.7. Note all nodes need the connector.
 ```
 wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz
 tar -zxf mysql-connector-java-5.1.46.tar.gz

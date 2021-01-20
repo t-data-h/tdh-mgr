@@ -58,39 +58,39 @@ Hadoop v2 to v3
 - Stop all Application and Services other than HDFS
 
 - Run Fsck
-```
-hdfs fsck / -files -blocks -locations > dfs-fsck.log
-```
+  ```
+  hdfs fsck / -files -blocks -locations > dfs-fsck.log
+  ```
 
 - Create Metadata Checkpoint
-```
-hdfs dfsadmin -safemode enter
-hdfs dfsadmin -saveNamespace
-```
+  ```
+  hdfs dfsadmin -safemode enter
+  hdfs dfsadmin -saveNamespace
+  ```
 
 - Backup Checkpoint files
-```
- ${dfs.namenode.name.dir}/current
-```
+  ```
+   ${dfs.namenode.name.dir}/current
+  ```
 
 - Run DataNode Report
-```
-hdfs dfsadmin -report > dfs-report.log
-```
+  ```
+  hdfs dfsadmin -report > dfs-report.log
+  ```
 
 - Capture Namespace
-```
-hdfs dfs -ls -R / > dfs-lsr.log
-```
+  ```
+  hdfs dfs -ls -R / > dfs-lsr.log
+  ```
 
 - Stop and perform new version upgrade.
 
 - Start Upgrade process
-```
-hadoop-daemon.sh start namenode -upgrade
-```
+  ```
+  hadoop-daemon.sh start namenode -upgrade
+  ```
 
 - Finalize previous images
-```
-hdfs dfsadmin -finalizeUpgrade
-```
+  ```
+  hdfs dfsadmin -finalizeUpgrade
+  ```

@@ -22,20 +22,25 @@ fi
 # -----------
 
 
-usage()
-{
-    echo ""
-    echo "Usage: $TDH_PNAME [-i interface]  start|stop|status"
-    echo "  -h|--help      : Display usage info and exit."
-    echo "  -i|--interface : Name of a system interface; default is 'vmnet8'"
-    echo "  -I|--ip        : Alternate bind address to use, in CIDR format."
-    echo "                   the default is: \$(hostname -i)/24"
-    echo "  -V|--version   : Display version and exit"
-    echo ""
-    echo "   Note the /24 netmask is the default used above, but the netmask"
-    echo "   should always be provided with the -I option"
-    echo ""
-}
+usage="
+Convenience script for configuring the host IP on the given interface. 
+By default, the interface 'vmnet8' is used, but can be defined seperately.
+This is primarily intended for detached hosts or hosts with unstable 
+network environments (ie. laptop|wifi)
+
+Synopsis:
+  $TDH_PNAME [options]  start|stop|status
+
+Options:
+  -h|--help      : Display usage info and exit.
+  -i|--interface : Name of a system interface; default is 'vmnet8'
+  -I|--ip        : Alternate bind address to use, in CIDR format.
+                   the default is: \$(hostname -i)/24
+  -V|--version   : Display version and exit
+
+   Note the /24 netmask is the default used above, but the netmask
+   should always be provided with the -I option
+"
 
 
 hostip_is_valid()
@@ -91,7 +96,7 @@ IFACE="vmnet8"
 while [ $# -gt 0 ]; do
     case "$1" in
         'help'|-h|--help)
-            usage
+            echo "$usage"
             exit 0
             ;;
         -i|--interface)
@@ -145,7 +150,7 @@ elif [ "$ACTION" == "status" ]; then
     echo ""
 
 else
-    usage
+    echo "$usage"
 fi
 
 echo ""

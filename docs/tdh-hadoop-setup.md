@@ -17,11 +17,11 @@ Apache projects or built from source. The supporting scripts and
 instructions are based on building a distribution using the following
 versions:
 
-- Hadoop 2.8.x
+- Hadoop 3.3.x
 - HBase  1.3.x
-- Hive   2.3.x
-- Spark  1.6.x - 2.4.x
-- Kafka  2.2.x
+- Hive   3.1.x
+- Spark  2.4.x - 3.0.x
+- Kafka  2.2.x - 2.6.x
 - Zookeeper 5.x
 
 [System Prerequisites:](tdh-prereq.md) 
@@ -40,29 +40,31 @@ via Ansible in the **tdh-gcp** project.
 Note that this **must** be a JDK distribution, not JRE. Oracle is only needed
 by vendor distributions for the Strong Encryption security module though more
 recent versions of OpenJDK 1.8 (>171?) now support strong encryption by default.
+Java 11 is not supported fully in Hadoop 2.x though it may function albeit with 
+a load of warnings.
 
-* Disable IPv6  
+- Disable IPv6  
 There are known issues with Hadoop and IPv6 (especially with Ubuntu) and it is
 recommended to disable the IPv6 stack in the Linux Kernel.
 
-* sysctl.conf
+- sysctl.conf
   ```
   net.ipv6.conf.all.disable_ipv6 = 1
   net.ipv6.conf.default.disable_ipv6 = 1
   net.ipv6.conf.lo.disable_ipv6 = 1
   ```
 
-* Hadoop User and Group  
+- Hadoop User and Group  
   The environment generally runs well as a single user, but for an actual
   distributed cluster it may make more sense to create a hadoop user and group
   with a consistent UID and GID across systems.
-   ```
-   $ UID=xxx; GID=yyy
-   $ groupadd -g $GID hadoop
-   $ useradd -g -m -u $UID hadoop
-   ```
+  ```
+  $ UID=xxx; GID=yyy
+  $ groupadd -g $GID hadoop
+  $ useradd -g -m -u $UID hadoop
+  ```
 
-* Networking and DNS  
+- Networking and DNS  
   While it is possible to run services on localhost only (loopback) for a single
   node setup, the use of loopback does not work well with distributed systems.
   Spark especially, even in a single node setup, relies on `hostname -f` resolving
@@ -93,8 +95,8 @@ recommended to disable the IPv6 stack in the Linux Kernel.
     the cluster is running. The script `./sbin/pseudoint.sh` can be used to set this
     accordingly.
 
-* Configure SSH  
-SSH keys are required for starting services (such as the secondary namenode).
+- Configure SSH  
+  SSH keys are required for starting services (such as the secondary namenode).
   ```
   # su - hadoop
   $ ssh-keygen
@@ -105,21 +107,21 @@ SSH keys are required for starting services (such as the secondary namenode).
   $ chmod 600 !$
   ```
 
-* Configure MySQL  
-Mysql is the preferred db type for use with the Hive Metastore. For distributed
-clusters, Mysql can be configured to run in a master-slave setup by the `tdh-gcp`
-project via Ansible.  Alternatively, for Dev setups or single host
-'pseudo-distributed' mode, a docker instance can be used effectively and is
-described in further detail below in the Hive section.
+- Configure MySQL  
+  Mysql is the preferred db type for use with the Hive Metastore. For distributed
+  clusters, Mysql can be configured to run in a master-slave setup by the `tdh-gcp`
+  project via Ansible.  Alternatively, for Dev setups or single host
+  'pseudo-distributed' mode, a docker instance can be used effectively and is
+  described in further detail below in the Hive section.
 
 * Cluster configuration  
-While these instructions go into some detail about configurations, a base
-template version can be used to initiate the configs and is found in the `tdh-config`
-directory.  Generally, this directory should be copied away to its own separate
-repository for tracking the cluster configurations. Additionally, as previously
-stated, much of these instructions are for seeding a TDH installation from
-scratch but most of these steps are automated via the `tdh-gcp` project and
-corresponding Ansible.
+  While these instructions go into some detail about configurations, a base
+  template version can be used to initiate the configs and is found in the `tdh-config`
+  directory.  Generally, this directory should be copied away to its own separate
+  repository for tracking the cluster configurations. Additionally, as previously
+  stated, much of these instructions are for seeding a TDH installation from
+  scratch but most of these steps are automated via the `tdh-gcp` project and
+  corresponding Ansible.
 
 ##  Hadoop
 

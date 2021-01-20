@@ -29,6 +29,7 @@ if [ -z "$HADOOP_CONF_DIR" ]; then
 fi
 # -----------
 
+HOST=$( hostname -s )
 HADOOP_VER=$(readlink $HADOOP_HOME)
 HDFS_CONF="${HADOOP_CONF_DIR}/hdfs-site.xml"
 YARN_CONF="${HADOOP_CONF_DIR}/yarn-site.xml"
@@ -40,9 +41,6 @@ FC_ID=""
 RM_ID="resourcemanager.ResourceManager"
 DN_ID="datanode.DataNode"
 NM_ID="nodemanager.NodeManager"
-
-HOST=$( hostname -s )
-nscache="${HADOOP_HOME}/.ns_cache"
 
 NS_NAME=$( grep -A1 'dfs.nameservices' $HDFS_CONF | \
   grep value 2>/dev/null | sed -E 's/.*<value>(.*)<\/value>/\1/' 2>/dev/null )
@@ -59,7 +57,11 @@ NN1=
 NN2=
 IS_HA=
 
+# -----------
+# NSCACHE
+nscache="${HADOOP_HOME}/.ns_cache"
 cache_timeout_sec=800
+
 # cache expired? note 'stat -c' is not portable
 if [[ -f $nscache && $(( $(date +%s) - $(stat -c %Y $nscache) )) > $cache_timeout_sec ]]; then
     ( rm $nscache )
@@ -79,6 +81,8 @@ else
     fi
 fi
 
+# -----------
+# HA Config
 JNS=$(echo "$JN_EDITS" | sed 's,qjournal://\([^/]*\)/.*,\1,g; s/;/ /g; s/:[0-9]*//g')
 NN1=$(echo $NNS | awk '{ print $1 }')
 
@@ -91,12 +95,12 @@ else
 fi
 
 
-# -----------
+# ---------------------------------------------------
 
 
 usage()
 {
-    echo "$TDH_PNAME {start|stop|status} <journal>"
+    echo "$TDH_PNAME {start|stop|status} <journal-only>"
     echo "  TDH $TDH_VERSION"
 }
 
@@ -118,7 +122,6 @@ show_status()
     printf " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- \n"
 
     # HDFS Primary Namenode
-    #
     check_remote_process $NN1 $NN_ID
 
     rt=$?
@@ -130,7 +133,6 @@ show_status()
     fi
 
     # HDFS Secondary Namenode
-    #
     check_remote_process $NN2 $SN_ID
 
     rt=$?
@@ -142,7 +144,6 @@ show_status()
     fi
 
     # YARN ResourceManager
-    #
     check_remote_process $RM1 $RM_ID
 
     rt=$?
@@ -178,6 +179,7 @@ show_status()
     for dn in $( cat ${nodes} ); do
         printf "      -------------     |------|\n"
 
+        # HDFS DataNode
         check_remote_process $dn $DN_ID
 
         rt=$?
@@ -188,6 +190,7 @@ show_status()
             r=1
         fi
 
+        # YARN NodeManager
         check_remote_process $dn $NM_ID
 
         rt=$?

@@ -31,11 +31,11 @@ separately as a tarball given it's size.  The supporting scripts and
 instructions are based on building a distribution using the following
 versions:
 
-- Hadoop 3.3.0
-- HBase  1.3.3
-- Hive   3.1.2
-- Spark  3.0.1
-- Kafka  2.2.0
+- Hadoop 3.3.x
+- HBase  1.3.x
+- Hive   3.1.x
+- Spark  3.0.x
+- Kafka  2.6.x
 
 Refer to the setup document [tdh-hadoop-setup.md](docs/tdh-hadoop-setup.md) for
 creating a TDH distribution from scratch. The end result is a root path containing
@@ -53,8 +53,8 @@ lrwxrwxrwx  1 tca tca   11 Jun 29  2019 hbase -> hbase-1.3.3
 drwxr-xr-x  8 tca tca 4096 Aug 27  2019 hbase-1.3.3
 lrwxrwxrwx  1 tca tca   10 Dec 14 13:51 hive -> hive-3.1.2
 drwxrwxr-x 10 tca tca 4096 Dec 14 15:39 hive-3.1.2
-lrwxrwxrwx  1 tca tca   11 Dec 14 13:24 kafka -> kafka-2.2.0
-drwxr-xr-x  6 tca tca 4096 Jul 27  2019 kafka-2.2.0
+lrwxrwxrwx  1 tca tca   11 Dec 14 13:24 kafka -> kafka-2.6.1
+drwxr-xr-x  6 tca tca 4096 Jul 27  2019 kafka-2.6.1
 -rw-rw-r--  1 tca tca 1021 Dec 21  2019 README.md
 drwxr-xr-x  2 tca tca 4096 Dec 14 13:57 sbin
 lrwxrwxrwx  1 tca tca   11 Dec 14 13:52 spark -> spark-3.0.1

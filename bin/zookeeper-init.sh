@@ -51,8 +51,8 @@ show_status()
         zk=$( echo $zk | awk -F: '{ print $1 }' )
 
         check_remote_process $zk $ZK_ID
-        rt=$?
 
+        rt=$?
         if [ $rt -eq 0 ]; then
             printf " Zookeeper              | $C_GRN OK $C_NC | [${zk}:${PID}]\n"
         else
