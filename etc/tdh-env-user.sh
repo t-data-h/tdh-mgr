@@ -23,9 +23,9 @@ export HADOOP_PID_DIR="/tmp"
 # HADOOP_CONF_DIR should always be set by user prior to including
 # this file to support switching environments.
 if [ -z "$HADOOP_CONF_DIR" ]; then
-    echo "=> Warning! HADOOP_CONF_DIR is not set!"
+    echo " -> Warning! HADOOP_CONF_DIR is not set!"
     export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
-    echo "=> Setting default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
+    echo " -> Using default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
 fi
 
 # Set components home
