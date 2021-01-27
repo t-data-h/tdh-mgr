@@ -33,11 +33,10 @@ HUE_LOGDIR="$HADOOP_LOGDIR"
 
 # -----------
 
-usage()
-{
-    echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH $TDH_VERSION"
-}
+usage="
+$TDH_PNAME {start|stop|status}
+  TDH $TDH_VERSION
+"
 
 
 show_status()
@@ -92,7 +91,7 @@ case "$ACTION" in
         ;;
 
     'help'|--help|-h)
-        usage
+        echo "$usage"
         ;;
 
     'version'|--version|-V) 
@@ -100,7 +99,7 @@ case "$ACTION" in
         ;;
 
     *)
-        usage
+        echo "$usage"
         ;;
 esac
 

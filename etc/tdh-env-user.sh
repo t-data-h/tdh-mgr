@@ -4,7 +4,7 @@
 #
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.01"
+VERSION="v21.02"
 
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1
@@ -89,6 +89,7 @@ if [ -n "$HADOOP_PATH" ]; then
     export PATH=${PATH:+${PATH}:}$HADOOP_PATH
 fi
 
+# -------------------
 
 function tdh_version()
 {
@@ -96,6 +97,17 @@ function tdh_version()
     return 0
 }
 
+function tdh_show_header()
+{
+    local ver="$1"
+    printf " -------- ${C_CYN}${ver}${C_NC} --------- \n"
+
+}
+
+function tdh_show_separator()
+{
+    printf "      -------------     |------|\n"
+}
 
 function check_process_pid()
 {
@@ -108,7 +120,6 @@ function check_process_pid()
 
     return 1
 }
-
 
 function check_process()
 {
@@ -145,7 +156,6 @@ function check_remote_process()
 
     return $rt
 }
-
 
 #  Validates that our configured hostname as provided by `hostname -f`
 #  locally resolves to an interface other than the loopback
@@ -190,7 +200,6 @@ function hostip_is_valid()
     return $rt
 }
 
-
 function hconf()
 {
     if [ -n "$1" ]; then
@@ -198,7 +207,6 @@ function hconf()
     fi
     echo "HADOOP_CONF_DIR=$HADOOP_CONF_DIR"
 }
-
 
 function getBrokers()
 {

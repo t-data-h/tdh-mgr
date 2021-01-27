@@ -29,11 +29,10 @@ TDHMYSQL="mysqld --"
 MYSQL_VER="mysql-5.7.27"
 
 
-usage()
-{
-    echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH $TDH_VERSION"
-}
+usage="
+$TDH_PNAME {start|stop|status}
+  TDH $TDH_VERSION
+"
 
 
 # =================
@@ -47,7 +46,7 @@ if [ -z "$TDH_DOCKER_MYSQL" ]; then
     exit 0;  # exit silently as no container name is provided or set
 fi
 
-printf " -------- ${C_CYN}${MYSQL_VER}${C_NC} --------- \n"
+tch_show_header $MYSQL_VER
 
 case "$ACTION" in
     'start')
@@ -85,7 +84,7 @@ case "$ACTION" in
         ;;
     
     'help'|--help|-h)
-        usage 
+        echo "$usage" 
         ;;
 
     'version'|--version|-V)
@@ -93,7 +92,7 @@ case "$ACTION" in
         ;;
 
     *)
-        usage
+        echo "$usage"
         ;;
 esac
 

@@ -1,23 +1,29 @@
 #!/bin/bash
 #
 #  Do a full Hive Metastore dump including the schema
+PNAME=${0##*\/}
 
 dbhost="$1"
 dbport="${2:-3306}"
 dbname="${3:-metastore}"
 dbuser="${4:-hive}"
 
-mydump=$(which mysqldump)
+mydump=$(which mysqldump 2>/dev/null)
+
+usage="
+Usage: $PNAME  [dbhost] <dbport> <dbname> <dbuser>
+  <dbport> will default to 3306, 
+  <dbname> defaults to 'metastore'
+  <dbuser> defaults to 'hive'
+"
 
 if [ -z "$dbhost" ]; then
-    echo "Usage: $0  [dbhost] <dbport> <dbname> <dbuser>"
-    echo "  <dbport> will default to 3306, <dbname> to 'metastore'"
-    echo "  and <dbuser? to 'hive'"
+    echo "$usage"
     exit 1
 fi
 
 if [ -z "$mydump" ]; then
-    echo "Error, binary for 'mysqldump' was not found in the PATH"
+    echo "$PNAME Error, binary for 'mysqldump' was not found in the PATH"
     exit 2
 fi
 
@@ -30,6 +36,6 @@ fi
   --skip-add-drop-table \
   --no-data $dbname > hive-$dbhost-schema-2.3.6.mysql.sql )
 
-echo "Finished."
+echo "$PNAME Finished."
 
 exit $?

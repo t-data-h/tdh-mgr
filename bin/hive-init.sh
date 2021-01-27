@@ -40,11 +40,10 @@ HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | 
 
 # -------------------------------------------
 
-usage()
-{
-    echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH $TDH_VERSION"
-}
+usage="
+$TDH_PNAME {start|stop|status}
+  TDH $TDH_VERSION
+"
 
 
 show_status()
@@ -79,7 +78,7 @@ ACTION="$1"
 rt=0
 hs=0
 
-printf " -------- ${C_CYN}${HIVE_VER}${C_NC} ----------- \n"
+tdh_show_header $HIVE_VER
 
 case "$ACTION" in
     'start')
@@ -140,7 +139,7 @@ case "$ACTION" in
         ;;
     
     'help'|--help|-h)
-        usage
+        echo "$usage"
         ;; 
 
     'version'|--version|-V)
@@ -148,7 +147,7 @@ case "$ACTION" in
         ;;
 
     *)
-        usage
+        echo "$usage"
         ;;
 esac
 

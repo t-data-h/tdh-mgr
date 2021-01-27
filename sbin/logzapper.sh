@@ -28,14 +28,15 @@ if [ -z "$HADOOP_LOGDIR" ] ; then
 fi
 
 
-usage()
-{
-    echo "Usage: $TDH_PNAME [options]"
-    echo "  --dryrun | -n  =  Dryrun, files to be removed are listed only"
-    echo "  --help   | -h  =  Display usage info and exit"
-    echo ""
-    return 1
-}
+usage="
+Script to clear the TDH Log Directories.
+
+Usage: $TDH_PNAME [options]
+  
+  -n | --dryrun   :  Dryrun, files to be removed are listed only.
+  -h | --help     :  Display usage info and exit.
+  -V | --version  :  Show version info and exit.
+"
 
 
 ask()
@@ -109,7 +110,7 @@ erase_all()
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        -n|--dryrun)
+        -n|--dryrun|--dry-run)
             dryrun=1
             echo "  <DRYRUN Enabled>"
             ;;
@@ -128,9 +129,12 @@ while [ $# -gt 0 ]; do
 done
 
 
-echo "HADOOP_LOGDIR=$HADOOP_LOGDIR"
-echo ""
-echo "Warning! This will permanently erase all files in the directory."
+echo "
+HADOOP_LOGDIR=$HADOOP_LOGDIR
+
+Warning! This will permanently erase all files in the directory.
+"
+
 ask  "Are you sure you wish to continue? (y/N)" "N"
 rt=$?
 

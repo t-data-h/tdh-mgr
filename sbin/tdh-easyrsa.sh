@@ -25,7 +25,7 @@ Snynopsis:
 
 Options:
   -h|--help            : Display help info and exit.
-  -e|--easyrsa <path>  : Path to EasyRSA3 (with existing pki config).
+  -e|--easyrsa  <path> : Path to EasyRSA3 (with existing pki config).
   -x|--x509type <type> : Name of x509 type (default is 'serverclient').
   -V|--version         : Show version info and exit.
 

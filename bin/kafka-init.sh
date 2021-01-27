@@ -37,11 +37,10 @@ HOST=$(hostname -s)
 
 # -----------
 
-usage()
-{
-    echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH $TDH_VERSION"
-}
+usage="
+$TDH_PNAME {start|stop|status}
+  TDH $TDH_VERSION
+"
 
 
 show_status()
@@ -85,7 +84,7 @@ if [ -z "${BROKERS}" ]; then
     exit 1
 fi
 
-printf " ------ ${C_CYN}${KAFKA_VER}${C_NC} ------- \n"
+tdh_show_header $KAFKA_VER
 
 case "$ACTION" in
     'start')
@@ -130,7 +129,7 @@ case "$ACTION" in
         ;;
 
     'help'|--help|-h) 
-        usage 
+        echo "$usage" 
         ;;
 
     'version'|--version|-V)
@@ -138,7 +137,7 @@ case "$ACTION" in
         ;;
 
     *)
-        usage
+        echo "$usage"
         ;;
 esac
 

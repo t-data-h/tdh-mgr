@@ -28,7 +28,7 @@ fi
 # -----------
 
 # default init list
-# add mysqld-tdh-init.sh  for a local docker instance of mysql
+# add 'mysqld-tdh-init.sh' for a local docker instance of mysql
 INITS="hadoop-init.sh zookeeper-init.sh hbase-init.sh hive-init.sh \
 kafka-init.sh spark-history-init.sh"
 force=0
@@ -39,23 +39,22 @@ fi
 
 # -----------
 
-usage()
-{
-    echo ""
-    echo "Usage: $TDH_PNAME [-fh]  {start|stop|status}"
-    echo "     -h|--help    : Show usage and exit"
-    echo "     -f|--force   : Run all start/stop scripts ignoring any errors"
-    echo "     -V|--version : Show TDH version and exit"
-    echo ""
-    echo "  HADOOP_ECOSYSTEM_INITS=\"${TDH_ECOSYSTEM_INITS}\""
-    if [ -z "$TDH_ECOSYSTEM_INITS" ]; then
-        echo ""
-        echo "  Using default list:"
-        echo "  '$INITS'"
-    fi
-    echo ""
-}
+usage="
+Script to operate on all TDH ecosystem init scripts.
+The list of services can be provided via HADOOP_ECOSYSTEM_INITS
 
+Synopsis:
+  $TDH_PNAME [-fhV] {start|stop|status}
+
+Options:
+     -h|--help    : Show usage and exit
+     -f|--force   : Run all start/stop scripts ignoring any errors
+     -V|--version : Show TDH version and exit
+  
+HADOOP_ECOSYSTEM_INITS=\"${TDH_ECOSYSTEM_INITS}\"
+"
+
+# -----------
 
 run_action()
 {

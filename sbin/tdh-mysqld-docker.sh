@@ -34,9 +34,9 @@ mycnf="$(realpath ${HADOOP_ENV_PATH})/mysqld-tdh.cnf"
 port="3306"
 network=
 volname=
-res=
 ACTION=
 
+# -----------
 
 usage="
 A script for creating and initializing a docker mysqld instance.
@@ -60,6 +60,7 @@ Options:
   created at startup from the container logs.
 "
 
+# -----------
 
 validate_network()
 {
@@ -78,6 +79,10 @@ validate_network()
     return 0
 }
 
+
+# -----------
+# MAIN
+rt=0
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -98,7 +103,7 @@ while [ $# -gt 0 ]; do
             shift
             ;;
         'version'|-V|--version)
-            version
+            tdh_version
             exit 0
             ;;
         *)
@@ -142,13 +147,13 @@ cmd="$cmd --mount type=bind,src=${mycnf},dst=/etc/my.cnf \
 #  initialization scripts
 # --mount type=bind,src=/path-on-host-machine/scripts/,dst=/docker-entrypoint-initdb.d/ \
 
-echo ""
-echo "  TDH Docker Container: '${name}'"
-echo "  Docker Image: ${docker_image}"
-echo "  Container Volume: '${volname}'"
-echo "  Docker Network: ${network}"
-echo "  Local port: ${port}"
-echo ""
+echo "
+  TDH Docker Container: '${name}'
+  Docker Image: ${docker_image}
+  Container Volume: '${volname}'
+  Docker Network: ${network}
+  Local port: ${port}
+"
 
 if [[ $ACTION == "run" || $ACTION == "start" ]]; then
 
@@ -160,9 +165,10 @@ if [[ $ACTION == "run" || $ACTION == "start" ]]; then
     echo "Starting container '$name'"
 
     ( $cmd )
+    rt=$?
     ( sleep 6 )  # allow mysqld to start and generate password
 
-    if [ $? -ne 0 ]; then
+    if [ $rt -ne 0 ]; then
         echo "Error in docker run"
         exit 1
     fi
@@ -181,18 +187,13 @@ if [[ $ACTION == "run" || $ACTION == "start" ]]; then
     echo "passwd='$passwd'"
 elif [[ $ACTION == "pull" ]]; then
     ( docker pull ${docker_image} )
+    rt=$?
 else
-    echo "  <DRYRUN> - Command to exec would be: "
-    echo ""
-    echo "( $cmd )"
-    echo ""
+    printf "  <DRYRUN> - Command to exec would be: \n\n ( %s )\n" $cmd
 fi
 
-res=$?
-
-if [ $res -ne 0 ]; then
-    echo "ERROR in run for $PNAME"
-    exit $res
+if [ $rt -ne 0 ]; then
+    echo "$TDH_PNAME ERROR in docker run"
 fi
 
-exit $res
+exit $rt

@@ -21,7 +21,6 @@ fi
 
 # -----------
 
-
 usage="
 Convenience script for configuring the host IP on the given interface. 
 By default, the interface 'vmnet8' is used, but can be defined seperately.
@@ -42,6 +41,7 @@ Options:
    should always be provided with the -I option
 "
 
+# -----------
 
 hostip_is_valid()
 {

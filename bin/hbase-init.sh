@@ -42,12 +42,10 @@ fi
 
 # --------------------------------------------
 
-usage()
-{
-    echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH $TDH_VERSION"
-}
-
+usage="
+$TDH_PNAME {start|stop|status}
+  TDH $TDH_VERSION
+"
 
 show_status()
 {
@@ -71,7 +69,7 @@ show_status()
         printf " HBase ThriftServer     | ${C_RED}DEAD$C_NC | [$HBASE_MASTER]\n"
     fi
 
-    printf "      -------------     |------|\n"
+    tdh_show_separator
 
     set -f
     IFS=$'\n'
@@ -99,7 +97,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-printf " -------- ${C_CYN}${HBASE_VER}${C_NC} ---------- \n"
+tdh_show_header $HBASE_VER
 
 if [ -z "$HBASE_MASTER" ]; then
     echo "Error determining HBase Master host! Aborting.."
@@ -157,7 +155,7 @@ case "$ACTION" in
         ;;
 
     'help'|--help|-h)
-        usage
+        echo "$usage"
         ;;
 
     'version'|--version|-V)
@@ -165,7 +163,7 @@ case "$ACTION" in
         ;;
 
     *)
-        usage
+        echo "$usage"
         ;;
 esac
 

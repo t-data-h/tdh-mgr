@@ -33,6 +33,7 @@ HOST=$( hostname -s )
 HADOOP_VER=$(readlink $HADOOP_HOME)
 HDFS_CONF="${HADOOP_CONF_DIR}/hdfs-site.xml"
 YARN_CONF="${HADOOP_CONF_DIR}/yarn-site.xml"
+NODE_CONF="${HADOOP_CONF_DIR}/workers"
 
 NN_ID="namenode.NameNode"
 SN_ID="namenode.SecondaryNameNode"
@@ -51,8 +52,8 @@ JN_EDITS=$( grep -A1 'dfs.namenode.shared.edits.dir' $HDFS_CONF | \
 RM1=$( grep -A1 'yarn.resourcemanager.address' ${YARN_CONF} | \
   grep value 2>/dev/null | sed -E 's/.*<value>(.*)<\/value>/\1/' |  awk -F':' '{ print $1 }' )
 
-NNS=
-JNS=
+NNS=    # namenodes list
+JNS=    # journalnodes
 NN1=
 NN2=
 IS_HA=
@@ -94,16 +95,21 @@ else
     IS_HA=1
 fi
 
+# -----------
+# Datanodes
+if [ ! -e $NODE_CONF ]; then
+    NODE_CONF="${HADOOP_CONF_DIR}/slaves"
+fi
+NODES=$(cat $NODE_CONF)
 
 # ---------------------------------------------------
 
+usage="
+$TDH_PNAME {start|stop|status} <start-journals-only>
+  TDH $TDH_VERSION
+"
 
-usage()
-{
-    echo "$TDH_PNAME {start|stop|status} <journal-only>"
-    echo "  TDH $TDH_VERSION"
-}
-
+# ---------------------------------------------------
 
 show_status()
 {
@@ -113,13 +119,13 @@ show_status()
     hostip_is_valid
     rt=$?
     if [ $rt -ne 0 ]; then
-        echo "    Unable to locate the host network interface. "
-        echo "    Please verify networking is configured properly."
+        echo "$PNAME Error, unable to locate the host network interface. "
+        echo "  Please verify networking is configured properly."
         echo ""
         return 3
     fi
 
-    printf " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- \n"
+    tdh_show_header $HADOOP_VER
 
     # HDFS Primary Namenode
     check_remote_process $NN1 $NN_ID
@@ -155,7 +161,8 @@ show_status()
     fi
 
     if [ $IS_HA -eq 0 ] && [ -n "$JNS" ]; then
-        printf "      -------------     |------|\n"
+        tdh_show_separator
+
         for jn in $JNS; do
             check_remote_process $jn $JN_ID
 
@@ -169,15 +176,11 @@ show_status()
         done
     fi
 
-    nodes="${HADOOP_HOME}/etc/hadoop/workers"
-    if ! [ -e $nodes ]; then
-        nodes="${HADOOP_HOME}/etc/hadoop/slaves"
-    fi
 
     IFS=$'\n'
 
-    for dn in $( cat ${nodes} ); do
-        printf "      -------------     |------|\n"
+    for dn in $NODES; do
+        tdh_show_separator
 
         # HDFS DataNode
         check_remote_process $dn $DN_ID
@@ -242,7 +245,7 @@ case "$ACTION" in
             exit $rt
         fi
 
-        printf " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- \n"
+        tdh_show_header $HADOOP_VER
 
         # only start journalnodes first on request, this is needed for formatting HDFS
         if [[ "${OPT,,}" =~ "journal" ]]; then
@@ -270,7 +273,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
+        tdh_show_separator
 
         echo "Stopping YARN.. [${RM1}]"
         ( ssh $RM1 "sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh" > /dev/null 2>&1 )
@@ -286,18 +289,17 @@ case "$ACTION" in
         ;;
 
     'help'|--help|-h)
-        usage 
+        echo "$usage" 
         ;;
 
     'version'|--version|-V)
-        echo -e " -------- ${C_CYN}${HADOOP_VER}${C_NC} --------- "
+        tdh_show_header $HADOOP_VER
         tdh_version
         ;;
 
     *)
-        usage
+        echo "$usage"
         ;;
 esac
-
 
 exit $rt
