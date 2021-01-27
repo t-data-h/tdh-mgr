@@ -38,12 +38,12 @@ SHS_HOST=$( grep 'spark.yarn.historyServer.address' ${SPARK_HOME}/conf/spark-def
 
 # -----------
 
-usage()
-{
-    echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH $TDH_VERSION"
-}
+usage="
+$TDH_PNAME {start|stop|status}
+  TDH $TDH_VERSION
+"
 
+# -----------
 
 show_status()
 {
@@ -69,7 +69,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-printf " -------- ${C_CYN}${SPARK_VER}${C_NC} ---------- \n"
+tdh_show_header ${SPARK_VER}
 
 case "$ACTION" in
     'start')
@@ -105,11 +105,11 @@ case "$ACTION" in
         ;;
 
     'help'|--help|-h)
-        usage 
+        echo "$usage" 
         ;;
 
     'version'|--version|-V)
-        version
+        tdh_version
         ;;
 
     *)

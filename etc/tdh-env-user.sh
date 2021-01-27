@@ -4,7 +4,7 @@
 #
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.01"
+VERSION="v21.02"
 
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1
@@ -23,9 +23,9 @@ export HADOOP_PID_DIR="/tmp"
 # HADOOP_CONF_DIR should always be set by user prior to including
 # this file to support switching environments.
 if [ -z "$HADOOP_CONF_DIR" ]; then
-    echo "=> Warning! HADOOP_CONF_DIR is not set!"
+    echo " -> Warning! HADOOP_CONF_DIR is not set!"
     export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
-    echo "=> Setting default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
+    echo " -> Using default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
 fi
 
 # Set components home
@@ -89,6 +89,7 @@ if [ -n "$HADOOP_PATH" ]; then
     export PATH=${PATH:+${PATH}:}$HADOOP_PATH
 fi
 
+# -------------------
 
 function tdh_version()
 {
@@ -96,6 +97,17 @@ function tdh_version()
     return 0
 }
 
+function tdh_show_header()
+{
+    local ver="$1"
+    printf " -------- ${C_CYN}${ver}${C_NC} --------- \n"
+
+}
+
+function tdh_show_separator()
+{
+    printf "      -------------     |------|\n"
+}
 
 function check_process_pid()
 {
@@ -108,7 +120,6 @@ function check_process_pid()
 
     return 1
 }
-
 
 function check_process()
 {
@@ -145,7 +156,6 @@ function check_remote_process()
 
     return $rt
 }
-
 
 #  Validates that our configured hostname as provided by `hostname -f`
 #  locally resolves to an interface other than the loopback
@@ -190,7 +200,6 @@ function hostip_is_valid()
     return $rt
 }
 
-
 function hconf()
 {
     if [ -n "$1" ]; then
@@ -198,7 +207,6 @@ function hconf()
     fi
     echo "HADOOP_CONF_DIR=$HADOOP_CONF_DIR"
 }
-
 
 function getBrokers()
 {

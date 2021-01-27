@@ -33,7 +33,7 @@ broker=$(cat $KAFKA_HOME/config/brokers | grep $host 2>/dev/null)
 brokerid=
 
 if [ -z "$broker" ]; then
-    echo "Broker Id not found for $host"
+    echo "$TDH_PNAME Error, Broker Id not found for $host"
     exit 0
 fi
 
@@ -43,14 +43,14 @@ fi
 broker=${broker%% *}
 
 if [ -z "$brokerid" ]; then
-    echo "Warning! Broker ID not configured"
+    echo "$TDH_PNAME Error, Broker ID not configured"
     exit 1
 fi
 
 if [[ $brokerid =~ ^[0-9]+$ ]]; then
-    echo "Setting Broker Id for '$broker' to '$brokerid'"
+    echo "$TDH_PNAME Setting Broker Id for '$broker' to '$brokerid'"
 else
-    echo "Broker ID is invalid"
+    echo "$TDH_PNAME Error, Broker ID is invalid"
     exit 1
 fi
 

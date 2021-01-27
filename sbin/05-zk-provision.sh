@@ -35,12 +35,12 @@ dataDir=$(grep 'dataDir' $ZOOKEEPER_HOME/conf/zoo.cfg | awk -F= '{ print $2 }')
 zkid=
 
 if [ -z "$zk" ]; then
-    echo "Zookeeper not found for '$host'"
+    echo "$TDH_PNAME Error, Zookeeper not found for '$host'"
     exit 0
 fi
 
 if [ -z "$dataDir" ]; then
-    echo "ZooKeeper dataDir config not found!"
+    echo "$TDH_PNAME Error, ZooKeeper dataDir config not found!"
     exit 1
 fi
 
@@ -49,14 +49,14 @@ if [[ $zk =~ ^server\.([0-9]).* ]]; then
 fi
 
 if [ -z "$zkid" ]; then
-    echo "Warning! ZooKeeper ID not configured"
+    echo "$TDH_PNAME Error, ZooKeeper ID not configured."
     exit 1
 fi
 
 if [[ $zkid =~ ^[0-9]+$ ]]; then
-    echo "Setting ZooKeeper Id for '$host' to '$zkid'"
+    echo "$TDH_PNAME Setting ZooKeeper Id for '$host' to '$zkid'"
 else
-    echo "ZooKeeper ID is invalid"
+    echo "$TDH_PNAME Error, ZooKeeper ID is invalid"
     exit 1
 fi
 

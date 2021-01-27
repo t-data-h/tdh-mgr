@@ -47,7 +47,7 @@ echo "$TDH_PNAME validating the Spark External Shuffle Jar for YARN..."
 echo ""
 
 if [ "$YARN_JAR" == "$SPARK_JAR" ]; then
-    echo "Spark External Shuffle Jar for YARN is already linked to: "
+    echo " -> Spark Shuffle Jar for YARN is already linked to: "
     echo "  $SPARK_JAR"
 else
     if [ -n "$YARN_LINK" ]; then
@@ -59,9 +59,9 @@ else
 
     rt=$?
     if [ $rt -ne 0 ]; then
-        echo "Error in creating link"
+        echo "$TDH_PNAME Error creating link"
     else
-        echo "Spark External Shuffle Jar for YARN is now linked."
+        echo "$TDH_PNAME Shuffle Jar for YARN is now linked."
     fi
 fi
 

@@ -18,22 +18,38 @@ hive_ver=
 hive_schema_ver=
 hive_schema_path="scripts/metastore/upgrade/mysql"
 hive_schema=
+mysql=$(which mysql 2>/dev/null)
 rt=
+
+usage="
+Initiates the Hive Metastore database within MySQL.
+The script assumes the secret is configured via '~/.my.cnf'
+
+Synopsis:
+$PNAME <dbname>
+
+<dbname> defaults to '$hivedb'
+"
 
 if [ -n "$1" ]; then
     case "$1" in 
         'help'|-h|--help)
-            echo "Usage: $PNAME <dbname>"
-            echo "  <dbname> defaults to '$hivedb'"
+            echo "$usage"
             exit 0
             ;;
+        'version'|-V|--version)
+            tdh_version
+            exit 0
         *)
             hivedb="$1"
             ;;
     esac
 fi
 
-mysql=$(which mysql)
+if [ -z "$mysql" ]; then
+    echo "$PNAME Error, 'mysql' client not found in PATH"
+    exit 2
+fi
 
 # -------------------------------------
 # Set Hive real path locations
@@ -80,15 +96,10 @@ if [ ! -f ${hive_schema_path}/${hive_schema} ]; then
 fi
 
 # -------------------------------------
-echo ""
-echo "$PNAME initializing Hive Db: '$hivedb'"
-echo "  Schema File: '$hive_schema'"
-echo ""
-
-if [ -z "$mysql" ]; then
-    echo "$PNAME Error, 'mysql' client not found in PATH"
-    exit 2
-fi
+echo "
+$PNAME initializing Hive Db: '$hivedb'
+  Schema File: '$hive_schema'
+"
 
 # create db
 ( mysql -e "CREATE DATABASE IF NOT EXISTS $hivedb" )

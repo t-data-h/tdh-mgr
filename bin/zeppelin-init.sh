@@ -33,12 +33,12 @@ HOST=$(hostname -s)
 
 # -----------
 
-usage()
-{
-    echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH $TDH_VERSION"
-}
+usage="
+$TDH_PNAME {start|stop|status}
+  TDH $TDH_VERSION
+"
 
+# -----------
 
 show_status()
 {
@@ -62,7 +62,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-printf " ------- ${C_CYN}${ZEPPELIN_VER}${C_NC} -------- \n"
+tdh_show_header $ZEPPELIN_VER
 
 case "$ACTION" in
     'start')
@@ -105,7 +105,7 @@ case "$ACTION" in
         ;;
 
     *)
-        usage
+        echo "$usage"
         ;;
 esac
 

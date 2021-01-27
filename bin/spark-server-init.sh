@@ -34,13 +34,12 @@ SPARK_PID="org.apache.spark.deploy.master.Master"
 
 # -----------
 
+usage="
+$TDH_PNAME {start|stop|status}
+  TDH $TDH_VERSION
+"
 
-usage()
-{
-    echo "$TDH_PNAME {start|stop|status}"
-    echo "  TDH $TDH_VERSION"
-}
-
+# -----------
 
 show_status()
 {
@@ -62,7 +61,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-printf " ------ ${C_CYN}${SPARK_VER}${C_NC} ------- \n"
+tdh_show_header $SPARK_VER
 
 case "$ACTION" in
     'start')
@@ -94,8 +93,16 @@ case "$ACTION" in
     'status'|'info')
         show_status
         ;;
+
+    'help'|--help|-h)
+        echo "$usage" 
+        ;;
+
+    'version'|--version|-V)
+        tdh_version
+        ;;
     *)
-        usage
+        echo "$usage"
         ;;
 esac
 
