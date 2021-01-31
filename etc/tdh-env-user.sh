@@ -4,7 +4,7 @@
 #
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.02"
+VERSION="v21.02.1"
 
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1
@@ -168,12 +168,10 @@ function hostip_is_valid()
     local ip=
     local rt=1
 
-    echo "$fqdn"
-    echo -n  "[$hostid] : $hostip"
+    printf "%s \n [%s] : %s" $fqdn $hostid $hostip
 
     if [ "$hostip" == "127.0.0.1" ]; then
-        echo "   <lo> "
-        echo "  WARNING! Hostname is set to localhost, aborting.."
+        printf "  <lo>\n  WARNING! Hostname is set to localhost, aborting..\n"
         return $rt
     fi
 

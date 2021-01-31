@@ -42,51 +42,6 @@ Options:
 "
 
 # -----------
-
-hostip_is_valid()
-{
-    local hostid=`hostname`
-    local hostip=`hostname -i`
-    local fqdn=`hostname -f`
-    local iface=
-    local ip=
-    local rt=1
-
-    if [ "$hostip" == "127.0.0.1" ]; then
-        echo "   <lo> "
-        echo "  WARNING! Hostname is set to localhost, aborting.."
-        return $rt
-    fi
-
-    IFS=$'\n'
-
-    for line in $(ip addr list | grep "inet ")
-    do
-        IFS=$' '
-        iface=$(echo $line | awk -F' ' '{ print $NF }')
-        ip=$(echo $line | awk '{ print $2}' | awk -F'/' '{ print $1 }')
-
-        if [ "$ip" == "$hostip" ]; then
-            rt=0
-            break
-        fi
-    done
-
-    echo ""
-    echo "$fqdn"
-    echo -n "[$hostid]"
-
-    if [ $rt -eq 0 ]; then
-        echo " : $hostip : <$iface>"
-    else
-	echo " : <No Interface bound>"
-    fi
-
-    return $rt
-}
-
-
-#-------------------------------------------------------------
 # Main
 ACTION=
 BINDIP="$(hostname -i)/24"
@@ -126,10 +81,7 @@ if [ "$ACTION" == "start" ]; then
     rt=$?
 
     if [ $rt -ne 0 ]; then
-        echo ""
-	    echo "  Binding $BINDIP to interface $IFACE"
-        echo ""
-
+        printf "\n -> Binding %s to interface '%s' \n\n" $BINDIP $IFACE
         ( sudo ip addr add $BINDIP dev $IFACE )
         rt=$?
 
@@ -147,11 +99,9 @@ elif [ "$ACTION" == "status" ]; then
 
     hostip_is_valid
     rt=$?
-    echo ""
 
 else
     echo "$usage"
 fi
 
-echo ""
 exit $rt
