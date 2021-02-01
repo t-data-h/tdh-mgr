@@ -29,7 +29,7 @@ fi
 
 
 usage="
-Script to clear the TDH Log Directories.
+Script to clear TDH Log Directories.
 
 Usage: $TDH_PNAME [options]
   
