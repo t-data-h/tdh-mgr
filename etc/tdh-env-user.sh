@@ -9,7 +9,7 @@ VERSION="v21.02.1"
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1
 
-# JAVA_HOME should already be set or managed by the system.
+# JAVA_HOME should be set or managed by the system.
 if [ -z "$JAVA_HOME" ]; then
     echo "WARNING! JAVA_HOME is not set"
 fi
@@ -20,15 +20,12 @@ export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
 export HADOOP_PID_DIR="/tmp"
 
-# HADOOP_CONF_DIR should always be set by user prior to including
-# this file to support switching environments.
 if [ -z "$HADOOP_CONF_DIR" ]; then
-    echo " -> Warning! HADOOP_CONF_DIR is not set!"
+    echo " -> Warning, HADOOP_CONF_DIR is not set!"
     export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
     echo " -> Using default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
 fi
 
-# Set components home
 export HADOOP_COMMON_HOME="$HADOOP_HOME"
 export HADOOP_HDFS_HOME="$HADOOP_COMMON_HOME"
 export HADOOP_MAPRED_HOME="$HADOOP_COMMON_HOME"
@@ -42,7 +39,6 @@ export KAFKA_HOME="$HADOOP_ROOT/kafka"
 export SPARK_HOME="$HADOOP_ROOT/spark"
 export SPARK_CONF_DIR="$SPARK_HOME/conf"
 
-# bin path
 export HADOOP_PATH="\
 $HADOOP_ROOT/bin:\
 $HADOOP_ROOT/sbin:\
@@ -60,7 +56,6 @@ export TDH_DOCKER_MYSQL="tdh-mysql01"
 if [ -f "/etc/kafka/jaas.conf" ]; then
     export KAFKA_OPTS="-Djava.security.auth.login=/etc/kafka/jaas.conf"
 fi
-
 if [ -f "/etc/kafka/conf/kafka-client.conf" ]; then
     export ZKS=$( cat /etc/kafka/conf/kafka-client.conf 2>/dev/null | awk -F '=' '{ print $2 }' )
 fi
@@ -157,8 +152,8 @@ function check_remote_process()
     return $rt
 }
 
-#  Validates that our configured hostname as provided by `hostname -f`
-#  locally resolves to an interface other than the loopback
+# Validates that our configured hostname as provided by `hostname -f`
+# locally resolves to an interface other than the loopback
 function hostip_is_valid()
 {
     local hostid=$(hostname -s)

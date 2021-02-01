@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 #  Sets up an internal IP or pseudo-ip on a given interface. By default
 #  vmnet8 (vmware) is used, but vbox works as well.  Primarily for
@@ -21,31 +21,33 @@ fi
 
 # -----------
 
+BINDIP="$(hostname -i)/24"
+IFACE="vmnet8"
+ACTION=
+
 usage="
-Convenience script for configuring the host IP on the given interface. 
-By default, the interface 'vmnet8' is used, but can be defined seperately.
-This is primarily intended for detached hosts or hosts with unstable 
-network environments (ie. laptop|wifi)
+Script for configuring the host's IP on a given interface. 
+By default, the interface 'vmnet8' is used, if not provided.
+This is intended for detached hosts or hosts with an unstable 
+network environment (ie. laptop|wifi).
 
 Synopsis:
   $TDH_PNAME [options]  start|stop|status
 
 Options:
   -h|--help      : Display usage info and exit.
-  -i|--interface : Name of a system interface; default is 'vmnet8'
+  -i|--interface : Name of a system interface; default is '$IFACE'.
   -I|--ip        : Alternate bind address to use, in CIDR format.
                    the default is: \$(hostname -i)/24
-  -V|--version   : Display version and exit
+  -V|--version   : Display version and exit.
 
-   Note the /24 netmask is the default used above, but the netmask
-   should always be provided with the -I option
+Note the /24 netmask is the default as used above, but the netmask
+should always be included when using the '--ip' option.
 "
 
 # -----------
 # Main
-ACTION=
-BINDIP="$(hostname -i)/24"
-IFACE="vmnet8"
+rt=0
 
 # parse options
 while [ $# -gt 0 ]; do
@@ -72,8 +74,6 @@ while [ $# -gt 0 ]; do
             ;;
     esac
 done
-
-rt=0
 
 if [ "$ACTION" == "start" ]; then
 

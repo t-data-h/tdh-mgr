@@ -18,10 +18,11 @@ join_buffer_size        = 8M
 
 transaction-isolation=READ-COMMITTED
 binlog-format=mixed
-
+bind-address=0.0.0.0
 basedir=/usr
 tmpdir=/tmp
 datadir=/var/lib/mysql
+socket=/var/run/mysqld/mysqld.sock
 user=mysql
 
 # INNODB settings
