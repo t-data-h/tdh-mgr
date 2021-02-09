@@ -40,6 +40,7 @@ if [ -n "$1" ]; then
         'version'|-V|--version)
             tdh_version
             exit 0
+            ;;
         *)
             hivedb="$1"
             ;;
