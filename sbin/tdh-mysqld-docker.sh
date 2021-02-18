@@ -60,6 +60,16 @@ Options:
   created at startup from the container logs.
 "
 
+success="
+ -> $TDH_PNAME successfully initialized mysqld container..
+
+Initial connection to the instance via docker may require the Socket name:
+  ( docker exec -it $name mysql -uroot -p -S /var/run/mysqld/mysqld.sock )
+Set a new root password including from the host node.
+  ALTER USER 'root'@'localhost' IDENTIFIED BY 'pw';
+  GRANT ALL PRIVILEGES ON *.* TO 'root'@'hostname' IDENTIFIED BY 'pw' WITH GRANT OPTION;
+"
+
 # -----------
 
 validate_network()
@@ -195,12 +205,9 @@ fi
 if [ $rt -ne 0 ]; then
     echo "$TDH_PNAME ERROR in docker run"
 else
-    echo "$TDH_PNAME successfully initialized mysqld container.."
-    echo "  Initial connection to the instance via docker may require the Socket name"
-    echo " ( docker exec -it $name mysql -uroot -p -S /var/run/mysqld/mysqld.sock )"
-    echo "  Set a new root password including from the host node."
-    echo "  ALTER USER 'root'@'localhost' IDENTIFIED BY 'pw';"
-    echo "  GRANT ALL PRIVILEGES ON *.* TO 'root'@'hostname' IDENTIFIED BY 'pw' WITH GRANT OPTION;"
+    echo "$success"
 fi
+
+echo "$PNAME Finished."
 
 exit $rt

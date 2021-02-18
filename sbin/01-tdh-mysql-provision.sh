@@ -22,8 +22,11 @@ mysql=$(which mysql 2>/dev/null)
 rt=
 
 usage="
-Initiates the Hive Metastore database within MySQL.
-The script assumes the secret is configured via '~/.my.cnf'
+Initiates the Hive Metastore database within MySQL. The script
+assumes the mysql secret file '~/.my.cnf' is already configured.
+
+Note this only configures the Hive Metastore schema, but does 
+not provision users and respective grant statements.
 
 Synopsis:
 $PNAME <dbname>
