@@ -174,7 +174,7 @@ if [[ $ACTION == "run" || $ACTION == "start" ]]; then
     fi
 
     echo -n "Checking for password. "
-    for x in {1..3}; do
+    for x in {1..5}; do
         passwd=$( docker logs ${name} 2>&1 | grep GENERATED | awk -F': ' '{ print $2 }' )
         if [ -n "$passwd" ]; then
             rt=0
