@@ -121,7 +121,7 @@ fi
 
 if [[ $ACTION == "pw" ]]; then
     passwd=$( docker logs ${name} 2>&1 | grep GENERATED | awk -F': ' '{ print $2 }' )
-    echo "Mysqld root password: '$passwd'"
+    echo " -> Mysqld root password: '$passwd'"
     exit 0
 fi
 
@@ -162,7 +162,7 @@ if [[ $ACTION == "run" || $ACTION == "start" ]]; then
         exit 1
     fi
 
-    echo "Starting container '$name'"
+    echo " -> Starting container '$name'"
 
     ( $cmd )
     rt=$?
@@ -173,7 +173,7 @@ if [[ $ACTION == "run" || $ACTION == "start" ]]; then
         exit 1
     fi
 
-    echo -n "Checking for password. "
+    echo -n " -> Checking for password. "
     for x in {1..5}; do
         passwd=$( docker logs ${name} 2>&1 | grep GENERATED | awk -F': ' '{ print $2 }' )
         if [ -n "$passwd" ]; then
@@ -194,6 +194,13 @@ fi
 
 if [ $rt -ne 0 ]; then
     echo "$TDH_PNAME ERROR in docker run"
+else
+    echo "$TDH_PNAME successfully initialized mysqld container.."
+    echo "  Initial connection to the instance via docker may require the Socket name"
+    echo " ( docker exec -it $name mysql -uroot -p -S /var/run/mysqld/mysqld.sock )"
+    echo "  Set a new root password including from the host node."
+    echo "  ALTER USER 'root'@'localhost' IDENTIFIED BY 'pw';"
+    echo "  GRANT ALL PRIVILEGES ON *.* TO 'root'@'hostname' IDENTIFIED BY 'pw' WITH GRANT OPTION;"
 fi
 
 exit $rt
