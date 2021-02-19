@@ -229,11 +229,34 @@ function getZookeepers()
 }
 
 # convert a config XML to key=value pairs
-function config_toKV()
+function xmlFile_toKV()
 {
     local xml="$1"
 
     if [ -n "$xml" ]; then
         ( cat $xml | xq ".configuration[]" | jq ".[]" | jq -r ".name + \"=\" + .value" )
     fi
+}
+
+function kv_toXml()
+{
+    local kv="$1"
+    local key=$(echo $kv | awk -F= '{ print $1 }')
+    local val=$(echo $kv | awk -F= '{ print $2 }')
+
+    echo "    <property>
+        <name>${key}</name>
+        <value<${val}</value>
+    </property>"
+}
+
+function kvFile_toXml()
+{
+    local kvfile="$1"
+    local key=
+    local val=
+
+    for kv in $(cat $kvfile); do
+        kv_toXml "$kv"
+    done
 }
