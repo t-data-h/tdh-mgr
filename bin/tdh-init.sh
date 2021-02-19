@@ -41,7 +41,7 @@ fi
 
 usage="
 Script to operate on all TDH ecosystem init scripts.
-The list of services can be provided via HADOOP_ECOSYSTEM_INITS
+The list of services is configured via HADOOP_ECOSYSTEM_INITS
 
 Synopsis:
   $TDH_PNAME [-fhV] {start|stop|status}
@@ -51,6 +51,7 @@ Options:
      -f|--force   : Run all start/stop scripts ignoring any errors
      -V|--version : Show TDH version and exit
   
+
 HADOOP_ECOSYSTEM_INITS=\"${TDH_ECOSYSTEM_INITS}\"
 "
 
@@ -124,15 +125,8 @@ show_status()
 }
 
 
-# =================
 #  MAIN
-# =================
-
-
-if [ $# -eq 0 ]; then
-    usage
-    exit 1
-fi
+#
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -157,13 +151,13 @@ case "$action" in
         show_status
         ;;
     'help'|--help|-h)
-        usage
+        echo "$usage"
         ;;
     'version'|--version|-V)
         tdh_version
         ;;
     *)
-        usage
+        echo "$usage"
         ;;
 esac
 
