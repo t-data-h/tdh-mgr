@@ -193,14 +193,16 @@ function hostip_is_valid()
     return $rt
 }
 
-function hconf()
+# shows or sets HADOOP_CONF_DIR
+function hconfdir()
 {
     if [ -n "$1" ]; then
         export HADOOP_CONF_DIR="$1"
     fi
-    echo "HADOOP_CONF_DIR=$HADOOP_CONF_DIR"
+    printf "HADOOP_CONF_DIR=$HADOOP_CONF_DIR\n"
 }
 
+# populates the BROKERS variable with currently configured broker list
 function getBrokers()
 {
     local brokersfile=${1:-${KAFKA_HOME}/config/brokers}
@@ -213,6 +215,7 @@ function getBrokers()
     export BROKERS
 }
 
+# populates the variable 'ZKS' with the currently defined zookeepers
 function getZookeepers()
 {
     local zoomasters=${1:-${ZOOKEEPER_HOME}/conf/masters}
@@ -223,4 +226,14 @@ function getZookeepers()
     IFS=$tmpifs
 
     export ZKS
+}
+
+# convert a config XML to key=value pairs
+function config_toKV()
+{
+    local xml="$1"
+
+    if [ -n "$xml" ]; then
+        ( cat $xml | xq ".configuration[]" | jq ".[]" | jq -r ".name + \"=\" + .value" )
+    fi
 }
