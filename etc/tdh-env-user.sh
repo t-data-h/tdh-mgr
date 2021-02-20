@@ -238,15 +238,17 @@ function xmlFile_toKV()
     fi
 }
 
+
 function kv_toXml()
 {
     local kv="$1"
-    local key=$(echo $kv | awk -F= '{ print $1 }')
-    local val=$(echo $kv | awk -F= '{ print $2 }')
+    local fs=${2:-'='}
+    local key=$(echo $kv | awk -F$fs '{ print $1 }')
+    local val=$(echo $kv | awk -F$fs '{ print $2 }')
 
     echo "    <property>
         <name>${key}</name>
-        <value<${val}</value>
+        <value>${val}</value>
     </property>"
 }
 
