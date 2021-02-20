@@ -16,8 +16,6 @@ export MINIO_NS="minio"
 export MINIO_SERVER_PORT=9000
 # minio hdfs gateway
 export MINIO_GATEWAY_PORT=9001
-# minio root user
-#export MINIO_ROOT_USER=minio
 
 # ------------------------
 
@@ -48,11 +46,13 @@ function mcmkdir()
 function minio_accesskey()
 {
     export MINIO_ACCESS_KEY=$(kubectl get secret $MINIO_RELEASE -n $MINIO_NS -o jsonpath="{.data.accesskey}" | base64 --decode)
+    printf "%s" $MINIO_ACCESS_KEY
 }
 
 function minio_secretkey()
 {
     export MINIO_SECRET_KEY=$(kubectl get secret $MINIO_RELEASE -n $MINIO_NS -o jsonpath="{.data.secretkey}" | base64 --decode)
+    printf "%s" $MINIO_SECRET_KEY
 }
 
 function minio_open()
