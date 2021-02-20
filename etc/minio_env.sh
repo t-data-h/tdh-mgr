@@ -57,8 +57,15 @@ function minio_open()
 {
     rt=0
     export MINIO_POD=$(kubectl get pods --namespace $MINIO_NS -l "release=${MINIO_RELEASE}" -o jsonpath="{.items[0].metadata.name}")
-    ( kubectl port-forward $MINIO_POD $MINIO_SERVER_PORT --namespace $MINIO_NS )
+    ( kubectl port-forward $MINIO_POD $MINIO_SERVER_PORT --namespace $MINIO_NS & )
     rt=$?
-    echo "MinIO Server UI: http://localhost:${MINIO_SERVER_PORT}"
+    printf "MinIO Server UI: http://localhost:${MINIO_SERVER_PORT} \n"
     return $rt
+}
+
+function minio_gateway()
+{
+    ( minio gateway hdfs --address ${MINIO_ALIAS}:${MINIO_GATEWAY_PORT} & )
+    sleep 2
+    ( mc alias set hdfs http://${MINIO_ALIAS}:${MINIO_GATEWAY_PORT} "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY" )
 }

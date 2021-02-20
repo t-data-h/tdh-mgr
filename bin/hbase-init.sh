@@ -20,7 +20,7 @@ elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    printf "ERROR, Unable to locate TDH Environment '$HADOOP_ENV' \n"
     exit 1
 fi
 # -----------
@@ -36,7 +36,7 @@ HBASE_THRIFTLOG="${HBASE_LOGDIR}/hbase-thriftserver.log"
 HBASE_MASTER=$(cat $HBASE_HOME/conf/masters 2>/dev/null)
 
 if [ -z "$HBASE_MASTER" ]; then
-    echo "$PNAME: Error determining hbase master. "
+    printf "$TDH_PNAME: Error determining HBase Master. \n"
     exit 1
 fi
 
@@ -100,7 +100,7 @@ rt=0
 tdh_show_header $HBASE_VER
 
 if [ -z "$HBASE_MASTER" ]; then
-    echo "Error determining HBase Master host! Aborting.."
+    printf "$TDH_PNAME Error determining HBase Master host! Aborting.. \n"
     exit 1
 fi
 
@@ -112,9 +112,9 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo " HBase Master is already running  [${HBASE_MASTER}:${PID}]"
+            printf " HBase Master is already running  [${HBASE_MASTER}:${PID}] \n"
         else
-            echo "Starting HBase Master.."
+            printf "Starting HBase Master.. [${HBASE_MASTER}] \n"
             ( ssh $HBASE_MASTER "$HBASE_HOME/bin/start-hbase.sh 2>&1 > /dev/null" )
         fi
 
@@ -122,9 +122,9 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo " ThriftServer is already running  [${HBASE_MASTER}:${PID}]"
+            printf " ThriftServer is already running  [${HBASE_MASTER}:${PID}] \n"
         else
-            echo "Starting HBase ThriftServer.."
+            printf "Starting HBase ThriftServer.. [${HBASE_MASTER}] \n"
             ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start > $HBASE_THRIFTLOG 2>&1 &" )
         fi
         rt=0
@@ -133,7 +133,7 @@ case "$ACTION" in
     'stop')
         check_remote_process $HBASE_MASTER $HB_MASTER_ID
 
-        echo "Stopping HBase Master.. [${HBASE_MASTER}:${PID}]"
+        printf "Stopping HBase Master.. [${HBASE_MASTER}:${PID}] \n"
         ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER kill $PID >/dev/null 2>&1" )
         ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh > /dev/null 2>&1" )
 
@@ -141,10 +141,10 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping HBase ThriftServer.. [${HBASE_MASTER}:${PID}]"
+            printf "Stopping HBase ThriftServer.. [${HBASE_MASTER}:${PID}] \n"
             ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER kill $PID" )
         else
-            echo "HBase ThriftServer not found"
+            printf "HBase ThriftServer not found \n"
         fi
         rt=0
         ;;
