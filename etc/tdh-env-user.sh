@@ -9,22 +9,11 @@ VERSION="v21.02.18"
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1
 
-# JAVA_HOME should be set or managed by the system.
-if [ -z "$JAVA_HOME" ]; then
-    echo "WARNING! JAVA_HOME is not set"
-fi
-
 export HADOOP_USER="${USER}"
 export HADOOP_ROOT="/opt/TDH"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
 export HADOOP_PID_DIR="/tmp"
-
-if [ -z "$HADOOP_CONF_DIR" ]; then
-    echo " -> Warning, HADOOP_CONF_DIR is not set!"
-    export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
-    echo " -> Using default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
-fi
 
 export HADOOP_COMMON_HOME="$HADOOP_HOME"
 export HADOOP_HDFS_HOME="$HADOOP_COMMON_HOME"
@@ -48,8 +37,17 @@ $HIVE_HOME/bin:\
 $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
 
-# set a mysqld docker container by name
-# this alone has no effect, but with TDH_ECOSYSTEM_INITS+='mysqld-tdh-init.sh'
+if [ -z "$HADOOP_CONF_DIR" ]; then
+    echo " -> Warning, HADOOP_CONF_DIR is not set!"
+    export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
+    echo " -> Using default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
+fi
+
+if [ -z "$JAVA_HOME" ]; then
+    echo " -> WARNING! JAVA_HOME is not set"
+fi
+
+# this alone has no effect, but enabled w/ TDH_ECOSYSTEM_INITS+='mysqld-tdh-init.sh'
 export TDH_DOCKER_MYSQL="tdh-mysql01"
 
 # Kafka
@@ -238,7 +236,7 @@ function xmlFile_toKV()
     fi
 }
 
-
+# convert a key=value pair to an XML Property stanza
 function kv_toXml()
 {
     local kv="$1"
@@ -250,8 +248,11 @@ function kv_toXml()
         <name>${key}</name>
         <value>${val}</value>
     </property>"
+
+    return 0
 }
 
+# convert a file containing key-value pairs to XML Properties
 function kvFile_toXml()
 {
     local kvfile="$1"
@@ -261,4 +262,6 @@ function kvFile_toXml()
     for kv in $(cat $kvfile); do
         kv_toXml "$kv"
     done
+    
+    return 0
 }

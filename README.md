@@ -70,7 +70,7 @@ Zeppelin, etc., in a fully deployed cluster. The TDH tarball may be added
 to this repository via `git lfs` in the future, but for now this must be 
 manually created or acquired externally.
 
-  As previously mentioned, the github project `tdh-gcp` provides Ansible
+  As previously mentioned, the github project **tdh-gcp** provides Ansible
 playbooks for deploying TDH on infrastructure and requires the TDH tarball
 along with this repository and a third 'config' tarball.
 
@@ -92,7 +92,7 @@ mv distributed-example myclusterenv
 git init
 ```
 
-  The configuration is then provided to `tdh-gcp` Ansible for distributing 
+  The configuration is then provided to **tdh-gcp** Ansible for distributing 
 to a running cluster.
 
 
@@ -107,5 +107,5 @@ on various components.
 variable `TDH_ECOSYSTEM_INITS`. Each component has its own script with the
 same options (Note, a 'restart' option is intentionally not provided).
 
-  This can be run from any host with TDH installed, but
-relies on ssh host keys for password-less ssh access to all nodes in the cluster.
+  This can be run from any host with TDH installed, but relies on ssh host 
+keys for password-less ssh access to all nodes in the cluster.
