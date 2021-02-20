@@ -5,43 +5,43 @@ TDH Manager ( tdh-mgr )
 
   TDH is a custom Hadoop distribution based on Apache Hadoop and related
 Apache Hadoop components such as Hive, HBase, Kafka, and Spark. It was
-created to serve as a local development environment running native on a linux
-host as a pseudo-distributed cluster (a single node acting as both master and
-worker).  It evolved into creating a multi-node cluster with a set of bash
-scripts for management, Ansible for deployment and updates, and a git repo
-for managing cluster configs.
+created to serve as a local development environment running native on a 
+linux host as a pseudo-distributed cluster (a single node acting as both 
+master and worker).  It evolved into creating a multi-node cluster with a 
+set of bash scripts for management, Ansible for deployment and updates, 
+and a git repo for managing cluster configs.
 
   The *tdh-mgr* project provides the set of management scripts for various
 components and obtaining their status across multiple nodes. The scripts
 rely on SSH host keys for running remote commands.
 
   *TDH* has been adapted as a multi-node distribution that can run on
-RHEL/CentOS instances.  A separate project, **tdh-gcp**, provides a framework
-for installing and deploying TDH via Ansible for multi-node clusters.
-There is some specific support for running on GCP, but the playbooks can be
-used with any environment. The project **tdh-docker** provides a set
-of container specifications for supported monitoring services such as
-Prometheus and Grafana.
+RHEL/CentOS instances.  A separate project, **tdh-gcp**, provides a 
+framework for installing and deploying TDH via Ansible for multi-node 
+clusters. There is some specific support for running on GCP, but the 
+playbooks can be used with any environment. The project **tdh-docker** 
+provides a set of container specifications for supported monitoring 
+services such as Prometheus and Grafana.
 
 ## Installation
 
   The ecosystem is built using packages from the various Apache projects,
 either as binaries or built from source. The TDH package is distributed
-separately as a tarball given it's size.  The supporting scripts and
+separately as a tarball, given it's size.  The supporting scripts and
 instructions are based on building a distribution using the following
 versions:
 
 - Hadoop 3.3.x
 - HBase  1.3.x
 - Hive   3.1.x
-- Spark  3.0.x
+- Spark 2 or 3
 - Kafka  2.6.x
 
-Refer to the setup document [tdh-hadoop-setup.md](docs/tdh-hadoop-setup.md) for
-creating a TDH distribution from scratch. The end result is a root path containing
-each ecosystem component.  Links are used to make minor upgrades easier, so
-for hadoop-2.8.5 there would also be a 'hadoop' link, and likewise for other
-components which would result in something like this:
+Refer to the setup document [tdh-hadoop-setup.md](docs/tdh-hadoop-setup.md) 
+for creating a TDH distribution from scratch. The end result is a root path 
+containing each ecosystem component.  Links are used to make minor upgrades 
+easier, so for hadoop-2.8.5 there would also be a 'hadoop' link, and likewise 
+for other components which would result in something like this:
 ```
 total 48
 drwxrwxr-x  2 tca tca 4096 Feb 25  2020 bin
@@ -64,25 +64,25 @@ lrwxrwxrwx  1 tca tca   15 Dec 20  2019 zookeeper -> zookeeper-5.5.6
 drwxrwxr-x  7 tca tca 4096 Nov 15 15:30 zookeeper-5.5.6
 ```
 
- This is essentially the contents of the TDH binary distribution though there
-could be additional components such as solr, elasticsearch, hue, zeppelin, etc.
-in a fully deployed cluster. The TDH tarball may be added to this repository
-via `git lfs` in the future, but for now this must be manually created or
-acquired externally.
+ This is essentially the contents of a TDH binary distribution, though 
+there could be additional components such as Solr, Elasticsearch, Hue, 
+Zeppelin, etc., in a fully deployed cluster. The TDH tarball may be added 
+to this repository via `git lfs` in the future, but for now this must be 
+manually created or acquired externally.
 
-  As previously mentioned, the github project `tdh-gcp` provides Ansible
+  As previously mentioned, the github project **tdh-gcp** provides Ansible
 playbooks for deploying TDH on infrastructure and requires the TDH tarball
 along with this repository and a third 'config' tarball.
 
 
 ## Configuring the Hadoop Distribution
 
-  The *tdh-config* directory provides sample cluster configurations in a manner
-that allows for a given environment config to be 'overlaid' onto the cluster
-directory (eg. /opt/TDH). The directory here provides a pair of examples for
-a distributed cluster and of a single, pseudo-distributed node. This is intended
-to be used as the template for a separately tracked git repo for managing
-configurations.
+  The *tdh-config* directory provides sample cluster configurations in a 
+manner that allows for a given environment config to be 'overlaid' onto the 
+cluster directory (eg. /opt/TDH). The directory here provides a pair of examples 
+for a distributed cluster and of a single, pseudo-distributed node. This is 
+intended to be used as the template for a separately tracked git repo for 
+managing configurations.
 ```
 cd ..
 mkdir myconfigdir
@@ -92,8 +92,8 @@ mv distributed-example myclusterenv
 git init
 ```
 
-  The configuration can be fed to `tdh-gcp` Ansible for distributing to a
-running cluster.
+  The configuration is then provided to **tdh-gcp** Ansible for distributing 
+to a running cluster.
 
 
 ## Running the Distribution
@@ -107,5 +107,5 @@ on various components.
 variable `TDH_ECOSYSTEM_INITS`. Each component has its own script with the
 same options (Note, a 'restart' option is intentionally not provided).
 
-  This can be run from any host with TDH installed, but
-relies on ssh host keys for password-less ssh access to all nodes in the cluster.
+  This can be run from any host with TDH installed, but relies on ssh host 
+keys for password-less ssh access to all nodes in the cluster.

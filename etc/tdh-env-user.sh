@@ -4,27 +4,16 @@
 #
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.02.2"
+VERSION="v21.02.18"
 
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1
-
-# JAVA_HOME should be set or managed by the system.
-if [ -z "$JAVA_HOME" ]; then
-    echo "WARNING! JAVA_HOME is not set"
-fi
 
 export HADOOP_USER="${USER}"
 export HADOOP_ROOT="/opt/TDH"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
 export HADOOP_PID_DIR="/tmp"
-
-if [ -z "$HADOOP_CONF_DIR" ]; then
-    echo " -> Warning, HADOOP_CONF_DIR is not set!"
-    export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
-    echo " -> Using default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
-fi
 
 export HADOOP_COMMON_HOME="$HADOOP_HOME"
 export HADOOP_HDFS_HOME="$HADOOP_COMMON_HOME"
@@ -48,8 +37,17 @@ $HIVE_HOME/bin:\
 $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
 
-# set a mysqld docker container by name
-# this alone has no effect, but with TDH_ECOSYSTEM_INITS+='mysqld-tdh-init.sh'
+if [ -z "$HADOOP_CONF_DIR" ]; then
+    echo " -> Warning, HADOOP_CONF_DIR is not set!"
+    export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
+    echo " -> Using default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
+fi
+
+if [ -z "$JAVA_HOME" ]; then
+    echo " -> WARNING! JAVA_HOME is not set"
+fi
+
+# this alone has no effect, but enabled w/ TDH_ECOSYSTEM_INITS+='mysqld-tdh-init.sh'
 export TDH_DOCKER_MYSQL="tdh-mysql01"
 
 # Kafka
@@ -193,14 +191,16 @@ function hostip_is_valid()
     return $rt
 }
 
-function hconf()
+# shows or sets HADOOP_CONF_DIR
+function hconfdir()
 {
     if [ -n "$1" ]; then
         export HADOOP_CONF_DIR="$1"
     fi
-    echo "HADOOP_CONF_DIR=$HADOOP_CONF_DIR"
+    printf "HADOOP_CONF_DIR=$HADOOP_CONF_DIR\n"
 }
 
+# populates the BROKERS variable with currently configured broker list
 function getBrokers()
 {
     local brokersfile=${1:-${KAFKA_HOME}/config/brokers}
@@ -213,6 +213,7 @@ function getBrokers()
     export BROKERS
 }
 
+# populates the variable 'ZKS' with the currently defined zookeepers
 function getZookeepers()
 {
     local zoomasters=${1:-${ZOOKEEPER_HOME}/conf/masters}
@@ -223,4 +224,44 @@ function getZookeepers()
     IFS=$tmpifs
 
     export ZKS
+}
+
+# convert a config XML to key=value pairs
+function xmlFile_toKV()
+{
+    local xml="$1"
+
+    if [ -n "$xml" ]; then
+        ( cat $xml | xq ".configuration[]" | jq ".[]" | jq -r ".name + \"=\" + .value" )
+    fi
+}
+
+# convert a key=value pair to an XML Property stanza
+function kv_toXml()
+{
+    local kv="$1"
+    local fs=${2:-'='}
+    local key=$(echo $kv | awk -F$fs '{ print $1 }')
+    local val=$(echo $kv | awk -F$fs '{ print $2 }')
+
+    echo "    <property>
+        <name>${key}</name>
+        <value>${val}</value>
+    </property>"
+
+    return 0
+}
+
+# convert a file containing key-value pairs to XML Properties
+function kvFile_toXml()
+{
+    local kvfile="$1"
+    local key=
+    local val=
+
+    for kv in $(cat $kvfile); do
+        kv_toXml "$kv"
+    done
+    
+    return 0
 }
