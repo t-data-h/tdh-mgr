@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# minio_functions.sh  -  Collection of bash functions for use with MinIO.
+# minio_env.sh  -  MinIO Environment settings and functions
 #
 # Timothy C. Arland <tcarland@gmail.com>
 #
@@ -17,11 +17,12 @@ export MINIO_SERVER_PORT=9000
 # minio hdfs gateway
 export MINIO_GATEWAY_PORT=9001
 # minio root user
-export MINIO_ROOT_USER=minio
+#export MINIO_ROOT_USER=minio
 
+# ------------------------
 
+# shell aliases
 MC="$MINIO_ALIAS"
-# MinIO Alias overrides
 alias mcls="mc ls $MC"
 alias mccp="mc cp $MC"
 alias mccat="mc cat $MC"
@@ -29,6 +30,7 @@ alias mcpipe="mc pipe $MC"
 alias mcfind="mc find $MC"
 alias mctree="mc tree $MC"
 
+# ------------------------
 
 function mcmkdir()
 {
