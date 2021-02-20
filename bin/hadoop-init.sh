@@ -273,7 +273,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        tdh_show_separator
+        tdh_show_header $HADOOP_VER
 
         printf "Stopping YARN.. [${RM1}] \n"
         ( ssh $RM1 "sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh" > /dev/null 2>&1 )
