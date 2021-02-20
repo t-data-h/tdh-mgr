@@ -2,15 +2,15 @@
 #
 #  tdh-env-user.sh - Bash environment for TDH.
 #
-#
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 VERSION="v21.02.19"
 
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1
+export TDH_HOME="/opt/TDH"
 
 export HADOOP_USER="${USER}"
-export HADOOP_ROOT="/opt/TDH"
+export HADOOP_ROOT="${TDH_HOME}"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
 export HADOOP_LOGDIR="/var/log/hadoop"
 export HADOOP_PID_DIR="/tmp"
