@@ -41,7 +41,7 @@ log_bin_trust_function_creators = 1
 symbolic-links=0
 
 log-bin=mysql-bin
-max_binlog_size = 300M
+max_binlog_size=300M
 expire_logs_days=7
 server-id=1
 

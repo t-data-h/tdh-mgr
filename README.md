@@ -99,8 +99,8 @@ to a running cluster.
 ## Running the Distribution
 
    The main entry point to running the cluster is the script `tdh-init.sh`.
-This works much like a standard init script with *start|stop|status* parameters.
-This in turn calls various ecosystem *init* functions to perform actions
+This works much like a standard init script with *start|stop|status* parameters,
+which in turn calls corresponding ecosystem *init* functions to perform actions
 on various components.  
 
   The specific stack of components to run can be set via the environment
@@ -108,4 +108,4 @@ variable `TDH_ECOSYSTEM_INITS`. Each component has its own script with the
 same options (Note, a 'restart' option is intentionally not provided).
 
   This can be run from any host with TDH installed, but relies on ssh host 
-keys for password-less ssh access to all nodes in the cluster.
+keys for ssh access to all nodes in the cluster.

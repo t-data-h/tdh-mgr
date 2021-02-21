@@ -241,7 +241,7 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo " Error! Unable to find a network interface. Please verify networking is configured properly."
+            printf "$TDH_PNAME Error, Unable to find a network interface. Please verify networking is configured properly. \n"
             exit $rt
         fi
 
@@ -252,10 +252,10 @@ case "$ACTION" in
             case "$JN_EDITS" in
                 qjournal://*)
                     if [ -z "$JNS" ]; then
-                        echo "Error determining Journal Nodes"
+                        printf "$TDH_PNAME Error determining Journal Nodes \n"
                         exit 1
                     fi
-                    echo "Starting HDFS Journal Nodes.."
+                    printf "Starting HDFS Journal Nodes.. [${JNS}] \n"
                     ( $HADOOP_HOME/bin/hdfs \
                       --config "$HADOOP_CONF_DIR" \
                       --hostnames "$JNS" \
@@ -265,20 +265,20 @@ case "$ACTION" in
             exit 0
         fi
 
-        echo "Starting HDFS.. [${NN1}]"
+        printf "Starting HDFS.. [${NN1}] \n"
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh > /dev/null 2>&1 )
 
-        echo "Starting YARN.. [${RM1}]"
+        printf "Starting YARN.. [${RM1}] \n"
         ( ssh $RM1 "sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/start-yarn.sh" > /dev/null 2>&1 )
         ;;
 
     'stop')
-        tdh_show_separator
+        tdh_show_header $HADOOP_VER
 
-        echo "Stopping YARN.. [${RM1}]"
+        printf "Stopping YARN.. [${RM1}] \n"
         ( ssh $RM1 "sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh" > /dev/null 2>&1 )
 
-        echo "Stopping HDFS.. [${NN1}]"
+        printf "Stopping HDFS.. [${NN1}] \n"
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh > /dev/null 2>&1 )
         rt=0
         ;;
