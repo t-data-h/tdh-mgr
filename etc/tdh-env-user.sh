@@ -3,7 +3,7 @@
 #  tdh-env-user.sh - Bash environment for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.02.19"
+VERSION="v21.03"
 
 export TDH_VERSION="$VERSION"
 export TDH_ENV_USER=1

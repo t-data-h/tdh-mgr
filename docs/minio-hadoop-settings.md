@@ -38,7 +38,9 @@ fs.s3a.connection.ssl.enabled=false
 fs.s3a.connection.timeout=200000
 fs.s3a.endpoint=http://minio:9000
 fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
-
+```
+additional optimizations for hdfs
+```
 fs.s3a.committer.threads=2048                # Number of threads writing to MinIO
 fs.s3a.connection.maximum=8192               # Maximum number of concurrent conns
 fs.s3a.fast.upload.active.blocks=2048        # Number of parallel uploads
@@ -56,35 +58,40 @@ fs.s3a.threads.max=2048                      # Maximum number of threads for S3A
 
 *spark-defaults.conf*
 ```
-spark.hadoop.fs.s3a.endpoint http://minio:9000
-spark.hadoop.fs.s3a.access.key minio
-spark.hadoop.fs.s3a.secret.key minio123
-spark.hadoop.fs.s3a.path.style.access true
-spark.hadoop.fs.s3a.block.size 512M
-spark.hadoop.fs.s3a.buffer.dir ${hadoop.tmp.dir}/s3a
-spark.hadoop.fs.s3a.committer.magic.enabled false
-spark.hadoop.fs.s3a.committer.name directory
-spark.hadoop.fs.s3a.committer.staging.abort.pending.uploads true
-spark.hadoop.fs.s3a.committer.staging.conflict-mode append
-spark.hadoop.fs.s3a.committer.staging.tmp.path /tmp/staging
-spark.hadoop.fs.s3a.committer.staging.unique-filenames true
-spark.hadoop.fs.s3a.committer.threads 2048           # number of threads writing to MinIO
-spark.hadoop.fs.s3a.connection.establish.timeout 5000
-spark.hadoop.fs.s3a.connection.maximum 8192          # maximum number of concurrent conns
-spark.hadoop.fs.s3a.connection.ssl.enabled false
-spark.hadoop.fs.s3a.connection.timeout 200000
+spark.hadoop.fs.s3a.endpoint=http://minio:9000
+spark.hadoop.fs.s3a.access.key=minio
+spark.hadoop.fs.s3a.secret.key=minio123
+spark.hadoop.fs.s3a.path.style.access=true
+spark.hadoop.fs.s3a.block.size=512M
+spark.hadoop.fs.s3a.buffer.dir=${hadoop.tmp.dir}/s3a
+spark.hadoop.fs.s3a.committer.magic.enabled=false
+spark.hadoop.fs.s3a.committer.name=directory
+spark.hadoop.fs.s3a.committer.staging.abort.pending.uploads=true
+spark.hadoop.fs.s3a.committer.staging.conflict-mode=append
+spark.hadoop.fs.s3a.committer.staging.tmp.path=/tmp/staging
+spark.hadoop.fs.s3a.committer.staging.unique-filenames=true
+spark.hadoop.fs.s3a.committer.threads=2048           # number of threads writing to MinIO
+spark.hadoop.fs.s3a.connection.establish.timeout=5000
+spark.hadoop.fs.s3a.connection.maximum=8192          # maximum number of concurrent conns
+spark.hadoop.fs.s3a.connection.ssl.enabled=false
+spark.hadoop.fs.s3a.connection.timeout=200000
 
-spark.hadoop.fs.s3a.fast.upload.active.blocks 2048   # number of parallel uploads
-spark.hadoop.fs.s3a.fast.upload.buffer disk          # use disk as the buffer for uploads
-spark.hadoop.fs.s3a.fast.upload true                 # turn on fast upload mode
-spark.hadoop.fs.s3a.impl org.apache.hadoop.spark.hadoop.fs.s3a.S3AFileSystem
-spark.hadoop.fs.s3a.max.total.tasks 2048             # maximum number of parallel tasks
-spark.hadoop.fs.s3a.multipart.size 512M              # size of each multipart chunk
-spark.hadoop.fs.s3a.multipart.threshold 512M         # size before using multipart uploads
-spark.hadoop.fs.s3a.socket.recv.buffer 65536         # read socket buffer hint
-spark.hadoop.fs.s3a.socket.send.buffer 65536         # write socket buffer hint
-spark.hadoop.fs.s3a.threads.max 2048                 # maximum number of threads for S3A
+spark.hadoop.fs.s3a.fast.upload.active.blocks=2048   # number of parallel uploads
+spark.hadoop.fs.s3a.fast.upload.buffer=disk          # use disk as the buffer for uploads
+spark.hadoop.fs.s3a.fast.upload=true                 # turn on fast upload mode
+spark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
+spark.hadoop.fs.s3a.max.total.tasks=2048             # maximum number of parallel tasks
+spark.hadoop.fs.s3a.multipart.size=512M              # size of each multipart chunk
+spark.hadoop.fs.s3a.multipart.threshold=512M         # size before using multipart uploads
+spark.hadoop.fs.s3a.socket.recv.buffer=65536         # read socket buffer hint
+spark.hadoop.fs.s3a.socket.send.buffer=65536         # write socket buffer hint
+spark.hadoop.fs.s3a.threads.max=2048                 # maximum number of threads for S3A
 ```
+
+Note the hadoop versions Spark is build against, if any, from $SPARK_HOME/jars. 
+Spark requires the same version of the `hadoop-aws-x.x.x.jar` and the corresponding 
+dependency of `aws-java-sdk-xxx.jar`. The various versions and their deps can be 
+browsed via the [Maven Repository](https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-aws)
 
 ## Hive and MinIO
 
