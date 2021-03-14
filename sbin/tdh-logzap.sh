@@ -4,6 +4,7 @@
 #
 HADOOP_LOGDIR=
 dryrun=0
+prompt=0
 
 # ----------- preamble
 HADOOP_ENV="tdh-env-user.sh"
@@ -35,6 +36,8 @@ Usage: $TDH_PNAME [options]
   
   -n | --dryrun   :  Dryrun, files to be removed are listed only.
   -h | --help     :  Display usage info and exit.
+  -P | --noprompt :  Don't ask for approval. 
+                     This removes logs without prompting!
   -V | --version  :  Show version info and exit.
 "
 
@@ -107,6 +110,9 @@ erase_all()
     return $rt
 }
 
+# -------------------
+# MAIN
+rt=0
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -116,11 +122,14 @@ while [ $# -gt 0 ]; do
             ;;
         'help'|-h|--help)
             usage
-            exit 0
+            exit $rt
+            ;;
+        -P|--noprompt|--no-prompt)
+            prompt=1
             ;;
         'version'|-V|--version)
             tdh_version
-            exit 0
+            exit $rt
             ;;
         *)
             ;;
@@ -135,8 +144,10 @@ HADOOP_LOGDIR=$HADOOP_LOGDIR
 Warning! This will permanently erase all files in the directory.
 "
 
-ask  "Are you sure you wish to continue? (y/N)" "N"
-rt=$?
+if [ $prompt -eq 0 ]; then
+    ask  "Are you sure you wish to continue? (y/N)" "N"
+    rt=$?
+fi
 
 if [ $rt -eq 0 ]; then
     erase_all "$HADOOP_LOGDIR"
