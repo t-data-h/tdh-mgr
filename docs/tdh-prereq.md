@@ -77,7 +77,7 @@ via grub:
   kernel /boot/vmlinuz-2.6.32-358.el6.x86_64 ro root=UUID=a216d1e5-884f-4e5c-859a-6e2e2530d486 rhgb quiet transparent_hugepage=never
 ```
 or via rc.local:
-```
+```bash
 if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
    echo never > /sys/kernel/mm/transparent_hugepage/enabled
 fi

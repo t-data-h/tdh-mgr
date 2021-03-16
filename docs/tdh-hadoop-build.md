@@ -55,7 +55,7 @@ Note the `--name` parameter used to label the specific build.
 ### Spark v1.6.x
 Note that Spark 1.6 uses -Phadoop2.6 and has no profile for 2.7. Additionally,
 1.6 uses Scala 2.11 only.
-```
+```bash
 export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
 ./make-distribution.sh --name custom-spark --tgz --skip-java-test -Phadoop-2.6 \
  -Dhadoop.version=2.7.1 -Pyarn -Phive -Phive-thriftserver -Phadoop-provided
@@ -65,7 +65,7 @@ export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
 
 Spark 2.1.x to 2.4.0. Note that Spark2 still uses Scala2.12 but adds a profile
 for supporting Scala 2.12.
-```
+```bash
 export SPARK_DIST_NAME="custom-spark"
 export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
 ./dev/make-distribution.sh --name $SPARK_DIST_NAME --tgz -Phadoop-2.7 \
@@ -73,7 +73,7 @@ export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
 ```
 
 ### Spark 2.4.2 +
-```
+```bash
 ./dev/make-distribution.sh --name $SPARK_DIST_NAME --tgz -Phadoop-2.7 \
  -Pyarn -Phive -Phive-thriftserver -Phadoop-provided -Pscala-2.12
 ```
