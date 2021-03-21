@@ -7,7 +7,7 @@
 #
 
 # ----------- preamble
-HADOOP_ENV="tdh-env-user.sh"
+HADOOP_ENV="tdh-env.sh"
 HADOOP_ENV_PATH="/opt/TDH/etc"
 
 if [ -r "./etc/$HADOOP_ENV" ]; then

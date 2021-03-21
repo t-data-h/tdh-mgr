@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-#  tdh-env-user.sh - Bash environment for TDH.
+#  tdh-env.sh - Bash environment for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 VERSION="v21.03"
 
 export TDH_VERSION="$VERSION"
-export TDH_ENV_USER=1
 export TDH_HOME="/opt/TDH"
+export TDH_ENV="tdh-env.sh $VERSION"
 
 export HADOOP_USER="${USER}"
 export HADOOP_ROOT="${TDH_HOME}"
@@ -71,7 +71,7 @@ C_NC='\e[0m'
 # -----------------------------------------------
 #  WARNING! Do not edit below this line.
 #
-#  tdh-env-functions
+#  tdh-env.sh
 #
 TDH_PNAME=${0##*\/}
 PID=
@@ -102,6 +102,7 @@ function tdh_show_separator()
     printf "      -------------     |------|\n"
 }
 
+
 function check_process_pid()
 {
     local pid=$1
@@ -113,6 +114,7 @@ function check_process_pid()
 
     return 1
 }
+
 
 function check_process()
 {
@@ -133,6 +135,7 @@ function check_process()
     return $rt
 }
 
+
 # Check a process on a remote host (via ssh) and set PID accordingly.
 function check_remote_process()
 {
@@ -149,6 +152,7 @@ function check_remote_process()
 
     return $rt
 }
+
 
 # Validates that our configured hostname as provided by `hostname -f`
 # locally resolves to an interface other than the loopback
@@ -200,6 +204,7 @@ function hconfdir()
     printf "HADOOP_CONF_DIR=$HADOOP_CONF_DIR\n"
 }
 
+
 # populates the BROKERS variable with currently configured broker list
 function getBrokers()
 {
@@ -225,6 +230,7 @@ function getZookeepers()
 
     export ZKS
 }
+
 
 # convert a config XML to key=value pairs
 function xmlFile_toKV()
@@ -265,3 +271,5 @@ function kvFile_toXml()
     
     return 0
 }
+
+# tdh-env.sh
