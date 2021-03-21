@@ -83,7 +83,7 @@ cluster directory (eg. /opt/TDH). The directory here provides a pair of examples
 for a distributed cluster and of a single, pseudo-distributed node. This is 
 intended to be used as the template for a separately tracked git repo for 
 managing configurations.
-```
+```bash
 cd ..
 mkdir myconfigdir
 rsync -av ./tdh-mgr/tdh-config/ ./myconfigdir/

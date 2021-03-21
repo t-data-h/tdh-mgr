@@ -4,7 +4,7 @@
 #
 
 # ----------- preamble
-HADOOP_ENV="tdh-env-user.sh"
+HADOOP_ENV="tdh-env.sh"
 
 if [ -z "$JAVA_HOME" ]; then
     if [ -e '/etc/profile.d/jdk.sh' ]; then

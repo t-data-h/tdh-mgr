@@ -167,7 +167,7 @@ Use these as the template to configure an install. Some important settings are
 shown here, but only scratch the surface.
 
 **core-site.xml:**
-```
+```xml
 <configuration>
     <property>
         <name>fs.default.name</name>
@@ -186,7 +186,7 @@ Choose a path for the Namenode and Datanode directories. Note that
 the replication parameter must be set properly. Even though we are running
 in distributed mode, this is still a single node so we do not want any
 replication.
-```
+```xml
 <configuration>
     <property>
         <name>dfs.replication</name>
@@ -204,7 +204,7 @@ replication.
 ```
 
 **yarn-site.xml:**
-```
+```xml
 <configuration>
     <property>
         <name>yarn.resourcemanager.address</name>
@@ -236,7 +236,7 @@ replication.
 
 If intending to use Spark2.x and Dynamic Execution, then the external Spark Shuffle 
 service should be configured:
-```
+```xml
 <property>
   <name>yarn.nodemanager.aux-services</name>
   <value>mapreduce_shuffle,spark_shuffle</value>
@@ -253,7 +253,7 @@ This environment serves as example. `tdh-mgr` provides this configuration
 via the file `tdh-env-user.sh`, which can be sourced from a users *.bashrc*.
 
 **.bashrc:**
-```
+```bash
 if [ -f /opt/TDH/etc/tdh-env-user.sh ]; then
     . /opt/TDH/etc/tdh-env-user.sh
 fi
@@ -264,7 +264,7 @@ fi
 The complete version of this file is provided as *./etc/tdh-env-user.sh*, and
 would look something similar to the following as a minimum to set up the
 hadoop environment properly:
-```
+```bash
 # User oriented environment variables (for use with bash)
 
 # The java implementation to use.
@@ -334,7 +334,7 @@ the *hbase-site.xml* file with the configuration below. Note that some of these
 values are defaults and as such are not necessary, but are included for reference.
 
 **hbase-site.xml:**
-```
+```xml
 <configuration>
     <property>
         <name>hbase.master.port</name>
@@ -391,19 +391,19 @@ has been setup accordingly.
 
 ### Using a Docker container for the Mysql Metastore
 
-  Assuming the TDH host in question already has Docker configured and working,
+Assuming the TDH host in question already has Docker configured and working,
 the script `tdh-mgr/sbin/tdh-mysqld-docker.sh` will instantiate a Mysql 5.7 Docker
 Container with a temporary password.
 ```
 ./sbin/tdh-mysqld-docker.sh run
 ```
 
-  The temp password is provided once the script completes successfully. The
-instance can then be fully configured via a mysql client from within the container
-by using the `./sbin/tdh-mysql-client.sh` script.
+The temp password is provided once the script completes successfully. The
+instance can then be fully configured via a mysql client from within the 
+container by using the `./sbin/tdh-mysql-client.sh` script.
 
-   Steps for configuring the container:
-```
+Steps for configuring the container:
+```bash
 $ ./sbin/tdh-mysql-client.sh
 # prompts for temp password, which should be changed first
 # replace the following password accordingly
@@ -427,7 +427,7 @@ $ mysql -h myhost -u hive -p metastore < hive-schema-1.2.0.mysql.sql
 
 
 ## Installing and Configuring Spark (on YARN and Standalone)
-```
+```bash
 $ cd /opt/tdh
 $ wget http://url/to/spark-1.6.2-bin-hadoop2.6.tgz
 $ tar -zxf spark-1.6.2-bin-hadoop2.6.tgz
@@ -452,7 +452,7 @@ $ cp log4j.properties.template log4j.properties
 ```
 
 **spark-env.sh:**
-```
+```bash
 export SPARK_DAEMON_JAVA_OPTS="-Dlog4j.configuration=file:///opt/tdh/spark/conf/log4j.properties"
 export SPARK_DIST_CLASSPATH=$(/opt/tdh/hadoop/bin/hadoop classpath)
 
@@ -485,7 +485,7 @@ spark.executor.memory                           1g
 ### Testing the Spark Installation
 
 To test running a spark job on YARN, try the following spark example:
-```
+```bash
 $SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi \
     --master yarn \
     --deploy-mode cluster \
@@ -499,7 +499,7 @@ Check the YARN UI *http://host:8088/*
 
 Jobs can be submitted directly to the spark master as well and viewed via
 the Spark UI at *http://host:8080/*
-```
+```bash
   $SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi \
     --master spark://$host:7077 \
     --num-executors 1 \
@@ -547,7 +547,7 @@ spark.executor.memory=1g
 ```
 
 **spark-env.sh:**
-```
+```bash
 export STANDALONE_SPARK_MASTER_HOST=`hostname`
 export SPARK_MASTER_IP=$STANDALONE_SPARK_MASTER_HOST
 
@@ -619,7 +619,7 @@ This is a nice feature, especially with constrained resources and notebook users
 To enable dynamic allocation, the external spark shuffle service must be added to YARN.
 
 **yarn-site.xml**:
-```
+```xml
   <property>
     <name>yarn.nodemanager.aux-services</name>
     <value>spark_shuffle,mapreduce_shuffle</value>

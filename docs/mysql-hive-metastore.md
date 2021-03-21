@@ -110,9 +110,7 @@ shell command.
   We then dump the master database with a full lock that we keep in place until 
   replication is running. 
   On the master we dump the database as follows:
-  ```
-  $ mysql -u root -p
-
+  ```sql
   > FLUSH TABLES WITH READ LOCK;
   > SHOW MASTER STATUS;
   ```
@@ -125,8 +123,7 @@ shell command.
 - Next, we reset the replication process on the Slave database to align the 
   *bin-log*. We take the two values for the log file and log position from the 
   master status details above.
-  ```
-  $ mysql -u root -p
+  ```sql
   > STOP SLAVE;
   > RESET SLAVE;
   > CHANGE MASTER TO
@@ -219,7 +216,7 @@ pid-file=/var/run/mysqld/mysqld.pid
 
 ## Mysql JDBC Connector
 Use the 5.1 Connector for Mysql 5.7. Note all nodes need the connector.
-```
+```bash
 wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz
 tar -zxf mysql-connector-java-5.1.46.tar.gz
 mkdir -p /usr/share/java
