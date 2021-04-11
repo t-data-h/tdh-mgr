@@ -6,16 +6,13 @@
 #
 export MINIO_ENV_VERSION="v21.02"
 
-# helm release name
-export MINIO_RELEASE="${MINIO_RELEASE_NAME:-minio-1}"
-# minio tentant or host alias
-export MINIO_ALIAS="${MINIO_HOST_ALIAS:-$(hostname -s)}"
-# minio namespace
-export MINIO_NS="minio"
-# minio server ui port
-export MINIO_SERVER_PORT=9000
-# minio hdfs gateway
-export MINIO_GATEWAY_PORT=9001
+
+export MINIO_RELEASE="${MINIO_RELEASE_NAME:-minio-1}"    # helm release name
+export MINIO_ALIAS="${MINIO_HOST_ALIAS:-$(hostname -s)}" # minio tentant or host alias
+
+export MINIO_NS="minio"        # minio namespace
+export MINIO_SERVER_PORT=9000  # minio server ui port
+export MINIO_GATEWAY_PORT=9001 # minio hdfs gateway
 
 # ------------------------
 

@@ -1,5 +1,6 @@
 #
 # The MySQL database server configuration file.
+# http://dev.mysql.com/doc/mysql/en/server-system-variables.html
 #
 
 [mysqld]
@@ -36,14 +37,23 @@ innodb_thread_concurrency       = 8
 innodb_flush_method             = O_DIRECT
 innodb_log_file_size            = 512M
 innodb_large_prefix
-log_bin_trust_function_creators = 1
 
-symbolic-links=0
+#symbolic-links=0
 
+bilog-format=mixed
 log-bin=mysql-bin
 max_binlog_size=300M
+log_bin_trust_function_creators = 1
 expire_logs_days=7
 server-id=1
+
+#binlog_do_db		= include_database_name
+#binlog_ignore_db	= include_database_name
+
+# For generating SSL certificates I recommend the OpenSSL GUI "tinyca".
+# ssl-ca=/etc/mysql/cacert.pem
+# ssl-cert=/etc/mysql/server-cert.pem
+# ssl-key=/etc/mysql/server-key.pem
 
 [mysqld_safe]
 log-error=/var/log/mysqld.log
