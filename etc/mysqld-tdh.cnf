@@ -5,13 +5,13 @@
 
 [mysqld]
 key_buffer_size         = 32M
-max_allowed_packet      = 16M
+max_allowed_packet      = 32M
 thread_stack            = 256K
 thread_cache_size       = 64
 query_cache_limit       = 8M
 query_cache_size        = 64M
 query_cache_type        = 1
-max_connections         = 150
+max_connections         = 550
 read_buffer_size        = 2M
 read_rnd_buffer_size    = 16M
 sort_buffer_size        = 8M
