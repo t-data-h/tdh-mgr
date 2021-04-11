@@ -154,8 +154,8 @@ function check_remote_process()
 }
 
 
-# Validates that our configured hostname as provided by `hostname -f`
-# locally resolves to an interface other than the loopback
+# Validates that the configured hostname, eg. as provided by `hostname -f`,
+# resolves to a locally defined interface other than the loopback
 function hostip_is_valid()
 {
     local hostid=$(hostname -s)
@@ -220,6 +220,7 @@ function getBrokers()
     export BROKERS
 }
 
+
 # populates the variable 'ZKS' with the currently defined zookeepers
 function getZookeepers()
 {
@@ -246,6 +247,7 @@ function xmlFile_toKV()
     fi
 }
 
+
 # convert a key=value pair to an XML Property stanza
 function kv_toXml()
 {
@@ -261,6 +263,7 @@ function kv_toXml()
 
     return 0
 }
+
 
 # convert a file containing key-value pairs to XML Properties
 function kvFile_toXml()
