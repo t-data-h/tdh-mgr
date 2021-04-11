@@ -69,7 +69,7 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Error: Spark Master is already running [$PID]"
+            echo "Error: Spark Master is already running: [$PID]"
             exit $rt
         fi
 
@@ -85,7 +85,7 @@ case "$ACTION" in
             echo "Stopping Spark Standalone..."
             ( sudo -u $HADOOP_USER $SPARK_HOME/sbin/stop-all.sh > /dev/null 2>&1 )
         else
-            echo " Spark Master not running.."
+            echo "  Spark Master not running.."
         fi
         rt=0
         ;;

@@ -3,7 +3,7 @@
 #  tdh-env.sh - Bash environment for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.03.17"
+VERSION="v21.04"
 
 export TDH_VERSION="$VERSION"
 export TDH_HOME="/opt/TDH"
@@ -215,6 +215,8 @@ function getBrokers()
     BROKERS=$( cat ${brokersfile} 2>/dev/null | awk '{ print $1 }' | paste -s -d, - )
     IFS=$tmpifs
 
+    printf "%s" ${BROKERS}
+
     export BROKERS
 }
 
@@ -227,6 +229,8 @@ function getZookeepers()
     IFS=$'\n'
     ZKS=$( cat ${zoomasters} 2>/dev/null | paste -s -d, - )
     IFS=$tmpifs
+
+    printf "%s" ${ZKS}
 
     export ZKS
 }

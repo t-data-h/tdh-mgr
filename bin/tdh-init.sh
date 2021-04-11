@@ -68,7 +68,7 @@ run_action()
         rt=$?
 
         if [ $rt -ne 0 ] && [ $force -eq 0 ]; then
-            echo "Caught Error in: '$cmd $action' (use '--force' to ignore)"
+            printf " Error in: '$cmd $action' use '-f|--force' to ignore errors"
             return $rt
         fi
     done
