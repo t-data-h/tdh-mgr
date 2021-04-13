@@ -54,9 +54,9 @@ show_status()
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            printf " Kafka Broker           | $C_GRN OK $C_NC | [${broker}:${PID}]\n"
+            printf " Kafka Broker           | $C_GRN OK $C_NC |  ${broker} [${PID}]\n"
         else
-            printf " Kafka Broker           | ${C_RED}DEAD${C_NC} | [${broker}]\n"
+            printf " Kafka Broker           | ${C_RED}DEAD${C_NC} |  ${broker}\n"
         fi
     done
 
@@ -77,10 +77,10 @@ if [ -n "$CONFIG" ]; then
     KAFKA_CFG="$CONFIG"
 fi
 
-getBrokers
+getBrokers >/dev/null
 
 if [ -z "${BROKERS}" ]; then
-    echo "Error getting brokers from host config: '${BROKERSFILE}'"
+    echo "$TDH_PNAME Error getting brokers from host config" 
     exit 1
 fi
 
@@ -95,11 +95,11 @@ case "$ACTION" in
             rt=$?
 
             if [ $rt -eq 0 ]; then
-                echo " Kafka Broker [${broker}:${PID}] is already running"
+                echo " Kafka Broker is already running: ${broker} [${PID}]"
                 continue
             fi
 
-            echo "Starting Kafka Broker.. [${broker}]"
+            echo "Starting Kafka Broker: '${broker}'"
             ( ssh $broker "${KAFKA_HOME}/bin/kafka-server-start.sh -daemon $KAFKA_HOME/$KAFKA_CFG > /dev/null 2>&1" )
 
             rt=$?
@@ -113,11 +113,11 @@ case "$ACTION" in
 
             rt=$?
             if [ $rt -eq 0 ]; then
-                echo "Stopping Kafka Broker [${broker}:${PID}]"
+                echo "Stopping Kafka Broker: ${broker} [${PID}]"
                 ( ssh $broker "$KAFKA_HOME/bin/kafka-server-stop.sh > /dev/null 2>&1" )
                 rt=$?
             else
-                echo "Kafka Broker not found."
+                echo "  Kafka Broker not found."
                 rt=0
             fi
         done

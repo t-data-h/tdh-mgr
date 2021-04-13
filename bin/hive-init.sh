@@ -52,18 +52,18 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        printf " Hive Metastore         | $C_GRN OK $C_NC | [${HIVE_SERVER}:${PID}]\n"
+        printf " Hive Metastore         | $C_GRN OK $C_NC |  ${HIVE_SERVER} [${PID}]\n"
     else
-        printf " Hive Metastore         | ${C_RED}DEAD$C_NC | [${HIVE_SERVER}]\n"
+        printf " Hive Metastore         | ${C_RED}DEAD$C_NC |  ${HIVE_SERVER}\n"
     fi
 
     check_remote_process $HIVE_SERVER $HIVESERVER2
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        printf " Hive Server            | $C_GRN OK $C_NC | [${HIVE_SERVER}:${PID}]\n"
+        printf " Hive Server            | $C_GRN OK $C_NC |  ${HIVE_SERVER} [${PID}]\n"
     else
-        printf " Hive Server            | ${C_RED}DEAD$C_NC | [${HIVE_SERVER}]\n"
+        printf " Hive Server            | ${C_RED}DEAD$C_NC |  ${HIVE_SERVER}\n"
     fi
 
     return $rt
@@ -86,26 +86,26 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo " Hive MetaStore is already running  [${HIVE_SERVER}:${PID}]"
+            echo "  Hive MetaStore is already running: ${HIVE_SERVER} [${PID}]"
         fi
 
         check_remote_process $HIVE_SERVER $HIVESERVER2
 
         hs=$?
         if [ $hs -eq 0 ]; then
-            echo " HiveServer2 is already running [${HIVE_SERVER}:${PID}]"
+            echo "  Hive Server2   is already running: ${HIVE_SERVER} [${PID}]"
         fi
 
         ( ssh $HIVE_SERVER "mkdir -p $HIVE_LOGDIR" )
 
         if [ $rt -gt 0 ]; then
-            echo "Starting HiveMetaStore.. [$HIVE_SERVER]"
+            echo "Starting HiveMetaStore: '$HIVE_SERVER'"
             ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service metastore > $HIVE_METASTORE_LOG 2>&1 &" )
             rt=$?
         fi
 
         if [ $hs -gt 0 ]; then 
-            echo "Starting HiveServer2..   [$HIVE_SERVER]"
+            echo "Starting HiveServer2: '$HIVE_SERVER'"
             ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 > $HIVE_SERVER2_LOG 2>&1 &" )
         fi
         ;;
@@ -115,20 +115,20 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping Hive MetaStore.. [${HIVE_SERVER}:${PID}]"
+            echo "Stopping Hive MetaStore: ${HIVE_SERVER} [${PID}]"
             ( ssh $HIVE_SERVER "kill $PID" )
         else
-            echo "Hive Metastore not found."
+            echo "  Hive Metastore not found."
         fi
 
         check_remote_process $HIVE_SERVER $HIVESERVER2
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping HiveServer2.. [${HIVE_SERVER}:${PID}]"
+            echo "Stopping Hive Server2:   ${HIVE_SERVER} [${PID}]"
             ( ssh $HIVE_SERVER "kill $PID" )
         else
-            echo "Hive Server not found."
+            echo "  Hive Server not found."
         fi
         rt=0
         ;;

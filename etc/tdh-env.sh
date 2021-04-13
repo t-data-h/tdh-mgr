@@ -3,7 +3,7 @@
 #  tdh-env.sh - Bash environment for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.03.17"
+VERSION="v21.04"
 
 export TDH_VERSION="$VERSION"
 export TDH_HOME="/opt/TDH"
@@ -65,7 +65,7 @@ C_YEL='\e[93m'  # 33 dim, 93 bright
 C_BLU='\e[34m\e[1m'
 C_MAG='\e[95m'
 C_CYN='\e[96m'
-C_WHT='\e[97m'
+C_WHT='\e[97m\e[1m'
 C_NC='\e[0m'
 
 # -----------------------------------------------
@@ -154,8 +154,8 @@ function check_remote_process()
 }
 
 
-# Validates that our configured hostname as provided by `hostname -f`
-# locally resolves to an interface other than the loopback
+# Validates that the configured hostname, eg. as provided by `hostname -f`,
+# resolves to a locally defined interface other than the loopback
 function hostip_is_valid()
 {
     local hostid=$(hostname -s)
@@ -215,8 +215,11 @@ function getBrokers()
     BROKERS=$( cat ${brokersfile} 2>/dev/null | awk '{ print $1 }' | paste -s -d, - )
     IFS=$tmpifs
 
+    printf "%s" ${BROKERS}
+
     export BROKERS
 }
+
 
 # populates the variable 'ZKS' with the currently defined zookeepers
 function getZookeepers()
@@ -227,6 +230,8 @@ function getZookeepers()
     IFS=$'\n'
     ZKS=$( cat ${zoomasters} 2>/dev/null | paste -s -d, - )
     IFS=$tmpifs
+
+    printf "%s" ${ZKS}
 
     export ZKS
 }
@@ -241,6 +246,7 @@ function xmlFile_toKV()
         ( cat $xml | xq ".configuration[]" | jq ".[]" | jq -r ".name + \"=\" + .value" )
     fi
 }
+
 
 # convert a key=value pair to an XML Property stanza
 function kv_toXml()
@@ -257,6 +263,7 @@ function kv_toXml()
 
     return 0
 }
+
 
 # convert a file containing key-value pairs to XML Properties
 function kvFile_toXml()

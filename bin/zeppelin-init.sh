@@ -46,10 +46,10 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        printf " Zeppelin Server        | $C_GRN OK  $C_NC | [${HOST}:${PID}]\n"
+        printf " Zeppelin Server        | $C_GRN OK  $C_NC |  ${HOST} [${PID}]\n"
         rt=0
     else
-        printf " Zeppelin Server        | ${C_RED}DEAD$C_NC | [${HOST}]\n"
+        printf " Zeppelin Server        | ${C_RED}DEAD$C_NC |  ${HOST}\n"
         rt=1
     fi
 
@@ -74,7 +74,7 @@ case "$ACTION" in
             exit $rt
         fi
 
-        echo "Starting Zeppelin..."
+        echo "Starting Zeppelin.."
         ( cd $ZEPPELIN_HOME; sudo -u $HADOOP_USER $ZEPPELIN_HOME/bin/zeppelin-daemon.sh start )
         rt=0
         ;;
@@ -85,12 +85,12 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo "Stopping Zeppelin [$PID]..."
+            echo "Stopping Zeppelin: [$PID]"
             ( sudo -u $HADOOP_USER $ZEPPELIN_HOME/bin/zeppelin-daemon.sh stop )
             rt=0
             #sleep 1
         else
-            echo "Zeppelin not found..."
+            echo "$TDH_PNAME Error, Zeppelin not found..."
             rt=1
         fi
         ;;

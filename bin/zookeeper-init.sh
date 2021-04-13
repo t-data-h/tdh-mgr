@@ -53,9 +53,9 @@ show_status()
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            printf " Zookeeper              | $C_GRN OK $C_NC | [${zk}:${PID}]\n"
+            printf " Zookeeper              | $C_GRN OK $C_NC |  ${zk} [${PID}] \n"
         else
-            printf " Zookeeper              | ${C_RED}DEAD$C_NC | [${zk}]\n"
+            printf " Zookeeper              | ${C_RED}DEAD$C_NC |  ${zk} \n"
         fi
     done
 
@@ -71,7 +71,7 @@ ACTION="$1"
 IFS=$','
 rt=0
 
-getZookeepers
+getZookeepers >/dev/null
 
 if [ -z "$ZKS" ]; then
     echo "Error locating Zookeeper host config: '${ZK_CONFIG}'"
@@ -89,11 +89,11 @@ case "$ACTION" in
             rt=$?
 
             if [ $rt -eq 0 ]; then
-                echo " Zookeeper [${zk}:${PID}] is already running"
+                echo "  Zookeeper is already running: ${zk} [${PID}]"
                 exit $rt
             fi
 
-            echo "Starting Zookeeper..  [${zk}]"
+            echo "Starting Zookeeper: '${zk}'"
             ( ssh $zk "${ZOOKEEPER_HOME}/bin/zkServer.sh start > /dev/null 2>&1" )
 
             rt=$?
@@ -108,11 +108,11 @@ case "$ACTION" in
             rt=$?
 
             if [ $rt -eq 0 ]; then
-                echo "Stopping Zookeeper.. [${zk}:${PID}]"
+                echo "Stopping Zookeeper: ${zk} [${PID}]"
                 ( ssh $zk "$ZOOKEEPER_HOME/bin/zkServer.sh stop > /dev/null 2>&1" )
                 rt=$?
             else
-                echo "Zookeeper not found."
+                echo "$TDH_PNAME Error, Zookeeper not found."
                 rt=0
             fi
         done

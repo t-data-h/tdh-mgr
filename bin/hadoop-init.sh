@@ -132,9 +132,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        printf " HDFS Namenode (pri)    | $C_GRN OK $C_NC | [${NN1}:${PID}]\n"
+        printf " HDFS Namenode (pri)    | $C_GRN OK $C_NC |  ${NN1} [${PID}]\n"
     else
-        printf " HDFS Namenode (pri)    | ${C_RED}DEAD$C_NC | [$NN1]\n"
+        printf " HDFS Namenode (pri)    | ${C_RED}DEAD$C_NC |  $NN1\n"
         r=1
     fi
 
@@ -143,9 +143,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        printf " HDFS NameNode (sec)    | $C_GRN OK $C_NC | [${NN2}:${PID}]\n"
+        printf " HDFS NameNode (sec)    | $C_GRN OK $C_NC |  ${NN2} [${PID}]\n"
     else
-        printf " HDFS Namenode (sec)    | ${C_RED}DEAD$C_NC | [${NN2}]\n"
+        printf " HDFS Namenode (sec)    | ${C_RED}DEAD$C_NC |  ${NN2}\n"
         r=1
     fi
 
@@ -154,9 +154,9 @@ show_status()
 
     rt=$?
     if [ $rt -eq 0 ]; then
-        printf " YARN ResourceManager   | $C_GRN OK $C_NC | [${RM1}:${PID}]\n"
+        printf " YARN ResourceManager   | $C_GRN OK $C_NC |  ${RM1} [${PID}]\n"
     else
-        printf " YARN ResourceManager   | ${C_RED}DEAD$C_NC | [${RM1}]\n"
+        printf " YARN ResourceManager   | ${C_RED}DEAD$C_NC |  ${RM1}\n"
         r=1
     fi
 
@@ -168,9 +168,9 @@ show_status()
 
             rt=$?
             if [ $rt -eq 0 ]; then
-                printf " HDFS JournalNode       | $C_GRN OK $C_NC | [${jn}:${PID}]\n"
+                printf " HDFS JournalNode       | $C_GRN OK $C_NC |  ${jn} [${PID}]\n"
             else
-                printf " HDFS JournalNode       | ${C_RED}DEAD$C_NC | [${jn}]\n"
+                printf " HDFS JournalNode       | ${C_RED}DEAD$C_NC |  ${jn}\n"
                 r=1
             fi
         done
@@ -187,9 +187,9 @@ show_status()
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            printf " HDFS DataNode          | $C_GRN OK $C_NC | [${dn}:${PID}]\n"
+            printf " HDFS DataNode          | $C_GRN OK $C_NC |  ${dn} [${PID}]\n"
         else
-            printf " HDFS DataNode          | ${C_RED}DEAD$C_NC | [${dn}]\n"
+            printf " HDFS DataNode          | ${C_RED}DEAD$C_NC |  ${dn}\n"
             r=1
         fi
 
@@ -198,9 +198,9 @@ show_status()
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            printf " YARN NodeManager       | $C_GRN OK $C_NC | [${dn}:${PID}]\n"
+            printf " YARN NodeManager       | $C_GRN OK $C_NC |  ${dn} [${PID}]\n"
         else
-            printf " YARN NodeManager       | ${C_RED}DEAD$C_NC | [$dn]\n"
+            printf " YARN NodeManager       | ${C_RED}DEAD$C_NC |  $dn\n"
             r=1
         fi
     done
@@ -241,7 +241,8 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -ne 0 ]; then
-            printf "$TDH_PNAME Error, Unable to find a network interface. Please verify networking is configured properly. \n"
+            printf "$TDH_PNAME Error, Unable to locate a matching network interface. \n  \
+             Please verify networking is configured properly. \n"
             exit $rt
         fi
 
@@ -255,7 +256,7 @@ case "$ACTION" in
                         printf "$TDH_PNAME Error determining Journal Nodes \n"
                         exit 1
                     fi
-                    printf "Starting HDFS Journal Nodes.. [${JNS}] \n"
+                    printf "Starting HDFS Journal Nodes: '${JNS}' \n"
                     ( $HADOOP_HOME/bin/hdfs \
                       --config "$HADOOP_CONF_DIR" \
                       --hostnames "$JNS" \
@@ -265,20 +266,20 @@ case "$ACTION" in
             exit 0
         fi
 
-        printf "Starting HDFS.. [${NN1}] \n"
+        printf "Starting HDFS: '${NN1}' \n"
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/start-dfs.sh > /dev/null 2>&1 )
 
-        printf "Starting YARN.. [${RM1}] \n"
+        printf "Starting YARN: '${RM1}' \n"
         ( ssh $RM1 "sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/start-yarn.sh" > /dev/null 2>&1 )
         ;;
 
     'stop')
         tdh_show_header $HADOOP_VER
 
-        printf "Stopping YARN.. [${RM1}] \n"
+        printf "Stopping YARN: '${RM1}' \n"
         ( ssh $RM1 "sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh" > /dev/null 2>&1 )
 
-        printf "Stopping HDFS.. [${NN1}] \n"
+        printf "Stopping HDFS: '${NN1}' \n"
         ( sudo -u $HADOOP_USER $HADOOP_HDFS_HOME/sbin/stop-dfs.sh > /dev/null 2>&1 )
         rt=0
         ;;
