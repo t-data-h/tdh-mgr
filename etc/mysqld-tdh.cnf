@@ -40,7 +40,7 @@ innodb_large_prefix
 
 #symbolic-links=0
 
-bilog-format=mixed
+binlog-format=mixed
 log-bin=mysql-bin
 max_binlog_size=300M
 log_bin_trust_function_creators = 1
