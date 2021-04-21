@@ -77,7 +77,7 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Error: Spark HistoryServer is already running: ${SHS_HOST} [${PID}]"
+            echo "Spark HistoryServer is already running: ${SHS_HOST} [${PID}]"
             exit $rt
         fi
 

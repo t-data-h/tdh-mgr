@@ -97,6 +97,14 @@ For Hadoop v3
  -Phive -Phive-thriftserver -Phadoop-provided -Pkubernetes -DskipTests
 ```
 
+Use Scala 2.13, add the Profile `-Pscala-2.13` to the build properties as above.
+```
+./dev/change-scala-version.sh 2.13
+```
+
+For Java 11, this may be required:
+`-Dio.netty.tryReflectionSetAccessible=true`
+
 ## Hive 1.2.x
 ```
 mvn clean package -Phadoop-2,dist

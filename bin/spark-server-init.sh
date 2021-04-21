@@ -69,7 +69,7 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Error: Spark Master is already running: [$PID]"
+            echo "Spark Master is already running: [$PID]"
             exit $rt
         fi
 

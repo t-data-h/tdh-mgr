@@ -70,7 +70,7 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -ne 0 ]; then
-            echo " Zeppelin is already running [$rt]"
+            echo "Zeppelin is already running [$rt]"
             exit $rt
         fi
 

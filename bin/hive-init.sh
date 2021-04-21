@@ -118,7 +118,7 @@ case "$ACTION" in
             echo "Stopping Hive MetaStore: ${HIVE_SERVER} [${PID}]"
             ( ssh $HIVE_SERVER "kill $PID" )
         else
-            echo "  Hive Metastore not found."
+            echo "Hive Metastore not found."
         fi
 
         check_remote_process $HIVE_SERVER $HIVESERVER2
@@ -128,7 +128,7 @@ case "$ACTION" in
             echo "Stopping Hive Server2:   ${HIVE_SERVER} [${PID}]"
             ( ssh $HIVE_SERVER "kill $PID" )
         else
-            echo "  Hive Server not found."
+            echo "Hive Server not found."
         fi
         rt=0
         ;;

@@ -89,7 +89,7 @@ case "$ACTION" in
             rt=$?
 
             if [ $rt -eq 0 ]; then
-                echo "  Zookeeper is already running: ${zk} [${PID}]"
+                echo "Zookeeper is already running: ${zk} [${PID}]"
                 exit $rt
             fi
 

@@ -12,7 +12,7 @@ export TDH_ENV="tdh-env.sh $VERSION"
 export HADOOP_USER="${USER}"
 export HADOOP_ROOT="${TDH_HOME}"
 export HADOOP_HOME="$HADOOP_ROOT/hadoop"
-export HADOOP_LOGDIR="/var/log/hadoop"
+export HADOOP_LOGDIR="/var/log/tdh"
 export HADOOP_PID_DIR="/tmp"
 
 export HADOOP_COMMON_HOME="$HADOOP_HOME"

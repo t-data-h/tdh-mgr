@@ -95,7 +95,7 @@ case "$ACTION" in
             rt=$?
 
             if [ $rt -eq 0 ]; then
-                echo " Kafka Broker is already running: ${broker} [${PID}]"
+                echo "Kafka Broker is already running: ${broker} [${PID}]"
                 continue
             fi
 
