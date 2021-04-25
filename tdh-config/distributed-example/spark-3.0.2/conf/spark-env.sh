@@ -86,7 +86,7 @@ if [ -z "$SPARK_HOME" ]; then
 fi
 
 if [ -z "$SPARK_TMP_DIR" ]; then
-    SPARK_TMP_DIR="${HADOOP_TMP_DIR:-/tmp}"
+    export SPARK_TMP_DIR="${HADOOP_TMP_DIR:-/tmp}"
 fi
 
 SPARK_PYTHON_PATH=""
