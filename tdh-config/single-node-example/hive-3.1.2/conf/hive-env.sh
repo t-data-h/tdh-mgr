@@ -26,22 +26,29 @@ export HIVE_CLIENT_HEAPSIZE=1024
 export HIVE_METASTORE_HEAPSIZE=2048
 export HIVE_SERVER2_HEAPSIZE=4096
 
+
 if [ "$SERVICE" = "hiveserver2" ]; then
+    
     export HADOOP_HEAPSIZE=$HIVE_SERVER2_HEAPSIZE
     if [ -n "$DEBUG" ]; then
         export HADOOP_OPTS="$HADOOP_OPTS -server -verbose:gc \
             -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps \
             -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/hive"
     fi
+
 elif [ "$SERVICE" = "metastore" ]; then
+
     export HADOOP_HEAPSIZE=$HIVE_METASTORE_HEAPSIZE
+
 elif [ "$SERVICE" = "cli" ]; then
+    
     export HADOOP_HEAPSIZE=$HIVE_CLIENT_HEAPSIZE
+
     if [ -z "$DEBUG" ]; then
-        export HADOOP_OPTS="$HADOOP_OPTS -XX:NewRatio=12 -Xmx2048m -Xms10m \
+        export HADOOP_OPTS="$HADOOP_OPTS -XX:NewRatio=12 -Xmx1024m -Xms10m \
             -XX:MaxHeapFreeRatio=40 -XX:MinHeapFreeRatio=15 -XX:+useParNewGC -XX:-useGCOverheadLimit"
     else
-        export HADOOP_OPTS="$HADOOP_OPTS -XX:NewRatio=12 -Xmx2048m -Xms10m \
+        export HADOOP_OPTS="$HADOOP_OPTS -XX:NewRatio=12 -Xmx1204m -Xms10m \
             -XX:MaxHeapFreeRatio=40 -XX:MinHeapFreeRatio=15 -XX:-useGCOverheadLimit"
     fi
 fi
