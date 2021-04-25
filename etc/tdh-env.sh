@@ -3,17 +3,18 @@
 #  tdh-env.sh - Bash environment for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.04.21"
+VERSION="v21.04.26"
 
 export TDH_VERSION="$VERSION"
 export TDH_HOME="/opt/TDH"
 export TDH_ENV="tdh-env.sh $VERSION"
 
-export HADOOP_USER="${USER}"
-export HADOOP_ROOT="${TDH_HOME}"
-export HADOOP_HOME="$HADOOP_ROOT/hadoop"
-export HADOOP_LOGDIR="/var/log/tdh"
-export HADOOP_PID_DIR="/tmp"
+export HADOOP_USER="$USER"
+export HADOOP_ROOT="$TDH_HOME"
+export HADOOP_HOME="${HADOOP_ROOT}/hadoop"
+export HADOOP_LOG_DIR="/var/log/tdh"
+export HADOOP_TMP_DIR="/tmp"
+export HADOOP_PID_DIR="$HADOOP_TMP_DIR"
 
 export HADOOP_COMMON_HOME="$HADOOP_HOME"
 export HADOOP_HDFS_HOME="$HADOOP_COMMON_HOME"
@@ -36,6 +37,7 @@ $HBASE_HOME/bin:\
 $HIVE_HOME/bin:\
 $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
+
 
 if [ -z "$HADOOP_CONF_DIR" ]; then
     echo " -> Warning, HADOOP_CONF_DIR is not set!"
@@ -69,7 +71,7 @@ C_WHT='\e[97m\e[1m'
 C_NC='\e[0m'
 
 # -----------------------------------------------
-#  WARNING! Do not edit below this line.
+#  Do not edit below this line.
 #
 #  tdh-env.sh
 #
@@ -94,7 +96,6 @@ function tdh_show_header()
 {
     local ver="$1"
     printf " -------- ${C_CYN}${ver}${C_NC} --------- \n"
-
 }
 
 function tdh_show_separator()
@@ -102,6 +103,10 @@ function tdh_show_separator()
     printf "      -------------     |------|\n"
 }
 
+function tdh_show_cols()
+{
+    printf "    == Component ==      Status     Host     PID \n"
+}
 
 function check_process_pid()
 {
