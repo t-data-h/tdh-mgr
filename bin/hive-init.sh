@@ -86,14 +86,14 @@ case "$ACTION" in
 
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "  Hive MetaStore is already running: ${HIVE_SERVER} [${PID}]"
+            echo "Hive MetaStore is already running: ${HIVE_SERVER} [${PID}]"
         fi
 
         check_remote_process $HIVE_SERVER $HIVESERVER2
 
         hs=$?
         if [ $hs -eq 0 ]; then
-            echo "  Hive Server2   is already running: ${HIVE_SERVER} [${PID}]"
+            echo "Hive Server2 is already running:   ${HIVE_SERVER} [${PID}]"
         fi
 
         ( ssh $HIVE_SERVER "mkdir -p $HIVE_LOGDIR" )

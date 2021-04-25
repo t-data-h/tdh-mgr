@@ -144,7 +144,7 @@ case "$ACTION" in
             printf "Stopping HBase Thrift Server: ${HBASE_MASTER} [${PID}] \n"
             ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER kill $PID" )
         else
-            printf "HBase ThriftServer not found \n"
+            printf "  HBase ThriftServer not found \n"
         fi
         rt=0
         ;;
