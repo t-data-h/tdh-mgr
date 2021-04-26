@@ -30,9 +30,9 @@ HIVE_VER=$(readlink $HIVE_HOME)
 HIVEMETASTORE="MetaStore"
 HIVESERVER2="HiveServer2"
 METADB="mysqld"
-HIVE_LOGDIR="${HADOOP_LOGDIR}/hive"
-HIVE_METASTORE_LOG="${HIVE_LOGDIR}/hive-metastore.log"
-HIVE_SERVER2_LOG="${HIVE_LOGDIR}/hive-server2.log"
+HIVE_LOG_DIR="${HADOOP_LOG_DIR}/hive"
+HIVE_METASTORE_LOG="${HIVE_LOG_DIR}/hive-metastore.log"
+HIVE_SERVER2_LOG="${HIVE_LOG_DIR}/hive-server2.log"
 HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | \
     grep value 2>/dev/null | \
     sed  -E 's/.*<value>thrift:\/\/(.*)<\/value>/\1/' | \
@@ -96,7 +96,7 @@ case "$ACTION" in
             echo "Hive Server2 is already running:   ${HIVE_SERVER} [${PID}]"
         fi
 
-        ( ssh $HIVE_SERVER "mkdir -p $HIVE_LOGDIR" )
+        ( ssh $HIVE_SERVER "mkdir -p $HIVE_LOG_DIR" )
 
         if [ $rt -gt 0 ]; then
             echo "Starting HiveMetaStore: '$HIVE_SERVER'"
