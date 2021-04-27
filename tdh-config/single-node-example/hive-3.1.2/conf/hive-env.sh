@@ -22,30 +22,40 @@
 # The hive service being invoked (CLI etc.) is available via the environment
 # variable SERVICE
 
+export HIVE_CLIENT_HEAPSIZE=1024
+export HIVE_METASTORE_HEAPSIZE=2048
+export HIVE_SERVER2_HEAPSIZE=4096
 
-# Hive Client memory usage can be an issue if a large number of clients
-# are running at the same time. The flags below have been useful in 
-# reducing memory usage:
-#
-# if [ "$SERVICE" = "cli" ]; then
-#   if [ -z "$DEBUG" ]; then
-#     export HADOOP_OPTS="$HADOOP_OPTS -XX:NewRatio=12 -Xms10m -XX:MaxHeapFreeRatio=40 -XX:MinHeapFreeRatio=15 -XX:+UseParNewGC -XX:-UseGCOverheadLimit"
-#   else
-#     export HADOOP_OPTS="$HADOOP_OPTS -XX:NewRatio=12 -Xms10m -XX:MaxHeapFreeRatio=40 -XX:MinHeapFreeRatio=15 -XX:-UseGCOverheadLimit"
-#   fi
-# fi
 
-# The heap size of the jvm stared by hive shell script can be controlled via:
-#
-# export HADOOP_HEAPSIZE=1024
-#
-# Larger heap size may be required when running queries over large number of files or partitions. 
-# By default hive shell scripts use a heap size of 256 (MB).  Larger heap size would also be 
-# appropriate for hive server.
+if [ "$SERVICE" = "hiveserver2" ]; then
+    
+    export HADOOP_HEAPSIZE=$HIVE_SERVER2_HEAPSIZE
+    if [ -n "$DEBUG" ]; then
+        export HADOOP_OPTS="$HADOOP_OPTS -server -verbose:gc \
+            -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps \
+            -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/hive"
+    fi
+
+elif [ "$SERVICE" = "metastore" ]; then
+
+    export HADOOP_HEAPSIZE=$HIVE_METASTORE_HEAPSIZE
+
+elif [ "$SERVICE" = "cli" ]; then
+    
+    export HADOOP_HEAPSIZE=$HIVE_CLIENT_HEAPSIZE
+
+    if [ -z "$DEBUG" ]; then
+        export HADOOP_OPTS="$HADOOP_OPTS -XX:NewRatio=12 -Xmx1024m -Xms10m \
+            -XX:MaxHeapFreeRatio=40 -XX:MinHeapFreeRatio=15 -XX:+useParNewGC -XX:-useGCOverheadLimit"
+    else
+        export HADOOP_OPTS="$HADOOP_OPTS -XX:NewRatio=12 -Xmx1204m -Xms10m \
+            -XX:MaxHeapFreeRatio=40 -XX:MinHeapFreeRatio=15 -XX:-useGCOverheadLimit"
+    fi
+fi
 
 
 # Set HADOOP_HOME to point to a specific hadoop install directory
-# HADOOP_HOME=${bin}/../../hadoop
+HADOOP_HOME=/opt/TDH/hadoop
 
 # Hive Configuration Directory can be controlled by:
 # export HIVE_CONF_DIR=

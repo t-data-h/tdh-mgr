@@ -127,9 +127,13 @@ show_status()
 
 #  MAIN
 #
+debug=0
 
 while [ $# -gt 0 ]; do
     case "$1" in
+        -d|--debug)
+            debug=1
+            ;;
         -f|--force)
             force=1
             ;;
@@ -139,6 +143,10 @@ while [ $# -gt 0 ]; do
     esac
     shift
 done
+
+if [ $debug -eq 1 ]; then
+    export DEBUG="true"
+fi
 
 case "$action" in
     start)

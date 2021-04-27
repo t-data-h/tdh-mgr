@@ -31,8 +31,8 @@ HB_MASTERS="${HBASE_HOME}/conf/masters"
 HB_MASTER_ID=".hbase.master.HMaster start"
 HB_REGION_ID=".hbase.regionserver.HRegionServer"
 HB_THRIFT_ID=".hbase.thrift.ThriftServer"
-HBASE_LOGDIR="${HADOOP_LOGDIR}/hbase"
-HBASE_THRIFTLOG="${HBASE_LOGDIR}/hbase-thriftserver.log"
+HBASE_LOG_DIR="${HADOOP_LOG_DIR}/hbase"
+HBASE_THRIFTLOG="${HBASE_LOG_DIR}/hbase-thriftserver.log"
 HBASE_MASTER=$(cat $HBASE_HOME/conf/masters 2>/dev/null)
 
 if [ -z "$HBASE_MASTER" ]; then
@@ -106,7 +106,7 @@ fi
 
 case "$ACTION" in
     'start')
-        ( mkdir -p $HBASE_LOGDIR )
+        ( mkdir -p $HBASE_LOG_DIR )
 
         check_remote_process $HBASE_MASTER $HB_MASTER_ID
 
@@ -144,7 +144,7 @@ case "$ACTION" in
             printf "Stopping HBase Thrift Server: ${HBASE_MASTER} [${PID}] \n"
             ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER kill $PID" )
         else
-            printf "HBase ThriftServer not found \n"
+            printf "  HBase ThriftServer not found \n"
         fi
         rt=0
         ;;

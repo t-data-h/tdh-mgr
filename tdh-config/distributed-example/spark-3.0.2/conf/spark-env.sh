@@ -85,6 +85,10 @@ if [ -z "$SPARK_HOME" ]; then
     export SPARK_HOME="/opt/TDH/spark"
 fi
 
+if [ -z "$SPARK_TMP_DIR" ]; then
+    export SPARK_TMP_DIR="${HADOOP_TMP_DIR:-/tmp}"
+fi
+
 SPARK_PYTHON_PATH=""
 if [ -n "$SPARK_PYTHON_PATH" ]; then
   export PYTHONPATH="$PYTHONPATH:$SPARK_PYTHON_PATH"
@@ -117,6 +121,6 @@ export SPARK_MASTER_WEBUI_PORT=18080
 export SPARK_MASTER_PORT=7077
 export SPARK_WORKER_PORT=7078
 export SPARK_WORKER_WEBUI_PORT=18081
-export SPARK_WORKER_DIR=/var/run/spark/work
-export SPARK_LOG_DIR=/var/log/hadoop/spark
+export SPARK_WORKER_DIR=${SPARK_TMP_DIR}/spark/work
+export SPARK_LOG_DIR=${HADOOP_LOG_DIR}/spark
 export SPARK_PID_DIR=/tmp
