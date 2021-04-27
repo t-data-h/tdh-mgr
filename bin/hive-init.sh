@@ -32,7 +32,7 @@ HIVESERVER2="HiveServer2"
 METADB="mysqld"
 HIVE_LOG_DIR="${HADOOP_LOG_DIR}/hive"
 HIVE_METASTORE_LOG="${HIVE_LOG_DIR}/hive-metastore.log"
-HIVE_SERVER2_LOG="${HIVE_LOG_DIR}/hive-server2.log"
+HIVE_SERVER_LOG="${HIVE_LOG_DIR}/hive-server2.log"
 HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | \
     grep value 2>/dev/null | \
     sed  -E 's/.*<value>thrift:\/\/(.*)<\/value>/\1/' | \
@@ -57,14 +57,16 @@ show_status()
         printf " Hive Metastore         | ${C_RED}DEAD$C_NC |  ${HIVE_SERVER}\n"
     fi
 
-    check_remote_process $HIVE_SERVER $HIVESERVER2
+    if [ -z "$TDH_HIVESERVER_IGNORE" ]; then
+        check_remote_process $HIVE_SERVER $HIVESERVER2
 
-    rt=$?
-    if [ $rt -eq 0 ]; then
-        printf " Hive Server            | $C_GRN OK $C_NC |  ${HIVE_SERVER} [${PID}]\n"
-    else
-        printf " Hive Server            | ${C_RED}DEAD$C_NC |  ${HIVE_SERVER}\n"
-    fi
+        rt=$?
+        if [ $rt -eq 0 ]; then
+            printf " Hive Server            | $C_GRN OK $C_NC |  ${HIVE_SERVER} [${PID}]\n"
+        else
+            printf " Hive Server            | ${C_RED}DEAD$C_NC |  ${HIVE_SERVER}\n"
+        fi
+    fi 
 
     return $rt
 }
@@ -104,9 +106,9 @@ case "$ACTION" in
             rt=$?
         fi
 
-        if [ $hs -gt 0 ]; then 
+        if [[ $hs -gt 0 && -z "$TDH_HIVESERVER_IGNORE" ]]; then 
             echo "Starting HiveServer2: '$HIVE_SERVER'"
-            ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 > $HIVE_SERVER2_LOG 2>&1 &" )
+            ( ssh -n $HIVE_SERVER "nohup $HIVE_HOME/bin/hive --service hiveserver2 > $HIVE_SERVER_LOG 2>&1 &" )
         fi
         ;;
 
@@ -122,13 +124,14 @@ case "$ACTION" in
         fi
 
         check_remote_process $HIVE_SERVER $HIVESERVER2
-
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping Hive Server2:   ${HIVE_SERVER} [${PID}]"
             ( ssh $HIVE_SERVER "kill $PID" )
         else
-            echo "Hive Server not found."
+            if [ -z "$TDH_HIVESERVER_IGNORE" ]; then
+                echo "Hive Server not found."
+            fi
         fi
         rt=0
         ;;
