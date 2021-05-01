@@ -3,7 +3,7 @@
 #  tdh-env.sh - Bash environment for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.04.26"
+VERSION="v21.05"
 
 export TDH_VERSION="$VERSION"
 export TDH_HOME="/opt/TDH"
@@ -242,11 +242,14 @@ function getZookeepers()
 }
 
 
-# convert a config XML to key=value pairs
+# xq is a python3 app from https://github.com/kislyuk/yq, which is installed 
+# with this version of yq, but the *other* [yq](https://github.com/mikefarah/yq) 
+# project is more widely used. 
+#
+# Convert a config XML to key=value pairs
 function xmlFile_toKV()
 {
     local xml="$1"
-
     if [ -n "$xml" ]; then
         ( cat $xml | xq ".configuration[]" | jq ".[]" | jq -r ".name + \"=\" + .value" )
     fi

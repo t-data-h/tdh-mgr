@@ -33,16 +33,19 @@ METADB="mysqld"
 HIVE_LOG_DIR="${HADOOP_LOG_DIR}/hive"
 HIVE_METASTORE_LOG="${HIVE_LOG_DIR}/hive-metastore.log"
 HIVE_SERVER_LOG="${HIVE_LOG_DIR}/hive-server2.log"
-HIVE_SERVER=$( grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | \
+HIVE_SERVER=$(grep -A1 'hive.metastore.uris' ${HIVE_HOME}/conf/hive-site.xml | \
     grep value 2>/dev/null | \
     sed  -E 's/.*<value>thrift:\/\/(.*)<\/value>/\1/' | \
-    awk -F':' '{ print $1 }' )
+    awk -F':' '{ print $1 }')
 
 # -------------------------------------------
 
 usage="
 $TDH_PNAME {start|stop|status}
   TDH $TDH_VERSION
+
+This will also honor \$TDH_HIVESERVER_IGNORE to manage only 
+Hive Metastore instance(s).
 "
 
 
