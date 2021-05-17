@@ -40,9 +40,9 @@ instructions are based on using the following component versions:
 
 Refer to the setup document [tdh-hadoop-setup.md](docs/tdh-hadoop-setup.md) 
 for creating a TDH distribution from scratch. The end result is a root path 
-containing each ecosystem component.  inks are used to make minor upgrades 
-easier, so for hadoop-2.8.5 there would also be a 'hadoop' link, and likewise 
-for other components which would result in something like this:
+containing each ecosystem component.  Soft Links are used to make minor upgrades 
+easier; for `hadoop-2.8.5` there would also be a `hadoop` link, and likewise 
+for other components which results in a directory like the following:
 ```
 total 48
 drwxrwxr-x  2 tca tca 4096 Feb 25  2020 bin
@@ -72,18 +72,18 @@ to this repository via `git lfs` in the future, but for now this must be
 manually created or acquired externally.
 
 As previously mentioned, the github project **tdh-gcp** provides Ansible
-playbooks for deploying TDH on infrastructure and requires the TDH tarball
-along with this repository and a third 'config' tarball.
+playbooks for deploying TDH and requires the TDH tarball along with this 
+repository and a third 'config' tarball.
 
 
 ## Configuring the Hadoop Distribution
 
 The *tdh-config* directory provides sample cluster configurations in a 
 manner that allows for a given environment config to be 'overlaid' onto the 
-cluster directory (eg. /opt/TDH). The directory here provides a pair of 
-examples for a distributed cluster and of a single, pseudo-distributed node. 
-This is intended to be used as the template for a separately tracked git repo 
-for managing configurations.
+cluster directory (/opt/TDH). The directory provided offers a pair of 
+examples for a distributed cluster and single, pseudo-distributed node. 
+This is intended to be used as the template for a separate git repo for
+managing configurations.
 ```bash
 cd ..
 mkdir myconfigdir
@@ -93,8 +93,8 @@ mv distributed-example myclusterenv
 git init
 ```
 
-The configuration is then provided to **tdh-gcp** Ansible for distributing 
-to a running cluster.
+The configuration is then provided to [tdh-gcp](https://github.com/tcarland/tdh-gcp) 
+for distributing/applying to a running cluster.
 
 
 ## Running the Distribution
