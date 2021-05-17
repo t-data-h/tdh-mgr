@@ -3,7 +3,7 @@
 #  tdh-env.sh - Bash environment for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.04.26"
+VERSION="v21.05"
 
 export TDH_VERSION="$VERSION"
 export TDH_HOME="/opt/TDH"
@@ -38,15 +38,24 @@ $HIVE_HOME/bin:\
 $KAFKA_HOME/bin:\
 $SPARK_HOME/bin"
 
+# Highlighting
+C_RED='\e[31m\e[1m'
+C_GRN='\e[32m\e[1m'
+C_YEL='\e[93m'  # 33 dim, 93 bright
+C_BLU='\e[34m\e[1m'
+C_MAG='\e[95m'
+C_CYN='\e[96m'
+C_WHT='\e[97m\e[1m'
+C_NC='\e[0m'
 
 if [ -z "$HADOOP_CONF_DIR" ]; then
-    echo " -> Warning, HADOOP_CONF_DIR is not set!"
+    printf " -> ${C_YEL}WARNING${C_NC}, variable HADOOP_CONF_DIR is not set! \n"
     export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
-    echo " -> Using default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR}"
+    printf " -> Using default: HADOOP_CONF_DIR=${HADOOP_CONF_DIR} \n"
 fi
 
 if [ -z "$JAVA_HOME" ]; then
-    echo " -> WARNING! JAVA_HOME is not set"
+    printf " -> ${C_YEL}WARNING!${C_NC} JAVA_HOME is not set \n"
 fi
 
 # this alone has no effect, but enabled w/ TDH_ECOSYSTEM_INITS+='mysqld-tdh-init.sh'
@@ -60,15 +69,6 @@ if [ -f "/etc/kafka/conf/kafka-client.conf" ]; then
     export ZKS=$( cat /etc/kafka/conf/kafka-client.conf 2>/dev/null | awk -F '=' '{ print $2 }' )
 fi
 
-# Highlighting
-C_RED='\e[31m\e[1m'
-C_GRN='\e[32m\e[1m'
-C_YEL='\e[93m'  # 33 dim, 93 bright
-C_BLU='\e[34m\e[1m'
-C_MAG='\e[95m'
-C_CYN='\e[96m'
-C_WHT='\e[97m\e[1m'
-C_NC='\e[0m'
 
 # -----------------------------------------------
 #  Do not edit below this line.
@@ -193,9 +193,9 @@ function hostip_is_valid()
     done
 
     if [ $rt -eq 0 ]; then
-        echo " : <$iface>"
+        printf " : <$iface>"
     fi
-    echo ""
+    printf "\n"
 
     return $rt
 }
@@ -242,11 +242,14 @@ function getZookeepers()
 }
 
 
-# convert a config XML to key=value pairs
+# xq is a python3 app from https://github.com/kislyuk/yq, which is installed 
+# with this version of yq, but the *other* [yq](https://github.com/mikefarah/yq) 
+# project is more widely used. 
+#
+# Convert a config XML to key=value pairs
 function xmlFile_toKV()
 {
     local xml="$1"
-
     if [ -n "$xml" ]; then
         ( cat $xml | xq ".configuration[]" | jq ".[]" | jq -r ".name + \"=\" + .value" )
     fi
