@@ -31,11 +31,11 @@ separately as a tarball, given it's size, but does not include Java.
 Java (JDK) 11 is the recommended JDK.  The supporting scripts and 
 instructions are based on using the following component versions:
 
-- Hadoop 3.3.x
-- HBase  1.3.x
-- Hive   3.1.x
-- Spark 2 or 3
-- Kafka  2.6.x
+- Hadoop 3.3.0
+- HBase  1.3.3
+- Hive   3.1.2
+- Spark  3.0.2
+- Kafka  2.6.1
 
 
 Refer to the setup document [tdh-hadoop-setup.md](docs/tdh-hadoop-setup.md) 
@@ -58,8 +58,8 @@ lrwxrwxrwx  1 tca tca   11 Dec 14 13:24 kafka -> kafka-2.6.1
 drwxr-xr-x  6 tca tca 4096 Jul 27  2019 kafka-2.6.1
 -rw-rw-r--  1 tca tca 1021 Dec 21  2019 README.md
 drwxr-xr-x  2 tca tca 4096 Dec 14 13:57 sbin
-lrwxrwxrwx  1 tca tca   11 Dec 14 13:52 spark -> spark-3.0.1
-drwxrwxr-x 13 tca tca 4096 Dec 15 07:07 spark-3.0.1
+lrwxrwxrwx  1 tca tca   11 Dec 14 13:52 spark -> spark-3.0.2
+drwxrwxr-x 13 tca tca 4096 Dec 15 07:07 spark-3.0.2
 drwxr-xr-x 20 tca tca 4096 Mar  4  2018 sqoop-1.99.6
 lrwxrwxrwx  1 tca tca   15 Dec 20  2019 zookeeper -> zookeeper-5.5.6
 drwxrwxr-x  7 tca tca 4096 Nov 15 15:30 zookeeper-5.5.6

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#  Init script for the core hadoop services HDFS and YARN.
+#  Init script for tdh mysql instance 
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 #
@@ -25,7 +25,7 @@ if [ -z "$TDH_VERSION" ]; then
 fi
 # -----------
 
-TDHMYSQL="mysqld --"
+TDH_MYSQL="mysqld --"
 MYSQL_VER="mysql-5.7.27"
 
 
@@ -50,7 +50,7 @@ tdh_show_header $MYSQL_VER
 
 case "$ACTION" in
     'start')
-        check_process "$TDHMYSQL"
+        check_process "$TDH_MYSQL"
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Mysql Daemon already running [$PID]"
@@ -62,7 +62,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_process "$TDHMYSQL"
+        check_process "$TDH_MYSQL"
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping Mysql Container: ${TDH_DOCKER_MYSQL} [$PID]"
@@ -74,7 +74,7 @@ case "$ACTION" in
         ;;
 
     'status')
-        check_process "$TDHMYSQL"
+        check_process "$TDH_MYSQL"
         rt=$?
         if [ $rt -eq 0 ]; then
             printf " MySQL Server           | $C_GRN OK $C_NC |  $TDH_DOCKER_MYSQL [$PID]\n"
