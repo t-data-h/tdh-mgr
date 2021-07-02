@@ -52,8 +52,8 @@ JN_EDITS=$( grep -A1 'dfs.namenode.shared.edits.dir' $HDFS_CONF | \
 RM1=$( grep -A1 'yarn.resourcemanager.address' ${YARN_CONF} | \
   grep value 2>/dev/null | sed -E 's/.*<value>(.*)<\/value>/\1/' |  awk -F':' '{ print $1 }' )
 
-NNS=    # namenodes list
-JNS=    # journalnodes
+NNS=
+JNS=
 NN1=
 NN2=
 IS_HA=
