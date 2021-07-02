@@ -4,15 +4,15 @@
 # The following environment variables are supported for scoping 
 # the MinIO Environment to a given tenant cluster:
 #
-#  MINIO_RELEASE_NAME  -  the tenant name given the deployment
-#  MINIO_HOST_ALIAS    -  the cluster host alias name for `mc`
+#  MINIO_RELEASE_NAME  -  the tenant name for a given deployment
+#  MINIO_HOST_ALIAS    -  the cluster alias for `mc`, see `mc alias --help`
 #  MINIO_NAMESPACE     -  the MinIO Namespace, 'minio' by default.
-#  MINIO_SERVER_PORT   -  the MinIO server port, defaults to 9000
-#  MINIO_GATEWAY_PORT  -  the MinIO HDFS Gateway server port.
+#  MINIO_SERVER_PORT   -  the MinIO server port, default is 9000
+#  MINIO_GATEWAY_PORT  -  the MinIO HDFS Gateway server port, if applicable
 #
 # Timothy C. Arland <tcarland@gmail.com>
 #
-export MINIO_ENV_SH="v21.06"
+export MINIO_ENV_SH="v21.07"
 
 export MINIO_RELEASE="${MINIO_RELEASE_NAME:-minio-1}"
 export MINIO_ALIAS="${MINIO_HOST_ALIAS:-$(hostname -s)}"
@@ -62,12 +62,12 @@ function mcrm()
 # Determines MinIO Endpoint from cluster, optionally returning the internal clusterIP 
 function minio_endpoint()
 {
-    local cip="$1"
+    local clusterip="$1"
     local port=$(kubectl get svc $MINIO_RELEASE -n $MINIO_NS --no-headers | awk '{ print $5 }' | sed 's/:.*//g' | sed 's/\/.*//g')
     local type="$(kubectl get svc $MINIO_RELEASE -n $MINIO_NS --no-headers | awk '{ print $2 }')"
     local ip=
 
-    if [[ "$type" == "LoadBalancer" && -z "$cip" ]]; then
+    if [[ "$type" == "LoadBalancer" && -z "$clusterip" ]]; then
         ip="$(kubectl get svc $MINIO_RELEASE -n $MINIO_NS --no-headers | awk '{ print $4 }')"
     else
         ip="$(kubectl get svc $MINIO_RELEASE -n $MINIO_NS --no-headers | awk '{ print $3 }')"
