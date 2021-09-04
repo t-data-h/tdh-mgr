@@ -25,8 +25,8 @@ if [ -z "$TDH_VERSION" ]; then
 fi
 # -----------
 
+ZEPPELIN_HOME="${ZEPPELIN_HOME:-${HADOOP_ROOT}/zeppelin}"
 ZEPPELIN_VER=$(readlink $ZEPPELIN_HOME)
-ZEPPELIN_HOME="$HADOOP_ROOT/zeppelin"
 ZKEY="ZeppelinServer"
 ZPID=0
 HOST=$(hostname -s)
