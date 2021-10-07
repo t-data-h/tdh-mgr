@@ -95,9 +95,9 @@ case "$ACTION" in
 
             echo "Starting Zookeeper: '${zk}'"
             ( ssh $zk "${ZOOKEEPER_HOME}/bin/zkServer.sh start > /dev/null 2>&1" )
-
             rt=$?
         done
+        sleep 5
         ;;
 
     'stop')
