@@ -80,6 +80,10 @@ fi
 
 if [ -n "$easyrsa" ] && [ -d "$easyrsa" ]; then
     cd $easyrsa
+    if [ $? -ne 0 ]; then
+        echo "Error in change directory to '$easyrsa'"
+        exit 1
+    fi
 fi
 
 if ! [ -x "./easyrsa" ]; then
@@ -112,14 +116,13 @@ for hostname in $hosts; do
     fi
 
     if [ $reqorsign -eq 0 ]; then   # gen-req
-        ( cd $easyrsa; ./easyrsa gen-req $hostname nopass )
+        ( cd $easyrsa && ./easyrsa gen-req $hostname nopass )
     else   # sign req
-        ( cd $easyrsa; \
+        ( cd $easyrsa && \
          ./easyrsa \
            --subject-alt-name="DNS:${hostname},DNS:${shortname}" \
            sign-req serverclient $hostname )
     fi
-
     rt=$?
 done
 

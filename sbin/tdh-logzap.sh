@@ -101,6 +101,9 @@ erase_all()
                 fi
             fi
             cd $cwd
+            if [ $? -ne 0 ]; then
+                echo "Error in 'cd', aborting.."
+                break
         elif [ -f $x ]; then
             echo "  rm $cwd/$x"
             if [ $dryrun -eq 0 ]; then

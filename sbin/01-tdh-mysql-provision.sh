@@ -118,7 +118,7 @@ fi
 # Note that the schema relies on relative path to import/include
 # the hive-txn schema file thus change directory is needed or the
 # relative path would need changing to absolute path.
-( cd $hive_schema_path; mysql $hivedb < $hive_schema )
+( cd $hive_schema_path && mysql $hivedb < $hive_schema )
 rt=$?
 
 if [ $rt -ne 0 ]; then
