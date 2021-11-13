@@ -22,12 +22,10 @@ if [ -z "$TDH_VERSION" ]; then
     echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
     exit 1
 fi
+
+HADOOP_LOG_DIR=${HADOOP_LOG_DIR:-/var/log/tdh}
+
 # -----------
-
-if [ -z "$HADOOP_LOGDIR" ] ; then
-    HADOOP_LOGDIR="/var/log/hadoop"
-fi
-
 
 usage="
 Script to clear TDH Log Directories.
@@ -41,6 +39,7 @@ Usage: $TDH_PNAME [options]
   -V | --version  :  Show version info and exit.
 "
 
+# -----------
 
 ask()
 {
@@ -81,6 +80,10 @@ erase_all()
     local cwd=
 
     cd $path
+    if [ $? -ne 0 ]; then
+        echo "Error in cd to HADOOP_LOG_DIR"
+        exit 1
+    fi
     cwd=`pwd`
 
     echo "ERASE: $cwd"
@@ -139,7 +142,7 @@ done
 
 
 echo "
-HADOOP_LOGDIR=$HADOOP_LOGDIR
+HADOOP_LOGDIR=$HADOOP_LOG_DIR
 
 Warning! This will permanently erase all files in the directory.
 "
