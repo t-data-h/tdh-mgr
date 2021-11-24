@@ -1,5 +1,5 @@
 
-MinIO Hadoop Settings
+S3 / MinIO Hadoop Settings
 ======================
 
 Settings for configuring S3 / MinIO storage within Hadoop components.
