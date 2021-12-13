@@ -79,14 +79,23 @@ erase_all()
     local rt=0
     local cwd=
 
+    if [[ -z "$path" || ! -d $path ]]; then
+        echo "Path provided is not valid: '$path'"
+        return 1
+    fi
+
     cd $path
     if [ $? -ne 0 ]; then
-        echo "Error in cd to HADOOP_LOG_DIR"
-        exit 1
+        echo "Error in cd to path: '$path'"
+        return 1
     fi
-    cwd=`pwd`
 
+    cwd=$(pwd)
     echo "ERASE: $cwd"
+    if [ $prompt -eq 0 ]; then
+        ask  "Are you sure you wish to continue? (y/N)" "N"
+        rt=$?
+    fi
 
     for x in *
     do
@@ -104,6 +113,7 @@ erase_all()
             if [ $? -ne 0 ]; then
                 echo "Error in 'cd', aborting.."
                 break
+            fi
         elif [ -f $x ]; then
             echo "  rm $cwd/$x"
             if [ $dryrun -eq 0 ]; then
@@ -145,18 +155,24 @@ done
 
 
 echo "
-HADOOP_LOGDIR=$HADOOP_LOG_DIR
+HADOOP_LOG_DIR=$HADOOP_LOG_DIR
 
 Warning! This will permanently erase all files in the directory.
 "
 
-if [ $prompt -eq 0 ]; then
-    ask  "Are you sure you wish to continue? (y/N)" "N"
-    rt=$?
+if [ -z "$HADOOP_LOG_DIR" ]; then
+    echo "Error, HADOOP_LOG_DIR not set"
+    exit 1
+fi
+
+cd $HADOOP_LOG_DIR
+if [ $? -ne 0 ]; then 
+    echo "Error in path HADOOP_LOG_DIR=$HADOOP_LOG_DIR"
+    exit 1
 fi
 
 if [ $rt -eq 0 ]; then
-    erase_all "$HADOOP_LOGDIR"
+    erase_all "$HADOOP_LOG_DIR"
     rt=$?
 fi
 

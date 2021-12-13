@@ -3,7 +3,7 @@
 #  tdh-env.sh - Bash environment for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.11"
+VERSION="v21.12"
 
 export TDH_VERSION="$VERSION"
 export TDH_HOME="/opt/TDH"
@@ -89,7 +89,6 @@ fi
 function tdh_version()
 {
     printf "${TDH_PNAME} ${TDH_VERSION} (${HADOOP_ENV_PATH}/${HADOOP_ENV})\n"
-    return 0
 }
 
 function tdh_show_header()
@@ -179,7 +178,6 @@ function hostip_is_valid()
 
     IFS=$'\n'
 
-    #for line in `ifconfig | grep inet`; do ip=$( echo $line | awk '{ print $2 }' )
     for line in $(/sbin/ip addr list | grep "inet ")
     do
         IFS=' '
@@ -217,7 +215,7 @@ function getBrokers()
     local tmpifs=$IFS
 
     IFS=$'\n'
-    BROKERS=$( cat ${brokersfile} 2>/dev/null | awk '{ print $1 }' | paste -s -d, - )
+    BROKERS=$(cat ${brokersfile} 2>/dev/null | awk '{ print $1 }' | paste -s -d, -)
     IFS=$tmpifs
 
     printf "%s" ${BROKERS}
@@ -233,7 +231,7 @@ function getZookeepers()
     local tmpifs=$IFS
 
     IFS=$'\n'
-    ZKS=$( cat ${zoomasters} 2>/dev/null | paste -s -d, - )
+    ZKS=$(cat ${zoomasters} 2>/dev/null | paste -s -d, -)
     IFS=$tmpifs
 
     printf "%s" ${ZKS}
@@ -244,7 +242,7 @@ function getZookeepers()
 
 # xq is a python3 app from https://github.com/kislyuk/yq, which is installed 
 # with this version of yq, but the *other* [yq](https://github.com/mikefarah/yq) 
-# project is more widely used. 
+# project (golang) is more widely used for yaml. 
 #
 # Convert a config XML to key=value pairs
 function xmlFile_toKV()
