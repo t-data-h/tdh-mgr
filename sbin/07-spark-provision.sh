@@ -15,7 +15,7 @@ elif [ -r "/opt/TDH/etc/$HADOOP_ENV" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'" >&2
     exit 1
 fi
 
@@ -25,7 +25,7 @@ SPARK_PATH=$(readlink -f $SPARK_HOME)
 rt=1
 
 if ! [ -d $SPARK_PATH ]; then
-    echo "Error determining path to SPARK_HOME: $SPARK_HOME"
+    echo "Error determining path to SPARK_HOME: $SPARK_HOME" >&2
     exit $rt
 fi
 
@@ -37,7 +37,7 @@ YARN_JAR=$(readlink -f $YARN_LINK 2>/dev/null)
 
 
 if [ -z "$SPARK_JAR" ]; then
-    echo "Fatal Error locating the Spark Shuffle JAR"
+    echo "Fatal Error locating the Spark Shuffle JAR" >&2
     exit $rt
 fi
 
@@ -60,7 +60,7 @@ else
 
     rt=$?
     if [ $rt -ne 0 ]; then
-        echo "$TDH_PNAME Error creating soft link"
+        echo "$TDH_PNAME Error creating soft link" >&2
     else
         echo " -> Spark Shuffle Jar for YARN is now linked."
     fi

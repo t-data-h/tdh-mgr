@@ -73,7 +73,7 @@ if [ -n "$TDH_HOSTS" ]; then
 fi
 
 if [ -z "$hosts" ]; then
-    echo "Error, No hosts provided!"
+    echo "Error, No hosts provided!" >&2
     echo "$usage"
     exit $rt
 fi
@@ -81,7 +81,7 @@ fi
 if [ -n "$easyrsa" ] && [ -d "$easyrsa" ]; then
     cd $easyrsa
     if [ $? -ne 0 ]; then
-        echo "Error in change directory to '$easyrsa'"
+        echo "Error in change directory to '$easyrsa'" >&2
         exit 1
     fi
 fi
@@ -101,7 +101,7 @@ elif [[ ${action,,} =~ ^sign$ ]]; then
     echo "$PNAME Signing certificate requests.."
     reqorsign=1
 else
-    echo "Invalid action. Valid option should be 'req' or 'sign'"
+    echo "Invalid action. Valid option should be 'req' or 'sign'" >&2
     exit $rt
 fi
 
@@ -110,7 +110,7 @@ for hostname in $hosts; do
     shortname=${hostname%%\.*}
 
     if [ -z "$shortname" ]; then
-        echo "Error, provided hostname '$hostname' is not a fully qualified domain name."
+        echo "Error, provided hostname '$hostname' is not a fully qualified domain name." >&2
         echo "Skipping host '$hostname'"
         continue
     fi

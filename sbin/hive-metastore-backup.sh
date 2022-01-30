@@ -23,7 +23,7 @@ if [ -z "$dbhost" ]; then
 fi
 
 if [ -z "$mydump" ]; then
-    echo "$PNAME Error, binary for 'mysqldump' was not found in the PATH"
+    echo "$PNAME Error, binary for 'mysqldump' was not found in the PATH" >&2
     exit 2
 fi
 

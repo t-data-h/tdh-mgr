@@ -20,7 +20,7 @@ elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    printf "ERROR, Unable to locate TDH Environment '$HADOOP_ENV' \n"
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV' \n" >&2
     exit 1
 fi
 # -----------
@@ -36,7 +36,7 @@ HBASE_THRIFTLOG="${HBASE_LOG_DIR}/hbase-thriftserver.log"
 HBASE_MASTER=$(cat $HBASE_HOME/conf/masters 2>/dev/null)
 
 if [ -z "$HBASE_MASTER" ]; then
-    printf "$TDH_PNAME Error determining HBase Master. \n"
+    printf "$TDH_PNAME Error determining HBase Master. \n" >&2
     exit 1
 fi
 
@@ -100,7 +100,7 @@ rt=0
 tdh_show_header $HBASE_VER
 
 if [ -z "$HBASE_MASTER" ]; then
-    printf "$TDH_PNAME Error determining HBase Master host! Aborting.. \n"
+    printf "$TDH_PNAME Error determining HBase Master host! Aborting.. \n" >&2
     exit 1
 fi
 

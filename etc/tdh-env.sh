@@ -3,7 +3,7 @@
 #  tdh-env.sh - Bash environment for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v21.12"
+VERSION="v22.01"
 
 export TDH_VERSION="$VERSION"
 export TDH_HOME="/opt/TDH"
@@ -55,7 +55,7 @@ if [ -z "$HADOOP_CONF_DIR" ]; then
 fi
 
 if [ -z "$JAVA_HOME" ]; then
-    printf " -> ${C_YEL}WARNING!${C_NC} JAVA_HOME is not set \n"
+    printf " -> ${C_YEL}WARNING!${C_NC} JAVA_HOME is not set \n" >&2
 fi
 
 # this alone has no effect, but enabled w/ TDH_ECOSYSTEM_INITS+='mysqld-tdh-init.sh'

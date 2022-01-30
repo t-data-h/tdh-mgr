@@ -23,7 +23,7 @@ elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'" >&2
     exit 1
 fi
 
@@ -35,12 +35,12 @@ dataDir=$(grep 'dataDir' $ZOOKEEPER_HOME/conf/zoo.cfg | awk -F= '{ print $2 }')
 zkid=
 
 if [ -z "$zk" ]; then
-    echo "$TDH_PNAME Error, Zookeeper not found for '$host'"
+    echo "$TDH_PNAME Error, Zookeeper not found for '$host'" >&2
     exit 0
 fi
 
 if [ -z "$dataDir" ]; then
-    echo "$TDH_PNAME Error, ZooKeeper dataDir config not found!"
+    echo "$TDH_PNAME Error, ZooKeeper dataDir config not found!" >&2
     exit 1
 fi
 
@@ -49,14 +49,14 @@ if [[ $zk =~ ^server\.([0-9]).* ]]; then
 fi
 
 if [ -z "$zkid" ]; then
-    echo "$TDH_PNAME Error, ZooKeeper ID not configured."
+    echo "$TDH_PNAME Error, ZooKeeper ID not configured." >&2
     exit 1
 fi
 
 if [[ $zkid =~ ^[0-9]+$ ]]; then
     echo "$TDH_PNAME Setting ZooKeeper Id for '$host' to '$zkid'"
 else
-    echo "$TDH_PNAME Error, ZooKeeper ID is invalid"
+    echo "$TDH_PNAME Error, ZooKeeper ID is invalid" >&2
     exit 1
 fi
 

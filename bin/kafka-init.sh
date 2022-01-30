@@ -20,13 +20,13 @@ elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'" >&2
     exit 1
 fi
 # -----------
 
 if [ -z "$KAFKA_HOME" ]; then
-    echo "Error! KAFKA_HOME is not set. Check your hadoop env."
+    echo "Fatal! KAFKA_HOME is not set. Check your hadoop env." >&2
     exit 1
 fi
 
@@ -80,7 +80,7 @@ fi
 getBrokers >/dev/null
 
 if [ -z "${BROKERS}" ]; then
-    echo "$TDH_PNAME Error getting brokers from host config" 
+    echo "$TDH_PNAME Error getting brokers from host config" >&2
     exit 1
 fi
 

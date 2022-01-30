@@ -23,7 +23,7 @@ elif [ -r "$HOME/hadoop/etc/$HADOOP_ENV" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'" >&2
     exit 1
 fi
 # -----------
@@ -33,7 +33,7 @@ broker=$(cat $KAFKA_HOME/config/brokers | grep $host 2>/dev/null)
 brokerid=
 
 if [ -z "$broker" ]; then
-    echo "$TDH_PNAME Error, Broker Id not found for $host"
+    echo "$TDH_PNAME Error, Broker Id not found for $host" >&2
     exit 0
 fi
 
@@ -43,14 +43,14 @@ fi
 broker=${broker%% *}
 
 if [ -z "$brokerid" ]; then
-    echo "$TDH_PNAME Error, Broker ID not configured"
+    echo "$TDH_PNAME Error, Broker ID not configured" >&2
     exit 1
 fi
 
 if [[ $brokerid =~ ^[0-9]+$ ]]; then
     echo "$TDH_PNAME Setting Broker Id for '$broker' to '$brokerid'"
 else
-    echo "$TDH_PNAME Error, Broker ID is invalid"
+    echo "$TDH_PNAME Error, Broker ID is invalid" >&2
     exit 1
 fi
 

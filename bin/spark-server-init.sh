@@ -20,7 +20,7 @@ elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'" >&2
     exit 1
 fi
 # -----------

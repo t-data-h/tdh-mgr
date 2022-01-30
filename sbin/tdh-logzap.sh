@@ -19,7 +19,7 @@ elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'" >&2
     exit 1
 fi
 
@@ -80,13 +80,13 @@ erase_all()
     local cwd=
 
     if [[ -z "$path" || ! -d $path ]]; then
-        echo "Path provided is not valid: '$path'"
+        echo "Path provided is not valid: '$path'" >&2
         return 1
     fi
 
     cd $path
     if [ $? -ne 0 ]; then
-        echo "Error in cd to path: '$path'"
+        echo "Error in cd to path: '$path'" >&2
         return 1
     fi
 
@@ -111,7 +111,7 @@ erase_all()
             fi
             cd $cwd
             if [ $? -ne 0 ]; then
-                echo "Error in 'cd', aborting.."
+                echo "Error in 'cd', aborting.." >&2
                 break
             fi
         elif [ -f $x ]; then
@@ -161,7 +161,7 @@ Warning! This will permanently erase all files in the directory.
 "
 
 if [ -z "$HADOOP_LOG_DIR" ]; then
-    echo "Error, HADOOP_LOG_DIR not set"
+    echo "Error, HADOOP_LOG_DIR not set" >&2
     exit 1
 fi
 

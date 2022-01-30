@@ -22,7 +22,7 @@ if [ -z "$hadooproot" ]; then
 fi
 
 if ! [ -d "$hadooproot" ]; then
-    echo "Error locating TDH root directory"
+    echo "Error locating TDH root directory" >&2
     echo ""
     echo "Usage: $PNAME <TDH_ROOT>"
     exit 1
@@ -35,7 +35,7 @@ if [ -e "$etchadoop" ]; then
     if [ -L "$etchadoop" ]; then
         ( sudo rm $etchadoop )
     else
-        echo "Error ''$etchadoop' exists and is not a link"
+        echo "Error ''$etchadoop' exists and is not a link" >&2
         exit 1
     fi
 fi

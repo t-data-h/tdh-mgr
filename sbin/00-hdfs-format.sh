@@ -21,7 +21,7 @@ elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'" >&2
     exit 1
 fi
 # -----------
@@ -36,19 +36,19 @@ NN1=$(echo $NNS | awk '{ print $1 }')
 NN2=$(echo $NNS | awk '{ print $2 }')
 
 if [ "$NN1" != "$HOST" ]; then
-    echo "$TDH_PNAME Error: Host '$HOST' not the Namenode '$NN1'"
+    echo "$TDH_PNAME Error: Host '$HOST' not the Namenode '$NN1'" >&2
     exit 1
 fi
 
 # HA Nameservice
 if [ -n "$NS_NAME" ]; then
     if [ -z "$JNS" ]; then
-        echo "$TDH_PNAME Error determining Journal Nodes"
+        echo "$TDH_PNAME Error determining Journal Nodes" >&2
         exit 1
     fi
 
     if [ -z "$NN2" ]; then
-        echo "$TDH_PNAME Error determining Standby Namenode"
+        echo "$TDH_PNAME Error determining Standby Namenode" >&2
         exit 1
     fi
 
@@ -68,7 +68,7 @@ fi
 
 rt=$?
 if [ $rt -ne 0 ]; then
-    echo "$TDH_NAME ERROR during namenode format, aborting.."
+    echo "$TDH_NAME ERROR during namenode format, aborting.." >&2
     exit $rt
 fi
 

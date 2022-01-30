@@ -73,7 +73,7 @@ if [ -z "$hosts" ]; then
 fi
 
 if [ -z "$groups" ] || [ -z "$users" ]; then
-    echo "$PNAME Error, Invalid or missing parameters"
+    echo "$PNAME Error, Invalid or missing parameters" >&2
     echo "$usage"
     exit 1
 fi
@@ -96,7 +96,7 @@ for group in $groups; do
                 ( ssh $host "sudo $cmd" )
                 rt=$?
                 if [ $rt -ne 0 ]; then
-                    echo "Error in ssh command"
+                    echo "Error in ssh command" >&2
                     break
                 fi
             done

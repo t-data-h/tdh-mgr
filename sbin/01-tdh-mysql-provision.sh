@@ -51,7 +51,7 @@ if [ -n "$1" ]; then
 fi
 
 if [ -z "$mysql" ]; then
-    echo "$PNAME Error, 'mysql' client not found in PATH"
+    echo "$PNAME Error, 'mysql' client not found in PATH" >&2
     exit 2
 fi
 
@@ -70,7 +70,7 @@ fi
 hive_dir=$( readlink -f $hive_dir )
 
 if [ ! -d $hive_dir ]; then
-    echo "$PNAME Error locating HIVE_HOME"
+    echo "$PNAME Error locating HIVE_HOME" >&2
     exit 1
 fi
 
@@ -87,7 +87,7 @@ if [[ $hive_ver =~ $rever ]]; then
 fi
 
 if [ -z "$hive_schema_ver" ]; then
-    echo "$PNAME Error determining HIVE schema version"
+    echo "$PNAME Error determining HIVE schema version" >&2
     exit 1
 fi
 
@@ -110,7 +110,7 @@ $PNAME initializing Hive Db: '$hivedb'
 rt=$?
 
 if [ $rt -ne 0 ]; then
-    echo "$PNAME Error in MySQL 'CREATE DATABASE'"
+    echo "$PNAME Error in MySQL 'CREATE DATABASE'" >&2
     exit $rt
 fi
 
@@ -122,7 +122,7 @@ fi
 rt=$?
 
 if [ $rt -ne 0 ]; then
-    echo "Error in import of hive metastore schema"
+    echo "Error in import of hive metastore schema" >&2
 fi
 
 echo "$PNAME finished."

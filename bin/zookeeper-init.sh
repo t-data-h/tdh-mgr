@@ -20,13 +20,13 @@ elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'" >&2
     exit 1
 fi
 # -----------
 
 if [ -z "$ZOOKEEPER_HOME" ]; then
-    echo "Error! ZOOKEEPER_HOME is not set. Check your hadoop env."
+    echo "Fatal! ZOOKEEPER_HOME is not set. Check your hadoop env." >&2
     exit 1
 fi
 

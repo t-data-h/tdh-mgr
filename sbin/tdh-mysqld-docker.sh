@@ -22,7 +22,7 @@ elif [ -r "${HADOOP_ENV_PATH}/${HADOOP_ENV}" ]; then
 fi
 
 if [ -z "$TDH_VERSION" ]; then
-    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'"
+    echo "Fatal! Unable to locate TDH Environment '$HADOOP_ENV'" >&2
     exit 1
 fi
 # -----------
@@ -158,7 +158,7 @@ echo "
 if [[ $ACTION == "run" || $ACTION == "start" ]]; then
 
     if [ ! -f $mycnf ]; then
-        echo "Error locating mysql config: '$mycnf'"
+        echo "Error locating mysql config: '$mycnf'" >&2
         exit 1
     fi
 
@@ -193,7 +193,7 @@ else
 fi
 
 if [ $rt -ne 0 ]; then
-    echo "$TDH_PNAME ERROR in docker run"
+    echo "$TDH_PNAME ERROR in docker run" >&2
 else
     echo "
     -> $TDH_PNAME successfully initialized mysqld container..
