@@ -3,7 +3,7 @@
 #  tdh-env.sh - Bash environment for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v22.01"
+VERSION="v22.02"
 
 export TDH_VERSION="$VERSION"
 export TDH_HOME="/opt/TDH"
@@ -177,7 +177,6 @@ function hostip_is_valid()
     fi
 
     IFS=$'\n'
-
     for line in $(/sbin/ip addr list | grep "inet ")
     do
         IFS=' '
@@ -197,6 +196,7 @@ function hostip_is_valid()
 
     return $rt
 }
+
 
 # shows or sets HADOOP_CONF_DIR
 function hconfdir()

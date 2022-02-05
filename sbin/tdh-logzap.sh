@@ -80,13 +80,13 @@ erase_all()
     local cwd=
 
     if [[ -z "$path" || ! -d $path ]]; then
-        echo "Path provided is not valid: '$path'" >&2
+        echo "$TDH_PNAME Error, path is not valid: '$path'" >&2
         return 1
     fi
 
     cd $path
     if [ $? -ne 0 ]; then
-        echo "Error in cd to path: '$path'" >&2
+        echo "$TDH_PNAME Error in cd to path: '$path'" >&2
         return 1
     fi
 
@@ -111,7 +111,7 @@ erase_all()
             fi
             cd $cwd
             if [ $? -ne 0 ]; then
-                echo "Error in 'cd', aborting.." >&2
+                echo "$TDH_PNAME Error in 'cd', aborting.." >&2
                 break
             fi
         elif [ -f $x ]; then
@@ -153,23 +153,11 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-
 echo "
 HADOOP_LOG_DIR=$HADOOP_LOG_DIR
 
 Warning! This will permanently erase all files in the directory.
 "
-
-if [ -z "$HADOOP_LOG_DIR" ]; then
-    echo "Error, HADOOP_LOG_DIR not set" >&2
-    exit 1
-fi
-
-cd $HADOOP_LOG_DIR
-if [ $? -ne 0 ]; then 
-    echo "Error in path HADOOP_LOG_DIR=$HADOOP_LOG_DIR"
-    exit 1
-fi
 
 if [ $rt -eq 0 ]; then
     erase_all "$HADOOP_LOG_DIR"

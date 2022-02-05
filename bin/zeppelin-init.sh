@@ -90,7 +90,7 @@ case "$ACTION" in
             rt=0
             #sleep 1
         else
-            echo "$TDH_PNAME Error, Zeppelin not found..."
+            echo "$TDH_PNAME Error, Zeppelin not found..." >&2
             rt=1
         fi
         ;;

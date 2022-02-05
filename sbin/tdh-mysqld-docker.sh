@@ -27,9 +27,8 @@ if [ -z "$TDH_VERSION" ]; then
 fi
 # -----------
 
-docker_image="mysql/mysql-server:5.7"
-
 name="${TDH_DOCKER_MYSQL:-tdh-mysql01}"
+docker_image="${TDH_MYSQL_IMAGE:-mysql/mysql-server:5.7}"
 mycnf="$(realpath ${HADOOP_ENV_PATH})/mysqld-tdh.cnf"
 port="3306"
 network=
@@ -58,6 +57,7 @@ Options:
  The 'pull' command fetches the docker image:version.
  The 'pw' command will attempt to detect the temporary password
   created at startup from the container logs.
+ The docker image default can provided via TDH_MYSQL_IMAGE
 "
 
 # -----------
