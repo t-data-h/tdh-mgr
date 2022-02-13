@@ -139,10 +139,9 @@ case "$ACTION" in
 
         for rs in $( cat ${HBASE_HOME}/conf/regionservers ); do
             check_remote_process $rs $HB_REGION_ID
-            
             if [ $? -eq 0 ]; then
                 ( ssh $rs "sudo -u $HADOOP_USER $HBASE_HOME/bin/hbase-daemon.sh stop regionserver" >/dev/null 2>&1 )
-            done
+            fi
         done
 
         check_remote_process $HBASE_MASTER $HB_THRIFT_ID
