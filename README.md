@@ -32,9 +32,9 @@ Java (JDK) 11 is the recommended JDK.  The supporting scripts and
 instructions are based on using the following component versions:
 
 - Hadoop    3.3.1
-- HBase     1.3.3
+- HBase     2.4.8
 - Hive      3.1.2
-- Spark     3.1.2
+- Spark     3.2.1
 - Kafka     2.8.1
 - Zookeeper 3.6.3
 
