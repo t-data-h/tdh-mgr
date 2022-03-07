@@ -62,6 +62,7 @@
 # Generic options for the daemons used in the standalone deploy mode
 # - SPARK_CONF_DIR      Alternate conf dir. (Default: ${SPARK_HOME}/conf)
 # - SPARK_LOG_DIR       Where log files are stored.  (Default: ${SPARK_HOME}/logs)
+# - SPARK_LOG_MAX_FILES Max log files of Spark daemons can rotate to. Default is 5.
 # - SPARK_PID_DIR       Where the pid file is stored. (Default: /tmp)
 # - SPARK_IDENT_STRING  A string representing this instance of spark. (Default: $USER)
 # - SPARK_NICENESS      The scheduling priority for daemons. (Default: 0)
@@ -71,11 +72,13 @@
 # - MKL_NUM_THREADS=1        Disable multi-threading of Intel MKL
 # - OPENBLAS_NUM_THREADS=1   Disable multi-threading of OpenBLAS
 
+
 SPARK_MASTER_HOST="10.10.10.65"
-SPARK_WORKER_CORES="2"
+SPARK_WORKER_CORES="4"
 
 export STANDALONE_SPARK_MASTER_HOST=$(hostname)
 export SPARK_MASTER_IP=$STANDALONE_SPARK_MASTER_HOST
+
 
 if [ -z "$SPARK_HOME" ]; then
     SELF="$(cd $(dirname $BASH_SOURCE) && pwd)"
@@ -85,9 +88,6 @@ if [ -z "$SPARK_HOME" ]; then
     export SPARK_HOME="/opt/TDH/spark"
 fi
 
-if [ -z "$SPARK_TMP_DIR" ]; then
-    export SPARK_TMP_DIR="${HADOOP_TMP_DIR:-/tmp}"
-fi
 
 SPARK_PYTHON_PATH=""
 if [ -n "$SPARK_PYTHON_PATH" ]; then
@@ -103,6 +103,7 @@ if [ -n "$HADOOP_HOME" ]; then
 fi
 export LD_LIBRARY_PATH
 
+
 PYLIB="$SPARK_HOME/python/lib"
 if [ -f "$PYLIB/pyspark.zip" ]; then
   PYSPARK_ARCHIVES_PATH=
@@ -116,6 +117,9 @@ if [ -f "$PYLIB/pyspark.zip" ]; then
   export PYSPARK_ARCHIVES_PATH
 fi
 
+
+export HADOOP_LOG_DIR=${HADOOP_LOG_DIR:-/var/log/tdh}
+export SPARK_TMP_DIR=${HADOOP_TMP_DIR:-/tmp}
 export SPARK_LIBRARY_PATH=${SPARK_HOME}/jars
 export SPARK_MASTER_WEBUI_PORT=18080
 export SPARK_MASTER_PORT=7077

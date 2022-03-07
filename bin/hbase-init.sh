@@ -110,8 +110,7 @@ case "$ACTION" in
 
         check_remote_process $HBASE_MASTER $HB_MASTER_ID
 
-        rt=$?
-        if [ $rt -eq 0 ]; then
+        if [ $? -eq 0 ]; then
             printf "HBase Master is already running: ${HBASE_MASTER} [${PID}] \n"
         else
             printf "Starting HBase Master Server: '${HBASE_MASTER}' \n"
@@ -120,14 +119,12 @@ case "$ACTION" in
 
         check_remote_process $HBASE_MASTER $HB_THRIFT_ID
 
-        rt=$?
-        if [ $rt -eq 0 ]; then
+        if [ $? -eq 0 ]; then
             printf "ThriftServer is already running: ${HBASE_MASTER} [${PID}] \n"
         else
             printf "Starting HBase Thrift Server '${HBASE_MASTER}' \n"
             ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER nohup $HBASE_HOME/bin/hbase thrift start > $HBASE_THRIFTLOG 2>&1 &" )
         fi
-        rt=0
         ;;
 
     'stop')
@@ -137,16 +134,24 @@ case "$ACTION" in
         ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER kill $PID >/dev/null 2>&1" )
         ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER $HBASE_HOME/bin/stop-hbase.sh > /dev/null 2>&1" )
 
+        set -f
+        IFS=$'\n'
+
+        for rs in $( cat ${HBASE_HOME}/conf/regionservers ); do
+            check_remote_process $rs $HB_REGION_ID
+            if [ $? -eq 0 ]; then
+                ( ssh $rs "sudo -u $HADOOP_USER $HBASE_HOME/bin/hbase-daemon.sh stop regionserver" >/dev/null 2>&1 )
+            fi
+        done
+
         check_remote_process $HBASE_MASTER $HB_THRIFT_ID
 
-        rt=$?
-        if [ $rt -eq 0 ]; then
+        if [ $? -eq 0 ]; then
             printf "Stopping HBase Thrift Server: ${HBASE_MASTER} [${PID}] \n"
             ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER kill $PID" )
         else
             printf "  HBase ThriftServer not found \n"
         fi
-        rt=0
         ;;
 
     'status'|'info')
