@@ -128,7 +128,7 @@ show_status()
     tdh_show_header $HADOOP_VER
 
     # HDFS Primary Namenode
-    check_remote_process $NN1 $NN_ID
+    check_remote_process "$NN1" "$NN_ID"
 
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -139,7 +139,7 @@ show_status()
     fi
 
     # HDFS Secondary Namenode
-    check_remote_process $NN2 $SN_ID
+    check_remote_process "$NN2" "$SN_ID"
 
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -150,7 +150,7 @@ show_status()
     fi
 
     # YARN ResourceManager
-    check_remote_process $RM1 $RM_ID
+    check_remote_process "$RM1" "$RM_ID"
 
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -164,7 +164,7 @@ show_status()
         tdh_show_separator
 
         for jn in $JNS; do
-            check_remote_process $jn $JN_ID
+            check_remote_process "$jn" "$JN_ID"
 
             rt=$?
             if [ $rt -eq 0 ]; then
@@ -183,7 +183,7 @@ show_status()
         tdh_show_separator
 
         # HDFS DataNode
-        check_remote_process $dn $DN_ID
+        check_remote_process "$dn" "$DN_ID"
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -194,7 +194,7 @@ show_status()
         fi
 
         # YARN NodeManager
-        check_remote_process $dn $NM_ID
+        check_remote_process "$dn" "$NM_ID"
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -246,7 +246,7 @@ case "$ACTION" in
             exit $rt
         fi
 
-        tdh_show_header $HADOOP_VER
+        tdh_show_header "$HADOOP_VER"
 
         # only start journalnodes first on request, this is needed for formatting HDFS
         if [[ "${OPT,,}" =~ "journal" ]]; then
@@ -274,7 +274,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        tdh_show_header $HADOOP_VER
+        tdh_show_header "$HADOOP_VER"
 
         printf "Stopping YARN: '${RM1}' \n"
         ( ssh $RM1 "sudo -u $HADOOP_USER $HADOOP_YARN_HOME/sbin/stop-yarn.sh" > /dev/null 2>&1 )
@@ -294,7 +294,7 @@ case "$ACTION" in
         ;;
 
     'version'|--version|-V)
-        tdh_show_header $HADOOP_VER
+        tdh_show_header "$HADOOP_VER"
         tdh_version
         ;;
 

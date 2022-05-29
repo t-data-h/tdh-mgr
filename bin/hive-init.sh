@@ -51,7 +51,7 @@ Hive Metastore instance(s).
 
 show_status()
 {
-    check_remote_process $HIVE_SERVER $HIVEMETASTORE
+    check_remote_process "$HIVE_SERVER" "$HIVEMETASTORE"
 
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -61,7 +61,7 @@ show_status()
     fi
 
     if [ -z "$TDH_HIVESERVER_IGNORE" ]; then
-        check_remote_process $HIVE_SERVER $HIVESERVER2
+        check_remote_process "$HIVE_SERVER" "$HIVESERVER2"
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -83,18 +83,18 @@ ACTION="$1"
 rt=0
 hs=0
 
-tdh_show_header $HIVE_VER
+tdh_show_header "$HIVE_VER"
 
 case "$ACTION" in
     'start')
-        check_remote_process $HIVE_SERVER $HIVEMETASTORE
+        check_remote_process "$HIVE_SERVER" "$HIVEMETASTORE"
 
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Hive MetaStore is already running: ${HIVE_SERVER} [${PID}]"
         fi
 
-        check_remote_process $HIVE_SERVER $HIVESERVER2
+        check_remote_process "$HIVE_SERVER" "$HIVESERVER2"
 
         hs=$?
         if [ $hs -eq 0 ]; then
@@ -116,7 +116,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_remote_process $HIVE_SERVER $HIVEMETASTORE
+        check_remote_process "$HIVE_SERVER" "$HIVEMETASTORE"
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -126,7 +126,8 @@ case "$ACTION" in
             echo "Hive Metastore not found."
         fi
 
-        check_remote_process $HIVE_SERVER $HIVESERVER2
+        check_remote_process "$HIVE_SERVER" "$HIVESERVER2"
+        
         rt=$?
         if [ $rt -eq 0 ]; then
             echo "Stopping Hive Server2:   ${HIVE_SERVER} [${PID}]"

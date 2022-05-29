@@ -62,7 +62,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-tdh_show_header $ZEPPELIN_VER
+tdh_show_header "$ZEPPELIN_VER"
 
 case "$ACTION" in
     'start')

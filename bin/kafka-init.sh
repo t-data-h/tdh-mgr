@@ -50,7 +50,7 @@ show_status()
     for broker in ${BROKERS}; do
         broker=$( echo $broker | awk -F: '{ print $1 }' )
 
-        check_remote_process $broker $KAFKA_ID
+        check_remote_process "$broker" "$KAFKA_ID"
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -90,7 +90,7 @@ case "$ACTION" in
     'start')
         for broker in ${BROKERS}; do
             broker=$( echo $broker | awk -F: '{ print $1 }' )
-            check_remote_process $broker $KAFKA_ID
+            check_remote_process "$broker" "$KAFKA_ID"
 
             rt=$?
 
@@ -109,7 +109,7 @@ case "$ACTION" in
     'stop')
         for broker in ${BROKERS}; do
             broker=$( echo $broker | awk -F: '{ print $1 }' )
-            check_remote_process $broker $KAFKA_ID
+            check_remote_process "$broker" "$KAFKA_ID"
 
             rt=$?
             if [ $rt -eq 0 ]; then

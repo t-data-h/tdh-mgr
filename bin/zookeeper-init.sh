@@ -49,7 +49,7 @@ show_status()
     for zk in ${ZKS}; do
         zk=$( echo $zk | awk -F: '{ print $1 }' )
 
-        check_remote_process $zk $ZK_ID
+        check_remote_process "$zk" "$ZK_ID"
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -78,14 +78,14 @@ if [ -z "$ZKS" ]; then
     exit 1
 fi
 
-tdh_show_header $ZK_VER
+tdh_show_header "$ZK_VER"
 
 case "$ACTION" in
     'start')
         for zk in ${ZKS}; do
             zk=$( echo $zk | awk -F: '{ print $1 }' )
 
-            check_remote_process $zk $ZK_ID
+            check_remote_process "$zk" "$ZK_ID"
             rt=$?
 
             if [ $rt -eq 0 ]; then
@@ -104,7 +104,7 @@ case "$ACTION" in
         for zk in ${ZKS}; do
             zk=$( echo $zk | awk -F: '{ print $1 }' )
 
-            check_remote_process $zk $ZK_ID
+            check_remote_process "$zk" "$ZK_ID"
             rt=$?
 
             if [ $rt -eq 0 ]; then
