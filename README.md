@@ -4,7 +4,7 @@ TDH Manager ( tdh-mgr )
 ## Overview
 
 TDH is a custom Hadoop distribution based on Apache Hadoop and related
-Apache Hadoop components such as Hive, HBase, Kafka, and Spark. It was
+components such as Hive, HBase, Kafka, and Spark. It was originally 
 created to serve as a local development environment running native on a 
 linux host as a pseudo-distributed cluster (a single node acting as both 
 master and worker).  It evolved into creating a multi-node cluster with a 
@@ -16,7 +16,7 @@ components and obtaining their status across multiple nodes. The scripts
 rely on SSH host keys for running remote commands.
 
 *TDH* has been adapted as a multi-node distribution that can run on
-RHEL/CentOS instances.  A separate project, **tdh-gcp**, provides a 
+RHEL or Ubuntu instances.  A separate project, **tdh-gcp**, provides a 
 framework for installing and deploying TDH via Ansible for multi-node 
 clusters. There is some specific support for running on GCP, but the 
 playbooks can be used with any environment. The project **tdh-docker** 
@@ -42,7 +42,7 @@ instructions are based on using the following component versions:
 Refer to the setup document [tdh-hadoop-setup.md](docs/tdh-hadoop-setup.md) 
 for creating a TDH distribution from scratch. The end result is a root path 
 containing each ecosystem component.  Soft Links are used to make minor upgrades 
-easier; for `hadoop-2.8.5` there would also be a `hadoop` link, and likewise 
+easier; for `hadoop-3.3.1` there would also be a `hadoop` link, and likewise 
 for other components which results in a directory like the following:
 ```
 total 48

@@ -46,7 +46,7 @@ if [ -z "$TDH_DOCKER_MYSQL" ]; then
     exit 0;  # exit silently as no container name is provided or set
 fi
 
-tdh_show_header $MYSQL_VER
+tdh_show_header "$MYSQL_VER"
 
 case "$ACTION" in
     'start')

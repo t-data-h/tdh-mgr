@@ -28,12 +28,12 @@ fi
 HOST=$(hostname -s)
 HBASE_VER=$(readlink $HBASE_HOME)
 HB_MASTERS="${HBASE_HOME}/conf/masters"
-HB_MASTER_ID=".hbase.master.HMaster start"
+HB_MASTER_ID=".hbase.master.HMaster"
 HB_REGION_ID=".hbase.regionserver.HRegionServer"
 HB_THRIFT_ID=".hbase.thrift.ThriftServer"
 HBASE_LOG_DIR="${HADOOP_LOG_DIR}/hbase"
 HBASE_THRIFTLOG="${HBASE_LOG_DIR}/hbase-thriftserver.log"
-HBASE_MASTER=$(cat $HBASE_HOME/conf/masters 2>/dev/null)
+HBASE_MASTER=$(cat ${HBASE_HOME}/conf/masters 2>/dev/null)
 
 if [ -z "$HBASE_MASTER" ]; then
     printf "$TDH_PNAME Error determining HBase Master. \n" >&2
@@ -50,8 +50,8 @@ $TDH_PNAME {start|stop|status}
 show_status()
 {
     local rt=0
-
-    check_remote_process $HBASE_MASTER $HB_MASTER_ID
+    
+    check_remote_process "$HBASE_MASTER" "$HB_MASTER_ID"
 
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -60,7 +60,7 @@ show_status()
         printf " HBase Master           | ${C_RED}DEAD$C_NC |  $HBASE_MASTER\n"
     fi
 
-    check_remote_process $HBASE_MASTER $HB_THRIFT_ID
+    check_remote_process "$HBASE_MASTER" "$HB_THRIFT_ID"
 
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -76,7 +76,7 @@ show_status()
 
     for rs in $( cat ${HBASE_HOME}/conf/regionservers ); do
 
-        check_remote_process $rs $HB_REGION_ID
+        check_remote_process "$rs" "$HB_REGION_ID"
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -97,7 +97,7 @@ show_status()
 ACTION="$1"
 rt=0
 
-tdh_show_header $HBASE_VER
+tdh_show_header "$HBASE_VER"
 
 if [ -z "$HBASE_MASTER" ]; then
     printf "$TDH_PNAME Error determining HBase Master host! Aborting.. \n" >&2
@@ -108,7 +108,7 @@ case "$ACTION" in
     'start')
         ( mkdir -p $HBASE_LOG_DIR )
 
-        check_remote_process $HBASE_MASTER $HB_MASTER_ID
+        check_remote_process "$HBASE_MASTER" "$HB_MASTER_ID"
 
         if [ $? -eq 0 ]; then
             printf "HBase Master is already running: ${HBASE_MASTER} [${PID}] \n"
@@ -117,7 +117,7 @@ case "$ACTION" in
             ( ssh $HBASE_MASTER "$HBASE_HOME/bin/start-hbase.sh 2>&1 > /dev/null" )
         fi
 
-        check_remote_process $HBASE_MASTER $HB_THRIFT_ID
+        check_remote_process "$HBASE_MASTER" "$HB_THRIFT_ID"
 
         if [ $? -eq 0 ]; then
             printf "ThriftServer is already running: ${HBASE_MASTER} [${PID}] \n"
@@ -128,7 +128,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_remote_process $HBASE_MASTER $HB_MASTER_ID
+        check_remote_process "$HBASE_MASTER" "$HB_MASTER_ID"
 
         printf "Stopping HBase Master Server: ${HBASE_MASTER} [${PID}] \n"
         ( ssh $HBASE_MASTER "sudo -u $HADOOP_USER kill $PID >/dev/null 2>&1" )
@@ -144,7 +144,7 @@ case "$ACTION" in
             fi
         done
 
-        check_remote_process $HBASE_MASTER $HB_THRIFT_ID
+        check_remote_process "$HBASE_MASTER" "$HB_THRIFT_ID"
 
         if [ $? -eq 0 ]; then
             printf "Stopping HBase Thrift Server: ${HBASE_MASTER} [${PID}] \n"

@@ -45,7 +45,7 @@ show_status()
 {
     local rt=0
 
-    check_process $SPARK_ID
+    check_process "$SPARK_ID"
 
     rt=$?
     if [ $rt -eq 0 ]; then
@@ -61,11 +61,11 @@ show_status()
 ACTION="$1"
 rt=0
 
-tdh_show_header $SPARK_VER
+tdh_show_header "$SPARK_VER"
 
 case "$ACTION" in
     'start')
-        check_process $SPARK_ID
+        check_process "$SPARK_ID"
 
         rt=$?
         if [ $rt -eq 0 ]; then
@@ -78,7 +78,7 @@ case "$ACTION" in
         ;;
 
     'stop')
-        check_process $SPARK_ID
+        check_process "$SPARK_ID"
 
         rt=$?
         if [ $rt -eq 0 ]; then
