@@ -47,9 +47,9 @@ Synopsis:
   $TDH_PNAME [-fhV] {start|stop|status}
 
 Options:
-     -h|--help    : Show usage and exit
-     -f|--force   : Run all start/stop scripts ignoring any errors
-     -V|--version : Show TDH version and exit
+  -h|--help    : Show usage and exit
+  -f|--force   : Run all start/stop scripts ignoring any errors
+  -V|--version : Show TDH version and exit
   
 
 HADOOP_ECOSYSTEM_INITS=\"${TDH_ECOSYSTEM_INITS}\"
