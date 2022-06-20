@@ -4,7 +4,7 @@
 #
 confdir=
 syncto=1
-dryrun=1
+dryrun=0
 delete=0
 
 components=()
@@ -34,16 +34,12 @@ fi
 INITS="hadoop-init.sh zookeeper-init.sh hbase-init.sh hive-init.sh \
 kafka-init.sh spark-history-init.sh"
 
-if [ -n "$TDH_ECOSYSTEM_INITS" ]; then
-    INITS="$TDH_ECOSYSTEM_INITS"
-fi
-
 TDH_HOME="${TDH_HOME:-/opt/TDH}"
 
 # -----------
 
 usage="
-Syncronized the cluster configuration from a configuration repo
+Synchronized the cluster configuration from a configuration repo
 to the current environment ie. TDH_HOME. Optionally can reverse 
 direction and '--sync-from' the environment back to the config repo.
 
@@ -53,7 +49,6 @@ Synopsis:
 Options:
   -h|--help       : Show usage info and exit.
   -n|--dryrun     : Enable rsync dryrun
-  -q|--quiet      : Do not prompt for approval
   -S|--sync-from  : Reverse sync from env to repo
   -V|--version    : Show version info and exit
 
@@ -69,7 +64,7 @@ function mapComponents()
     for c in ${INITS}; do
         cpath="$(realpath ${TDH_HOME}/${c%%-*})"
         if [ -n $cpath ]; then
-            components+=("${cpath%%\/*}")
+            components+=("${cpath##*\/}")
         fi
     done
 }
@@ -77,8 +72,9 @@ function mapComponents()
 
 # -----------
 # Main
+rt=0
 
-while [ $# -gt 0 ]; then
+while [ $# -gt 0 ]; do
     case "$1" in 
     'help'|-h|--help)
         echo "$TDH_PNAME [options] [config_path_envname]"
@@ -88,10 +84,8 @@ while [ $# -gt 0 ]; then
         exit 0
         ;;
     -n|--dryrun|--dry-run)
+        echo " -> DRYRUN enabled."
         dryrun=1
-        ;;
-    -q|--quiet)
-        quiet=1
         ;;
     -S|--syncfrom|--sync-from)
         syncto=0
@@ -113,47 +107,62 @@ if [[ ! -d $confdir ]]; then
     exit 1
 fi
 
+tdh_version
+mapComponents 
 
-mapComponents "$confdir"
-
+args=("--archive" "--cvs-exclude" "--verbose")
+if [ $dryrun -eq 1 ]; then
+    args+=("--dry-run")
+fi
 
 # SYNC-TO
 if [ $syncto -eq 1 ]; then
+    printf "\n ${C_GRN}-> SYNC TO: ${C_NC}${C_MAG}${TDH_HOME} ${C_NC} \n"
 
     for comp in ${components[@]}; do
-        target="${comp}/"
-        source="${confdir}/${comp##*\/}/"
+        printf "\n${C_YEL}${comp} ${C_NC} \n"
 
-        echo "rsync -aC $source $target"
-        if [ $dryrun -eq 0 ]; then
-            ( rsync -aC $source $target )
+        conf="conf"
+        if [[ "${comp%%-*}" == "hadoop" ]]; then
+            conf="etc/hadoop"
+        fi
+        target="${TDH_HOME}/${comp}/${conf}/"
+        source="${confdir}/${comp##*\/}/${conf}/"
+
+        echo "( rsync ${args[@]} $source $target )"
+        ( rsync ${args[@]} $source $target )
+
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " -> Error in rsync"
+            break
         fi
     done
-else # SYNC-FROM
+
+else 
+    printf "\n ${C_GRN}-> SYNC FROM: ${C_NC}${C_MAG}${TDH_HOME}${C_NC} \n"
+
     for comp in ${components[@]}; do
-        target="${confdir}/${comp##*\/}/conf/"
-        source="${comp}/conf/"
+        printf "\n${C_YEL}${comp} ${C_NC} \n"
 
-        if [[ ! -d $target ]]; then
-            if [ $quiet -eq 0 ]; then
-                echo "Target directory '$target' does not exist!"
-                #ask "Do you want to create it? (y/N) " N
-                if [[ $? -eq 0 && $dryrun -eq 0 ]]; then
-                    ( mkdir -p $target )
-                fi
-            else
-                echo " -> Skipping non-existant target '$target'"
-                continue
-            fi
+        conf="conf"
+        if [[ "${comp%%-*}" == "hadoop" ]]; then
+            conf="etc/hadoop"
         fi
+        target="${confdir}/${comp##*\/}/${conf}/"
+        source="${TDH_HOME}/${comp}/${conf}/"
 
-        echo "rsync -aX $source $target"
-        if [ $dryrun -eq 0 ]; then
-            ( rsync -aC $source $target )
+        echo "( rsync ${args[@]} $source $target )"
+        ( rsync ${args[@]} $source $target )
+
+        rt=$?
+        if [ $rt -ne 0 ]; then
+            echo " -> Error in rsync"
+            break
         fi
     done
 fi
 
 echo "$TDH_PNAME finished."
 
-exit $? 
+exit $rt
