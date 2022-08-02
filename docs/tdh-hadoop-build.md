@@ -7,7 +7,7 @@ A guide for building Hadoop and various ecosystem components from source.
 ## Building Hadoop (v2.7.x-v2.8.x)
 
 **Prerequisites:**
- * OpenJDK 1.8
+ * OpenJDK 1.8 or 11
  * Maven 3.x
  * protobuf=2.5.0
  * cmake

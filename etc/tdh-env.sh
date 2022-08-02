@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#  tdh-env.sh - Bash environment for TDH.
+#  tdh-env.sh - Environment file for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 VERSION="v22.05"
@@ -58,7 +58,7 @@ if [ -z "$JAVA_HOME" ]; then
     printf " -> ${C_YEL}WARNING!${C_NC} JAVA_HOME is not set \n" >&2
 fi
 
-# this alone has no effect, but enabled w/ TDH_ECOSYSTEM_INITS+='mysqld-tdh-init.sh'
+# this alone has no effect, but enabled w/ TDH_ECOSYSTEM_INITS+=('mysqld-tdh-init.sh')
 export TDH_DOCKER_MYSQL="tdh-mysql01"
 
 # Kafka
