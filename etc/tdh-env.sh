@@ -3,7 +3,7 @@
 #  tdh-env.sh - Environment file for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v22.05"
+VERSION="v22.06"
 
 export TDH_VERSION="$VERSION"
 export TDH_HOME="/opt/TDH"
@@ -28,6 +28,8 @@ export HIVE_CONF_DIR="$HIVE_HOME/conf"
 export KAFKA_HOME="$HADOOP_ROOT/kafka"
 export SPARK_HOME="$HADOOP_ROOT/spark"
 export SPARK_CONF_DIR="$SPARK_HOME/conf"
+export FLINK_HOME="$HADOOP_ROOT/flink"
+export FLINK_CONF_DIR="$FLINK_HOME/conf"
 
 export HADOOP_PATH="\
 $HADOOP_ROOT/bin:\
@@ -36,7 +38,8 @@ $HADOOP_HOME/bin:\
 $HBASE_HOME/bin:\
 $HIVE_HOME/bin:\
 $KAFKA_HOME/bin:\
-$SPARK_HOME/bin"
+$SPARK_HOME/bin:\
+$FLINK_HOME/bin"
 
 # Highlighting
 C_RED='\e[31m\e[1m'
@@ -83,6 +86,8 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${HADOOP_HOME}/lib
 if [ -n "$HADOOP_PATH" ]; then
     export PATH=${PATH:+${PATH}:}$HADOOP_PATH
 fi
+
+export HADOOP_CLASSPATH=$(hadoop classpath)
 
 # -------------------
 
