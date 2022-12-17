@@ -22,6 +22,7 @@ mapreduce.task.sort.spill.percent=0.9             # Minimum % before spilling to
 ## S3 Access from Hadoop
 *core-site.xml*  - Minio S3 settings
 ```
+fs.s3a.endpoint=http://minio:9000
 fs.s3a.access.key=minio
 fs.s3a.secret.key=minio123
 fs.s3a.path.style.access=true
@@ -36,7 +37,6 @@ fs.s3a.committer.staging.unique-filenames=true
 fs.s3a.connection.establish.timeout=5000
 fs.s3a.connection.ssl.enabled=false
 fs.s3a.connection.timeout=200000
-fs.s3a.endpoint=http://minio:9000
 fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
 ```
 additional optimizations for hdfs

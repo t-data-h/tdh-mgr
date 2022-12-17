@@ -7,7 +7,7 @@ A guide for building Hadoop and various ecosystem components from source.
 ## Building Hadoop (v2.7.x-v2.8.x)
 
 **Prerequisites:**
- * OpenJDK 1.8
+ * OpenJDK 1.8 or 11
  * Maven 3.x
  * protobuf=2.5.0
  * cmake
@@ -83,7 +83,7 @@ export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
 - Optionally add `-DskipTests`
 - Kubernetes support with `-Pkubernetes`
 
-### Spark 3.x.x
+### Spark 3
 
 For Hadoop v2
 ```
@@ -93,8 +93,9 @@ For Hadoop v2
 
 For Hadoop v3
 ```
-./dev/make-distribution.sh --name $SPARK_DIST_NAME --tgz -Phadoop-3.2 -Pyarn \
- -Phive -Phive-thriftserver -Phadoop-provided -Pkubernetes -DskipTests
+./dev/make-distribution.sh --name $SPARK_DIST_NAME --tgz \
+  -Phadoop-3.2 -Pyarn -Phive -Phive-thriftserver \ 
+  -Phadoop-provided -Pkubernetes -DskipTests
 ```
 
 Use Scala 2.13, add the Profile `-Pscala-2.13` to the build properties as above.
@@ -105,7 +106,9 @@ Use Scala 2.13, add the Profile `-Pscala-2.13` to the build properties as above.
 For Java 11, this may be required:
 `-Dio.netty.tryReflectionSetAccessible=true`
 
-## Hive 1.2.x
+As of Spark 3.3.x, Hadoop-3 is default.
 ```
-mvn clean package -Phadoop-2,dist
+./dev/make-distribution.sh --name $SPARK_DIST_NAME --tgz -Pyarn \
+ -Phive -Phive-thriftserver -Pkubernetes -Pscala-2.13 -DskipTests
 ```
+

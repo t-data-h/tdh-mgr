@@ -18,11 +18,11 @@ instructions are based on building a distribution using the following
 versions:
 
 - Hadoop 3.3.x
-- HBase  1.3.x
+- HBase  2.4.x
 - Hive   3.1.x
-- Spark  2.4.x - 3.0.x
-- Kafka  2.2.x - 2.6.x
-- Zookeeper 5.x
+- Spark  3.2.x 
+- Kafka  3.1.x 
+- Zookeeper 3.6.x
 
 [System Prerequisites:](tdh-prereq.md) 
 [Mysqld Configuration:](mysql-hive-metastore.md)
@@ -36,16 +36,16 @@ configured via Ansible (from tdh-gcp).
 Prerequisites are described in detail by the above gists and is also automated
 via Ansible in the **tdh-gcp** project.
 
-- Java JDK 1.8  
-Note that this **must** be a JDK distribution, not JRE. Oracle is only needed
-by vendor distributions for the Strong Encryption security module though more
-recent versions of OpenJDK 1.8 (>171?) now support strong encryption by default.
-Java 11 is not supported fully in Hadoop 2.x though it may function albeit with 
-a load of warnings.
+- Java JDK 1.8 or 11
+  Note that this **must** be a JDK distribution, not JRE. Oracle is only needed
+  by vendor distributions for the Strong Encryption security module though more
+  recent versions of OpenJDK 1.8 (>171?) now support strong encryption by default.
+  Java 11 is not supported fully in Hadoop 2.x, but works with Hadoop3. However,
+  only as of Hive 3.1.3 is a JDK11 functional.
 
 - Disable IPv6  
-There are known issues with Hadoop and IPv6 (especially with Ubuntu) and it is
-recommended to disable the IPv6 stack in the Linux Kernel.
+  There are known issues with Hadoop and IPv6 (especially with Ubuntu) and it is
+  recommended to disable the IPv6 stack in the Linux Kernel.
 
 - sysctl.conf
   ```
@@ -70,30 +70,30 @@ recommended to disable the IPv6 stack in the Linux Kernel.
   Spark especially, even in a single node setup, relies on `hostname -f` resolving
   to the correct interface of the host. Essentially, all nodes should have properly
   defined hosts file where hostname is defined to a reachable IPv4 address.
-   ```
-   127.0.0.1    localhost
-   10.10.10.65  callisto.trace3.com callisto
-   ```
-   It's worth mentioning that no connected Unix system should set the loopback
-   address to the hostname unless intended to be completely sequestered. All
-   nodes in a distributed system should map hostname to a valid, reachable
-   interface, that matches the IP of the Fully Qualified DomainName of the host
-   with matching forward and reverse DNS Records on resolution. The following
-   example compares the system configured hostname with DNS using the `host` tool
-   from the `bind-tools` system package.
-    ```
-    $ hostname -i
-    10.10.10.65
-    $ hostname -f
-    callisto.trace3.com
-    $ hostname -s
-    callisto
-    $ host callisto.trace3.com
-    ```
-    In the case of laptop development work which can result in unstable interfaces
-    and addresses, one could use a virtual interface for the hostname under which
-    the cluster is running. The script `./sbin/pseudoint.sh` can be used to set this
-    accordingly.
+  ```
+  127.0.0.1    localhost
+  10.10.10.65  callisto.trace3.com callisto
+  ```
+  It's worth mentioning that no connected Unix system should set the loopback
+  address to the hostname unless intended to be completely sequestered. All
+  nodes in a distributed system should map hostname to a valid, reachable
+  interface, that matches the IP of the Fully Qualified DomainName of the host
+  with matching forward and reverse DNS Records on resolution. The following
+  example compares the system configured hostname with DNS using the `host` tool
+  from the `bind-tools` system package.
+  ```
+  $ hostname -i
+  10.10.10.65
+  $ hostname -f
+  callisto.trace3.com
+  $ hostname -s
+  callisto
+  $ host callisto.trace3.com
+  ```
+  In the case of laptop development work which can result in unstable interfaces
+  and addresses, one could use a virtual interface for the hostname under which
+  the cluster is running. The script `./sbin/pseudoint.sh` can be used to set this
+  accordingly.
 
 - Configure SSH  
   SSH keys are required for starting services (such as the secondary namenode).
@@ -114,7 +114,7 @@ recommended to disable the IPv6 stack in the Linux Kernel.
   'pseudo-distributed' mode, a docker instance can be used effectively and is
   described in further detail below in the Hive section.
 
-* Cluster configuration  
+- Cluster configuration  
   While these instructions go into some detail about configurations, a base
   template version can be used to initiate the configs and is found in the `tdh-config`
   directory.  Generally, this directory should be copied away to its own separate
@@ -125,7 +125,7 @@ recommended to disable the IPv6 stack in the Linux Kernel.
 
 ##  Hadoop
 
-  Choose a base path for the hadoop ecosystem. eg. /opt/tdh.  
+Choose a base path for the hadoop ecosystem. eg. /opt/tdh.  
 From here, install the various ecosystem components complete with versions.
 ```
 # mkdir -p /opt/TDH && cd /opt/TDH
@@ -138,24 +138,25 @@ From here, install the various ecosystem components complete with versions.
 
 Use this pattern for other ecosystem components as well:
 ```
- $ ls -l /opt/TDH/
- lrwxrwxrwx 1 hadoop hadoop 12 Dec 29 12:44 hadoop -> hadoop-2.7.7
- drwxrwxr-x 10 hadoop hadoop 4096 Dec 29 13:07 hadoop-2.7.7
- lrwxrwxrwx 1 hadoop hadoop 11 Nov 7 20:38 hbase -> hbase-1.1.5
- drwxr-xr-x 8 hadoop hadoop 4096 Nov 6 11:38 hbase-1.1.5
- drwxr-xr-x 4 hadoop hadoop 4096 Nov 4 07:43 hdfs
- lrwxrwxrwx  1 hadoop hadoop   10 Feb 24 15:25 hive -> hive-1.2.1
- drwxr-xr-x  9 hadoop hadoop 4096 May  4 16:58 hive-1.2.1
- lrwxrwxrwx  1 hadoop hadoop    9 May  4 10:48 hue -> hue-4.1.0
- drwxr-xr-x 12 hadoop hadoop 4096 May  4 23:12 hue-4.1.0
- lrwxrwxrwx 1 hadoop hadoop 18 Nov 16 19:59 kafka -> kafka_2.11-0.10.2.0
- drwxr-xr-x 6 hadoop hadoop 4096 Nov 17 10:51 kafka_2.11-0.10.2.0
- lrwxrwxrwx 1 hadoop hadoop 11 Nov 19 11:05 spark -> spark-2.3.1
- drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 spark-1.6.1
- lrwxrwxrwx 12 hadoop hadoop 4096 Dec 2 10:23 sqoop -> sqoop-1.99.6
- drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 sqoop-1.99.6
- lrwxrwxrwx 12 hadoop hadoop 4096 Dec 2 10:23 zeppelin -> zeppelin-0.8.0
- drwxr-xr-x 12 hadoop hadoop 4096 Dec 2 10:23 zeppelin-0.8.0
+drwxrwxr-x  2 tca tca 4096 Feb 13 14:57 bin
+drwxr-xr-x  2 tca tca 4096 Dec 13  2021 docs
+drwxr-xr-x  2 tca tca 4096 May  9  2021 etc
+lrwxrwxrwx  1 tca tca   12 Jun 19 16:16 hadoop -> hadoop-3.3.3
+drwxr-xr-x 11 tca tca 4096 Jun 19 16:32 hadoop-3.3.3
+lrwxrwxrwx  1 tca tca   11 Feb 12 14:11 hbase -> hbase-2.4.8
+drwxrwxr-x  7 tca tca 4096 Feb 12 15:30 hbase-2.4.8
+lrwxrwxrwx  1 tca tca   10 May 29 10:58 hive -> hive-3.1.3
+drwxrwxr-x 11 tca tca 4096 May 29 11:19 hive-3.1.3
+lrwxrwxrwx  1 tca tca   11 Jun 19 16:25 kafka -> kafka-3.1.1
+drwxr-xr-x  8 tca tca 4096 Jun 19 16:31 kafka-3.1.1
+lrwxrwxrwx  1 tca tca   12 Nov 13  2021 logs -> /var/log/tdh
+-rw-rw-r--  1 tca tca 1021 Dec 21  2019 README.md
+drwxr-xr-x  2 tca tca 4096 Jun 20 09:33 sbin
+lrwxrwxrwx  1 tca tca   11 Jun 19 17:08 spark -> spark-3.2.1
+drwxr-xr-x 13 tca tca 4096 Apr 24 16:24 spark-3.2.1
+drwxr-xr-x 20 tca tca 4096 Mar  4  2018 sqoop-1.99.6
+lrwxrwxrwx  1 tca tca   15 Nov 13  2021 zookeeper -> zookeeper-3.6.3
+drwxrwxr-x  6 tca tca 4096 Nov 13  2021 zookeeper-3.6.3
 ```
 
 ### Configuring Hadoop
