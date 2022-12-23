@@ -1,4 +1,4 @@
-Installing and Configuring MySQL as the Hive Metastore
+Installing and Configuring MySQL as the Hive Metastore  **Legacy Docs**
 =======================================================
 
 Installing MySQL Server 5.7. For consistency, we use the MySQL Community Edition 
