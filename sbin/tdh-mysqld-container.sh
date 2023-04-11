@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-#  tdh-mysql-init.sh
-#   Creates MySQL Server Docker Container
+#  tdh-mysqld-container.sh
+#   Creates MySQL Server Container instance.
 #
 #  Timothy C. Arland <tcarland@gmail.com>
 
