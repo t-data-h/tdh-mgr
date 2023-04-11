@@ -5,7 +5,7 @@ PNAME=${0##*\/}
 
 dbhost="$1"
 dbport="${2:-3306}"
-dbname="${3:-metastore}"
+dbname="${3:-metastore_db}"
 dbuser="${4:-hive}"
 
 mydump=$(which mysqldump 2>/dev/null)

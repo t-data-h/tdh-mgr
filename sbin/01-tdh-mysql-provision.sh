@@ -12,7 +12,7 @@
 PNAME=${0##*\/}
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
 
-hivedb="metastore"
+hivedb="metastore_db"
 hive_dir="${HIVE_HOME}"
 hive_ver=
 hive_schema_ver=

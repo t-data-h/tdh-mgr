@@ -3,7 +3,7 @@
 #  tdh-env.sh - Environment file for TDH.
 #
 AUTHOR="Timothy C. Arland <tcarland@gmail.com>"
-VERSION="v22.12"
+VERSION="v23.01"
 
 export TDH_VERSION="$VERSION"
 export TDH_HOME="/opt/TDH"
@@ -62,7 +62,7 @@ if [ -z "$JAVA_HOME" ]; then
 fi
 
 # this alone has no effect, but enabled w/ TDH_ECOSYSTEM_INITS+=('mysqld-tdh-init.sh')
-export TDH_DOCKER_MYSQL="tdh-mysql01"
+export TDH_MYSQL_CONTAINER="tdh-mysql01"
 
 # Kafka
 if [ -f "/etc/kafka/jaas.conf" ]; then

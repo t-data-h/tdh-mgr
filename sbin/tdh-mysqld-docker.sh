@@ -27,8 +27,8 @@ if [ -z "$TDH_VERSION" ]; then
 fi
 # -----------
 
-name="${TDH_DOCKER_MYSQL:-tdh-mysql01}"
-docker_image="${TDH_MYSQL_IMAGE:-mysql/mysql-server:5.7}"
+name="${TDH_MYSQL_CONTAINER:-tdh-mysql01}"
+image="${TDH_MYSQL_IMAGE:-mysql/mysql-server:5.7}"
 mycnf="$(realpath ${HADOOP_ENV_PATH})/mysqld-tdh.cnf"
 port="3306"
 network=
@@ -38,26 +38,26 @@ ACTION=
 # -----------
 
 usage="
-A script for creating and initializing a docker mysqld instance.
+A script for creating and initializing a mysqld container instance.
 
 Synopsis:
   $TDH_PNAME [options] run|pull|pw
 
 Options:
   -h|--help            :  Display usage and exit.
-  -n|--name <name>     :  Name of the Docker Container instance.
+  -n|--name <name>     :  Name of the container instance.
                           Default container name is '${name}'.
-  -N|--network <name>  :  Attach container to a Docker network.
+  -N|--network <name>  :  Attach container to a network.
                           Default uses 'host' networking.
   -p|--port <port>     :  Local bind port for the container.
   -V|--version         :  Show version info and exit
   
  Any other action than 'run' results in a dry run.
  The container will only start with the run or start action.
- The 'pull' command fetches the docker image:version.
+ The 'pull' command fetches the container image:version.
  The 'pw' command will attempt to detect the temporary password
   created at startup from the container logs.
- The docker image default can provided via TDH_MYSQL_IMAGE
+ The container image default can provided via TDH_MYSQL_IMAGE
 "
 
 # -----------
@@ -148,10 +148,10 @@ cmd="$cmd --mount type=bind,src=${mycnf},dst=/etc/my.cnf \
 # --mount type=bind,src=/path-on-host-machine/scripts/,dst=/docker-entrypoint-initdb.d/ \
 
 echo "
-  TDH Docker Container: '${name}'
-  Docker Image: ${docker_image}
+  Container Name: '${name}'
+  Container Image: ${docker_image}
   Container Volume: '${volname}'
-  Docker Network: ${network}
+  Container Network: ${network}
   Local port: ${port}
 "
 
@@ -166,7 +166,7 @@ if [[ $ACTION == "run" || $ACTION == "start" ]]; then
 
     ( $cmd )
     rt=$?
-    ( sleep 6 )  # allow mysqld to start and generate password
+    ( sleep 8 )  # allow mysqld to start and generate password
 
     if [ $rt -ne 0 ]; then
         echo "Error in docker run"

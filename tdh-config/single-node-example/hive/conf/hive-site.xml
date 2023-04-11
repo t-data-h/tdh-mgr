@@ -64,7 +64,7 @@
 
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://callisto:3306/metastore?useSSL=false</value>
+    <value>jdbc:mysql://callisto:3306/metastore_db?useSSL=false</value>
     <description>JDBC connect string for a JDBC metastore</description>
   </property>
 

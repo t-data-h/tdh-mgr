@@ -42,7 +42,7 @@ $TDH_PNAME {start|stop|status}
 ACTION="$1"
 rt=0
 
-if [ -z "$TDH_DOCKER_MYSQL" ]; then
+if [ -z "$TDH_MYSQL_CONTAINER" ]; then
     exit 0;  # exit silently as no container name is provided or set
 fi
 
@@ -55,8 +55,8 @@ case "$ACTION" in
         if [ $rt -eq 0 ]; then
             echo "Mysql Daemon already running [$PID]"
         else
-            echo "Starting mysqld container: '${TDH_DOCKER_MYSQL}'"
-            ( docker start $TDH_DOCKER_MYSQL > /dev/null )
+            echo "Starting mysqld container: '${TDH_MYSQL_CONTAINER}'"
+            ( docker start $TDH_MYSQL_CONTAINER > /dev/null )
         fi
         rt=0
         ;;
@@ -65,8 +65,8 @@ case "$ACTION" in
         check_process "$TDH_MYSQL"
         rt=$?
         if [ $rt -eq 0 ]; then
-            echo "Stopping Mysql Container: ${TDH_DOCKER_MYSQL} [$PID]"
-            ( docker stop $TDH_DOCKER_MYSQL > /dev/null )
+            echo "Stopping Mysql Container: ${TDH_MYSQL_CONTAINER} [$PID]"
+            ( docker stop $TDH_MYSQL_CONTAINER > /dev/null )
         else
             echo "  $TDH_PNAME 'mysqld' not running or not found."
         fi
@@ -77,9 +77,9 @@ case "$ACTION" in
         check_process "$TDH_MYSQL"
         rt=$?
         if [ $rt -eq 0 ]; then
-            printf " MySQL Server           | $C_GRN OK $C_NC |  $TDH_DOCKER_MYSQL [$PID]\n"
+            printf " MySQL Server           | $C_GRN OK $C_NC |  $TDH_MYSQL_CONTAINER [$PID]\n"
         else
-            printf " MySQL Server           | ${C_RED}DEAD$C_NC |  $TDH_DOCKER_MYSQL\n"
+            printf " MySQL Server           | ${C_RED}DEAD$C_NC |  $TDH_MYSQL_CONTAINER\n"
         fi
         ;;
     
