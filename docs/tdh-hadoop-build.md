@@ -112,3 +112,10 @@ As of Spark 3.3.x, Hadoop-3 is default.
  -Phive -Phive-thriftserver -Pkubernetes -Pscala-2.13 -DskipTests
 ```
 
+### Spark 4 
+
+defaults to Scala 2.13
+```
+./dev/make-distribution.sh --name dione --tgz -Phive -Phive-thriftserver -Pkubernetes -DskipTests
+```
+
